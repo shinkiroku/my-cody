@@ -1,0 +1,1650 @@
+```html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>마이 아우터 3D 코디 시뮬레이터</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Three.js CDN for 3D Simulation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts Inter & Noto Sans KR -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Noto Sans KR', 'Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              500: '#10b981',
+              600: '#059669',
+              900: '#064e3b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: #0f172a;
+      color: #f8fafc;
+      overflow-x: hidden;
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1e293b;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #475569;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #64748b;
+    }
+    .glass-card {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card-active {
+      background: rgba(51, 65, 85, 0.85);
+      border-color: #38bdf8;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);
+    }
+    .badge-denim-hint {
+      background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+    }
+    /* 3D Canvas Container */
+    #canvas-container {
+      width: 100%;
+      height: 380px;
+      position: relative;
+      border-radius: 1rem;
+      overflow: hidden;
+      touch-action: none;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col">
+
+  <header class="border-b border-slate-800 glass-card sticky top-0 z-50 px-4 py-3">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-sky-500/20">
+          <i class="fa-solid fa-shirt text-lg text-white"></i>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+            내 아우터 3D 컬러 시뮬레이터
+            <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-400 border border-sky-500/30">14종 완벽 분석</span>
+          </h1>
+          <p class="text-xs text-slate-400">사진 속 14개 아우터 맞춤 티셔츠 · 바지(흑/연/중청) · 신발 3색 추천</p>
+        </div>
+      </div>
+      <!-- Denim Shopping Advisor Quick Trigger -->
+      <div class="flex items-center gap-2">
+        <button id="btn-denim-guide" class="text-xs bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-300 border border-indigo-500/40 px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-circle-question"></i>
+          <span>중청 데님 살까? 비교 팁</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <!-- LEFT COLUMN: Outer Selector (14 items) -->
+    <section class="lg:col-span-5 flex flex-col gap-4">
+      <div class="flex items-center justify-between">
+        <h2 class="text-sm font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+          <i class="fa-solid fa-layer-group text-sky-400"></i> 내 아우터 선택 (14종)
+        </h2>
+        <span class="text-xs text-slate-400" id="outer-count-badge">선택됨: 1번</span>
+      </div>
+
+      <!-- Outer Clothing Cards Scrollable Area -->
+      <div id="outer-list" class="grid grid-cols-2 sm:grid-cols-2 gap-2.5 max-h-[750px] overflow-y-auto pr-1">
+        <!-- Injected via JavaScript -->
+      </div>
+    </section>
+
+    <!-- RIGHT COLUMN: 3D Simulator & 3-Concept Matching -->
+    <section class="lg:col-span-7 flex flex-col gap-5">
+
+      <!-- Occasion Concept Tabs -->
+      <div class="glass-card p-2 rounded-2xl flex items-center justify-between gap-1 shadow-md">
+        <button class="concept-tab flex-1 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center justify-center gap-2 bg-sky-500 text-white shadow-lg shadow-sky-500/30" data-concept="office">
+          <i class="fa-solid fa-briefcase"></i>
+          <span>출근복 (모던/단정)</span>
+        </button>
+        <button class="concept-tab flex-1 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition flex items-center justify-center gap-2" data-concept="daily">
+          <i class="fa-solid fa-mug-hot"></i>
+          <span>일상외출복 (편안/캐주얼)</span>
+        </button>
+        <button class="concept-tab flex-1 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition flex items-center justify-center gap-2" data-concept="date">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          <span>꾸밈복 (데이트/모임)</span>
+        </button>
+      </div>
+
+      <div class="glass-card rounded-2xl p-4 flex flex-col relative overflow-hidden shadow-xl border border-slate-800">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-xs font-bold text-slate-300">3D 입체 코디 마네킹 뷰어</span>
+          </div>
+          <div class="text-[11px] text-slate-400 flex items-center gap-1.5">
+            <i class="fa-solid fa-arrows-rotate text-sky-400"></i> 드래그하여 360° 회전
+          </div>
+        </div>
+
+        <!-- 3D Canvas Box -->
+        <div id="canvas-container" class="bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-800/80">
+          <!-- Three.js will attach here -->
+          <div class="absolute bottom-3 left-3 bg-slate-900/85 backdrop-blur-md px-3 py-1.5 rounded-lg border border-slate-700/60 text-[11px] text-slate-300 flex items-center gap-2 pointer-events-none">
+            <span id="canvas-outer-name" class="font-bold text-sky-400">아우터 명</span>
+            <span class="text-slate-500">|</span>
+            <span id="canvas-concept-tag" class="text-slate-300">출근복 모드</span>
+          </div>
+          <button id="btn-reset-cam" title="카메라 위치 초기화" class="absolute top-3 right-3 bg-slate-800/80 hover:bg-slate-700 text-slate-300 p-2 rounded-lg text-xs border border-slate-700 transition">
+            <i class="fa-solid fa-crosshairs"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col gap-4 border border-slate-800">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div>
+            <h3 class="text-base font-bold text-white flex items-center gap-2">
+              <span id="selected-outer-title" class="text-sky-400">지오지아 카키 코듀로이 셔켓</span>
+              <span class="text-xs font-normal text-slate-400" id="selected-concept-title">(출근복 3색 조합)</span>
+            </h3>
+            <p class="text-xs text-slate-400 mt-0.5" id="outer-desc-guide">자연스러운 골지 텍스처로 단정하면서도 따뜻한 느낌을 줍니다.</p>
+          </div>
+          <!-- Denim advice badge for current outer -->
+          <div id="denim-outer-verdict" class="hidden sm:inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full badge-denim-hint text-white shadow-sm">
+            <i class="fa-solid fa-check mr-1.5"></i> 중청 강추!
+          </div>
+        </div>
+
+        <!-- 3 Columns: T-shirt / Pants / Shoes -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+          <!-- 1. T-SHIRT 3 COLORS -->
+          <div class="bg-slate-900/60 rounded-xl p-3 border border-slate-800 flex flex-col gap-2.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-6 h-6 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center text-xs"><i class="fa-solid fa-shirt"></i></span>
+                <h4 class="text-xs font-bold text-slate-200">이너 티셔츠 (3색)</h4>
+              </div>
+              <span class="text-[10px] text-slate-400">택 1</span>
+            </div>
+            <div id="tshirt-recommendations" class="flex flex-col gap-2">
+              <!-- Cards dynamic -->
+            </div>
+          </div>
+
+          <!-- 2. PANTS 3 COLORS (Highlights Denim: 흑청, 연청, 중청) -->
+          <div class="bg-slate-900/60 rounded-xl p-3 border border-slate-800 flex flex-col gap-2.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-6 h-6 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-xs"><i class="fa-solid fa-person"></i></span>
+                <h4 class="text-xs font-bold text-slate-200">하의 바지 (3색)</h4>
+              </div>
+              <span class="text-[10px] text-sky-400 font-medium">데님 매칭</span>
+            </div>
+            <div id="pants-recommendations" class="flex flex-col gap-2">
+              <!-- Cards dynamic -->
+            </div>
+          </div>
+
+          <!-- 3. SHOES 3 COLORS -->
+          <div class="bg-slate-900/60 rounded-xl p-3 border border-slate-800 flex flex-col gap-2.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs"><i class="fa-solid fa-shoe-prints"></i></span>
+                <h4 class="text-xs font-bold text-slate-200">신발 (3색)</h4>
+              </div>
+              <span class="text-[10px] text-slate-400">포인트</span>
+            </div>
+            <div id="shoes-recommendations" class="flex flex-col gap-2">
+              <!-- Cards dynamic -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Practical Styling Advice Banner -->
+        <div id="styling-tip-box" class="p-3 rounded-xl bg-slate-800/40 border border-slate-700/50 text-xs text-slate-300 flex items-start gap-2.5">
+          <i class="fa-solid fa-lightbulb text-amber-400 mt-0.5 text-sm"></i>
+          <div>
+            <span class="font-bold text-slate-200">스타일링 코디 가이드: </span>
+            <span id="styling-tip-text">검은색 티셔츠를 입을 경우, 하의를 중청이나 크림색으로 밝혀주면 상하의 밸런스가 깔끔해집니다.</span>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <div id="denim-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 max-w-lg w-full rounded-2xl p-6 shadow-2xl flex flex-col gap-4 relative">
+      <button id="btn-close-denim-modal" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-blue-600/30 text-blue-400 flex items-center justify-center text-xl">
+          <i class="fa-solid fa-vest-patches"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-bold text-white">중청 데님 구매 고민 솔루션</h3>
+          <p class="text-xs text-slate-400">현재 보유 중: 흑청, 연청 | 중청을 구매해야 할까?</p>
+        </div>
+      </div>
+
+      <div class="space-y-3 text-xs leading-relaxed text-slate-300">
+        <div class="p-3 rounded-xl bg-slate-800/70 border border-slate-700">
+          <div class="font-bold text-sky-400 mb-1">결론: "중청(Mid Blue) 구매를 강력히 추천합니다!"</div>
+          <p>사용자님의 14개 아우터 중 **카키 윈드브레이커, 1번 코듀로이 셔켓, 4번 멜란지 셔츠, 7번 체크 가디건, 11번 블랙 패딩**은 연청이나 흑청보다 **중청 데님**과 매치했을 때 가장 색상 밸런스가 좋습니다.</p>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2 text-center text-[11px]">
+          <div class="p-2 rounded-lg bg-slate-800 border border-slate-700">
+            <span class="block font-bold text-slate-300">보유: 흑청</span>
+            <span class="text-slate-400 text-[10px]">시크/모던. 단, 어두운 아우터와 입으면 다소 칙칙함.</span>
+          </div>
+          <div class="p-2 rounded-lg bg-sky-900/40 border border-sky-500/50">
+            <span class="block font-bold text-sky-300">추천: 중청 ⭐</span>
+            <span class="text-sky-200/80 text-[10px]">사계절 만능. 블랙 티와 입을 때 가장 예쁜 색감.</span>
+          </div>
+          <div class="p-2 rounded-lg bg-slate-800 border border-slate-700">
+            <span class="block font-bold text-slate-300">보유: 연청</span>
+            <span class="text-slate-400 text-[10px]">시원하고 캐주얼. 겨울 아우터와는 톤이 뜰 수 있음.</span>
+          </div>
+        </div>
+
+        <p class="text-slate-400 text-[11px]">
+          💡 <strong>구매 추천 핏:</strong> 와이드 스트레이트 또는 세미와이드 테이퍼드 핏. 너무 진하지 않고 샌드 브러쉬 워싱이 살짝 들어간 기본 미드블루를 고르시면 14개 아우터의 80% 이상과 즉시 매칭됩니다.
+        </p>
+      </div>
+
+      <button id="btn-modal-ok" class="w-full py-2.5 bg-sky-600 hover:bg-sky-500 text-white rounded-xl font-semibold text-xs transition">
+        확인 완료
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // 14 Outers mapped from the user's PDF
+    const outerItems = [
+      {
+        id: 1,
+        name: "지오지아 카키 코듀로이 셔켓",
+        tag: "코듀로이 / 어텀",
+        baseColor: "#3e4235", // Khaki corduroy
+        hexColor: "#3e4235",
+        desc: "부드러운 골지 짜임의 카키브라운 셔츠형 아우터. 가을/초겨울에 최적.",
+        denimRec: "중청(최적) / 흑청",
+        page: "PDF 1p",
+        outfits: {
+          office: {
+            tshirt: [
+              { name: "퓨어 화이트", hex: "#f8fafc", chip: "bg-slate-100 text-slate-900", tip: "가장 단정한 깃 대비" },
+              { name: "소프트 크림", hex: "#fef3c7", chip: "bg-amber-100 text-amber-900", tip: "따뜻한 웜톤 오피스" },
+              { name: "솔리드 블랙", hex: "#0f172a", chip: "bg-slate-900 text-white", tip: "차분하고 무게감 있는 느낌" }
+            ],
+            pants: [
+              { name: "차콜 슬랙스", hex: "#334155", type: "slacks", tip: "포멀한 출근룩 정석" },
+              { name: "흑청 데님", hex: "#1e293b", type: "black_denim", tip: "소장 중인 흑청으로 단정한 비즈니스 캐주얼" },
+              { name: "베이지/크림 치노", hex: "#e2d9cc", type: "chino", tip: "카키와 자연스러운 어스톤 조화" }
+            ],
+            shoes: [
+              { name: "블랙 더비 슈즈", hex: "#000000", tip: "정돈된 출근 신발" },
+              { name: "다크브라운 로퍼", hex: "#3e2723", tip: "코듀로이와 찰떡 조화" },
+              { name: "올 화이트 레더 스니커즈", hex: "#ffffff", tip: "깔끔하고 세련된 인상" }
+            ],
+            tip: "출근 시에는 안에 화이트나 크림 티를 단추 1~2개 오픈하고 차콜 슬랙스나 흑청과 매치해 깔끔함을 살려보세요."
+          },
+          daily: {
+            tshirt: [
+              { name: "오트밀 멜란지", hex: "#e5e5e5", chip: "bg-stone-200 text-stone-900", tip: "자연스러운 데일리" },
+              { name: "블랙 티셔츠", hex: "#0f172a", chip: "bg-slate-900 text-white", tip: "기본 무난함" },
+              { name: "헤더 그레이", hex: "#94a3b8", chip: "bg-slate-300 text-slate-900", tip: "편안한 무드" }
+            ],
+            pants: [
+              { name: "중청 데님 (강력 추천)", hex: "#2563eb", type: "mid_denim", tip: "★구매 시 1순위 활용! 카키와 최고의 배색" },
+              { name: "연청 데님", hex: "#60a5fa", type: "light_denim", tip: "소장 연청으로 밝고 경쾌하게 연출" },
+              { name: "카키/올리브 카고팬츠", hex: "#2f3e2d", type: "cargo", tip: "자연스러운 아웃도어 톤온톤" }
+            ],
+            shoes: [
+              { name: "그레이 런닝화 (뉴발란스류)", hex: "#94a3b8", tip: "가장 편안한 걷기 조합" },
+              { name: "화이트 캔버스 스니커즈", hex: "#f1f5f9", tip: "캐주얼 기본템" },
+              { name: "브라운 스웨이드 왈라비/뮬", hex: "#78350f", tip: "따뜻한 감성" }
+            ],
+            tip: "평소 외출에는 카키 아우터에 중청 데님을 입고 그레이 스니커즈를 신으면 호불호 없는 남친룩이 완성됩니다."
+          },
+          date: {
+            tshirt: [
+              { name: "블랙 모크넥/티", hex: "#000000", chip: "bg-black text-white", tip: "선명하고 슬림해 보임" },
+              { name: "다크 올리브", hex: "#283618", chip: "bg-emerald-950 text-emerald-100", tip: "감도 높은 톤온톤" },
+              { name: "아이보리 니트티", hex: "#fafafa", chip: "bg-stone-100 text-stone-900", tip: "부드럽고 호감형" }
+            ],
+            pants: [
+              { name: "흑청 와이드 데님", hex: "#1e293b", type: "black_denim", tip: "소장 흑청에 레더 벨트 포인트" },
+              { name: "중청 테이퍼드 데님", hex: "#1d4ed8", type: "mid_denim", tip: "선명한 컬러 대비감" },
+              { name: "오프화이트 와이드 슬랙스", hex: "#f1f5f9", type: "slacks", tip: "분위기 있는 카페 룩" }
+            ],
+            shoes: [
+              { name: "블랙 첼시 부츠", hex: "#111827", tip: "날렵하고 섹시한 실루엣" },
+              { name: "블랙 더비 슈즈", hex: "#000000", tip: "깔끔하고 세련된 구두" },
+              { name: "독일군 스니커즈", hex: "#e2e8f0", tip: "클래식하고 센스 있는 스니커즈" }
+            ],
+            tip: "데이트나 모임에서는 이너로 블랙을 선택해 시크함을 잡고, 흑청이나 크림 슬랙스에 블랙 더비를 매치하세요."
+          }
+        }
+      },
+      {
+        id: 2,
+        name: "지오다노 클래식 네이비 셔켓",
+        tag: "미니멀 / 네이비",
+        baseColor: "#1e293b",
+        hexColor: "#1e293b",
+        desc: "단정하고 깔끔한 지오다노 네이비 셔츠형 아우터. 출근과 단정한 자리에 최적화.",
+        denimRec: "연청 / 중청",
+        page: "PDF 2p",
+        outfits: {
+          office: {
+            tshirt: [
+              { name: "클린 화이트", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "네이비와 대비되는 청량감" },
+              { name: "라이트 그레이", hex: "#cbd5e1", chip: "bg-slate-200 text-slate-800", tip: "차분한 중간톤" },
+              { name: "스카이 블루 톤", hex: "#bae6fd", chip: "bg-sky-100 text-sky-900", tip: "셔츠 느낌의 톤온톤" }
+            ],
+            pants: [
+              { name: "미디엄 그레이 슬랙스", hex: "#475569", type: "slacks", tip: "실패 없는 네이비+그레이 공식" },
+              { name: "베이지 치노 슬랙스", hex: "#d6c7b2", type: "slacks", tip: "아이비리그 단정한 룩" },
+              { name: "흑청 데님", hex: "#0f172a", type: "black_denim", tip: "다크하고 깔끔한 비즈니스 룩" }
+            ],
+            shoes: [
+              { name: "블랙 플레인 더비", hex: "#000000", tip: "신뢰감 주는 출근화" },
+              { name: "올 화이트 미니멀 스니커즈", hex: "#ffffff", tip: "단정하고 경쾌함" },
+              { name: "다크 네이비 캔버스", hex: "#0f172a", tip: "통일감 있는 배색" }
+            ],
+            tip: "네이비 아우터에 그레이 슬랙스나 흑청은 가장 스마트해 보이는 오피스 배색입니다."
+          },
+          daily: {
+            tshirt: [
+              { name: "화이트 티셔츠", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "국민 정석 이너" },
+              { name: "차콜 그레이", hex: "#334155", chip: "bg-slate-700 text-white", tip: "묵직한 매치" },
+              { name: "블랙 티셔츠", hex: "#000000", chip: "bg-black text-white", tip: "시크한 네이비&블랙" }
+            ],
+            pants: [
+              { name: "연청 데님 (추천)", hex: "#60a5fa", type: "light_denim", tip: "소장 연청으로 산뜻한 네이비 대비!" },
+              { name: "중청 데님", hex: "#2563eb", type: "mid_denim", tip: "가장 안정적인 캐주얼" },
+              { name: "올리브/카키 치노", hex: "#3f4c38", type: "chino", tip: "색채감이 풍부한 스타일" }
+            ],
+            shoes: [
+              { name: "화이트 스니커즈", hex: "#ffffff", tip: "발끝을 밝혀 시선 분산 방지" },
+              { name: "그레이 빈티지 스니커즈", hex: "#94a3b8", tip: "편안한 무드" },
+              { name: "네이비/블루 반스/컨버스", hex: "#1e3a8a", tip: "위트 있는 캐주얼" }
+            ],
+            tip: "소장하고 계신 연청 바지를 적극 활용하기 가장 좋은 네이비 아우터입니다!"
+          },
+          date: {
+            tshirt: [
+              { name: "블랙 피마원단 티", hex: "#0f172a", chip: "bg-slate-900 text-white", tip: "모던하고 날렵한 인상" },
+              { name: "화이트 실켓 티", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "깔끔한 피부톤 연출" },
+              { name: "크림 베이지", hex: "#f5f5f4", chip: "bg-stone-100 text-stone-800", tip: "부드럽고 단정한 이미지" }
+            ],
+            pants: [
+              { name: "크림 화이트 와이드 팬츠", hex: "#f8fafc", type: "slacks", tip: "고급스럽고 화사함 극대화" },
+              { name: "흑청 데님", hex: "#1e293b", type: "black_denim", tip: "소장 흑청으로 깔끔한 실루엣" },
+              { name: "중청 와이드 데님", hex: "#1d4ed8", type: "mid_denim", tip: "캐주얼 댄디룩" }
+            ],
+            shoes: [
+              { name: "블랙 더비 슈즈", hex: "#000000", tip: "신뢰감 100% 룩" },
+              { name: "화이트 가죽 스니커즈", hex: "#ffffff", tip: "군더더기 없는 미니멀" },
+              { name: "로퍼 (페니/태슬)", hex: "#1e293b", tip: "격식 있는 포인트" }
+            ],
+            tip: "소장 흑청이나 크림 팬츠에 화이트 스니커즈를 신으면 실패 없는 데이트 룩이 됩니다."
+          }
+        }
+      },
+      {
+        id: 3,
+        name: "워싱 흑청/차콜 데님 셔켓",
+        tag: "스트릿 / 워싱",
+        baseColor: "#333538",
+        hexColor: "#333538",
+        desc: "빈티지한 워싱감이 매력적인 차콜 흑청 셔켓. 자연스러운 멋이 장점.",
+        denimRec: "중청 / 연청 (톤 대비)",
+        page: "PDF 3p",
+        outfits: {
+          office: {
+            tshirt: [
+              { name: "스노우 화이트", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "워싱의 러프함을 정돈" },
+              { name: "라이트 그레이", hex: "#cbd5e1", chip: "bg-slate-300 text-slate-900", tip: "부드러운 음영" },
+              { name: "모카 베이지", hex: "#d7ccc8", chip: "bg-stone-300 text-stone-900", tip: "차분한 웜그레이" }
+            ],
+            pants: [
+              { name: "차콜 슬랙스", hex: "#1e293b", type: "slacks", tip: "깔끔한 톤온톤 정돈" },
+              { name: "블랙 테이퍼드 치노", hex: "#0f172a", type: "chino", tip: "단정하고 샤프함" },
+              { name: "다크 네이비 팬츠", hex: "#0f172a", type: "slacks", tip: "차분한 무게감" }
+            ],
+            shoes: [
+              { name: "블랙 더비 슈즈", hex: "#000000", tip: "캐주얼 셔츠를 오피스룩으로 승화" },
+              { name: "올 화이트 스니커즈", hex: "#ffffff", tip: "대비되는 청결감" },
+              { name: "미니멀 블랙 로퍼", hex: "#18181b", tip: "트렌디한 감각" }
+            ],
+            tip: "워싱 데님 셔츠는 출근 시 단추를 모두 잠그고 슬랙스를 받쳐 입으면 정돈되어 보입니다."
+          },
+          daily: {
+            tshirt: [
+              { name: "솔리드 블랙 티", hex: "#000000", chip: "bg-black text-white", tip: "올블랙 시크 감성" },
+              { name: "멜란지 그레이", hex: "#94a3b8", chip: "bg-slate-300 text-slate-900", tip: "편안한 일상톤" },
+              { name: "아이보리 티", hex: "#fafaf9", chip: "bg-stone-100 text-stone-900", tip: "선명한 명도 대비" }
+            ],
+            pants: [
+              { name: "중청 데님 (최고의 궁합)", hex: "#2563eb", type: "mid_denim", tip: "★상하의 데님 톤온톤(청청) 분리 완성" },
+              { name: "연청 데님", hex: "#60a5fa", type: "light_denim", tip: "상체는 어둡고 하체는 시원하게" },
+              { name: "라이트 카키 카고", hex: "#52634f", type: "cargo", tip: "스트릿 캐주얼 무드" }
+            ],
+            shoes: [
+              { name: "그레이 런닝 스니커즈", hex: "#94a3b8", tip: "뉴발란스류 매치 추천" },
+              { name: "블랙/화이트 반스 올드스쿨", hex: "#0f172a", tip: "데님과 정석 짝꿍" },
+              { name: "볼드한 블랙 워커", hex: "#111827", tip: "묵직하고 남성적인 매력" }
+            ],
+            tip: "상의가 흑청 워싱이므로 바지는 같은 흑청보다는 '중청'이나 '연청'으로 톤 차이를 주는 것이 훨씬 세련됩니다."
+          },
+          date: {
+            tshirt: [
+              { name: "크림 베이지 티", hex: "#fef3c7", chip: "bg-amber-100 text-amber-900", tip: "워싱 데님을 부드럽게 감쌈" },
+              { name: "블랙 슬림핏 티", hex: "#000000", chip: "bg-black text-white", tip: "탄탄한 체형 부각" },
+              { name: "화이트 기본 라운드", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "깔끔 담백" }
+            ],
+            pants: [
+              { name: "아이보리/크림 와이드 팬츠", hex: "#f1f5f9", type: "slacks", tip: "센스 있는 패션 피플 느낌" },
+              { name: "중청 와이드 데님", hex: "#1d4ed8", type: "mid_denim", tip: "자연스러운 데이트 룩" },
+              { name: "블랙 와이드 슬랙스", hex: "#0f172a", type: "slacks", tip: "다리가 길어 보이는 조합" }
+            ],
+            shoes: [
+              { name: "블랙 더비 슈즈", hex: "#000000", tip: "단정하고 세련됨" },
+              { name: "올 화이트 레더 스니커즈", hex: "#ffffff", tip: "호감도 높은 기본" },
+              { name: "스웨이드 첼시 부츠", hex: "#3e2723", tip: "고급스러운 질감" }
+            ],
+            tip: "이너로 블랙 티셔츠를 입고, 크림색 바지와 화이트 스니커즈를 더하면 완벽한 남친룩입니다."
+          }
+        }
+      },
+      {
+        id: 4,
+        name: "멜란지 그레이 옥스포드 셔츠",
+        tag: "댄디 / 멜란지",
+        baseColor: "#64748b",
+        hexColor: "#64748b",
+        desc: "소매 롤업이 자연스러운 은은한 차콜-그레이 톤 옥스포드 셔츠. 다재다능 기본템.",
+        denimRec: "흑청 / 중청",
+        page: "PDF 4-5p",
+        outfits: {
+          office: {
+            tshirt: [
+              { name: "화이트 브이/라운드", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "단추 풀었을 때 맑은 느낌" },
+              { name: "블랙 티셔츠", hex: "#000000", chip: "bg-black text-white", tip: "모던하고 정제된 음영" },
+              { name: "네이비 티셔츠", hex: "#1e3a8a", chip: "bg-blue-950 text-blue-100", tip: "신뢰감 있는 비즈니스" }
+            ],
+            pants: [
+              { name: "다크 네이비 슬랙스", hex: "#0f172a", type: "slacks", tip: "그레이+네이비의 최고 궁합" },
+              { name: "흑청 데님", hex: "#1e293b", type: "black_denim", tip: "소장 흑청으로 단정한 캐주얼" },
+              { name: "블랙 슬림 슬랙스", hex: "#000000", type: "slacks", tip: "군더더기 없는 실루엣" }
+            ],
+            shoes: [
+              { name: "블랙 플레인 더비", hex: "#000000", tip: "정돈된 출근 신발" },
+              { name: "올 화이트 스니커즈", hex: "#ffffff", tip: "미니멀 오피스룩" },
+              { name: "다크 브라운 로퍼", hex: "#451a03", tip: "클래식 감성" }
+            ],
+            tip: "소매를 자연스럽게 2번 걷어 올리고 소장 흑청 바지와 블랙 더비를 신으면 프로페셔널해 보입니다."
+          },
+          daily: {
+            tshirt: [
+              { name: "블랙 반팔 티", hex: "#0f172a", chip: "bg-slate-900 text-white", tip: "가장 편안하고 실패 없음" },
+              { name: "화이트 무지 티", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "깔끔한 레이어드" },
+              { name: "차콜 티셔츠", hex: "#334155", chip: "bg-slate-700 text-white", tip: "톤온톤" }
+            ],
+            pants: [
+              { name: "중청 데님 (추천)", hex: "#2563eb", type: "mid_denim", tip: "★그레이 셔츠와 중청은 불패 조합" },
+              { name: "연청 데님", hex: "#60a5fa", type: "light_denim", tip: "소장 연청으로 밝은 봄/초가을 느낌" },
+              { name: "베이지 치노팬츠", hex: "#d7ccc8", type: "chino", tip: "부드럽고 편안한 톤" }
+            ],
+            shoes: [
+              { name: "그레이 스니커즈", hex: "#94a3b8", tip: "셔츠 색상과 이어지는 통일감" },
+              { name: "화이트 독일군 스니커즈", hex: "#f1f5f9", tip: "깔끔하고 세련된 데일리" },
+              { name: "블랙 캔버스화", hex: "#000000", tip: "심플 캐주얼" }
+            ],
+            tip: "그레이 셔츠를 단추 다 풀고 아우터처럼 툭 걸친 뒤 안에 검정 티, 바지는 중청 데님을 입어보세요!"
+          },
+          date: {
+            tshirt: [
+              { name: "소프트 크림 티", hex: "#fef3c7", chip: "bg-amber-100 text-amber-900", tip: "따뜻한 인상" },
+              { name: "실키 블랙 티", hex: "#000000", chip: "bg-black text-white", tip: "어른스러운 분위기" },
+              { name: "퓨어 화이트", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "호감도 높은 기본" }
+            ],
+            pants: [
+              { name: "흑청 테이퍼드 데님", hex: "#1e293b", type: "black_denim", tip: "소장 흑청의 단정함 발휘" },
+              { name: "중청 크롭 데님", hex: "#1d4ed8", type: "mid_denim", tip: "발목이 살짝 보이는 경쾌함" },
+              { name: "크림 슬랙스", hex: "#fafaf9", type: "slacks", tip: "센스 넘치는 데이트 배색" }
+            ],
+            shoes: [
+              { name: "블랙 더비 슈즈", hex: "#000000", tip: "가장 추천하는 정갈한 마무리" },
+              { name: "올 화이트 레더 스니커즈", hex: "#ffffff", tip: "실패 없는 첫인상" },
+              { name: "다크브라운 스웨이드 로퍼", hex: "#3e2723", tip: "따뜻하고 젠틀함" }
+            ],
+            tip: "질 좋은 검정 티셔츠 위에 그레이 셔츠를 가볍게 덧입고 흑청 바지에 블랙 더비를 신으면 미니멀의 정석입니다."
+          }
+        }
+      },
+      {
+        id: 5,
+        name: "베이직 멜란지 그레이 후드집업",
+        tag: "캐주얼 / 원마일",
+        baseColor: "#9ca3af",
+        hexColor: "#9ca3af",
+        desc: "유니클로 기본형 그레이 후드집업. 가장 손이 자주 가는 만능 레이어드 아이템.",
+        denimRec: "중청 / 흑청",
+        page: "PDF 5-6p",
+        outfits: {
+          office: {
+            tshirt: [
+              { name: "화이트 라운드 티", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "캐주얼한 오피스룩 정돈" },
+              { name: "네이비 티셔츠", hex: "#1e3a8a", chip: "bg-blue-950 text-blue-100", tip: "스마트한 인상" },
+              { name: "블랙 티셔츠", hex: "#000000", chip: "bg-black text-white", tip: "모노톤의 안정감" }
+            ],
+            pants: [
+              { name: "차콜 슬랙스", hex: "#334155", type: "slacks", tip: "후드의 가벼움을 눌러줌" },
+              { name: "흑청 데님", hex: "#1e293b", type: "black_denim", tip: "소장 흑청으로 단정한 비즈니스룩" },
+              { name: "다크 네이비 치노", hex: "#0f172a", type: "chino", tip: "클래식 캐주얼" }
+            ],
+            shoes: [
+              { name: "올 화이트 스니커즈", hex: "#ffffff", tip: "단정하고 깔끔함 유지" },
+              { name: "블랙 더비 슈즈", hex: "#000000", tip: "믹스매치 무드" },
+              { name: "미니멀 그레이 레더화", hex: "#64748b", tip: "톤온톤 정돈" }
+            ],
+            tip: "후드집업으로 출근할 때는 슬랙스나 흑청을 받쳐 입어 홈웨어처럼 보이지 않게 균형을 맞춰주세요."
+          },
+          daily: {
+            tshirt: [
+              { name: "블랙 티셔츠", hex: "#000000", chip: "bg-black text-white", tip: "후드 안쪽 안정적인 배경" },
+              { name: "화이트 무지 티", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "기본 레이어드" },
+              { name: "차콜 티셔츠", hex: "#1e293b", chip: "bg-slate-800 text-white", tip: "모노톤 일상" }
+            ],
+            pants: [
+              { name: "중청 와이드 데님 (최고)", hex: "#2563eb", type: "mid_denim", tip: "★그레이 후드+중청 청바지는 캠퍼스/일상 1등 배색" },
+              { name: "연청 데님", hex: "#60a5fa", type: "light_denim", tip: "소장 연청으로 밝고 청량하게" },
+              { name: "그레이 조거팬츠", hex: "#94a3b8", type: "jogger", tip: "편안한 스웻 셋업 룩" }
+            ],
+            shoes: [
+              { name: "그레이 런닝화", hex: "#64748b", tip: "가장 편안한 걷기 조합" },
+              { name: "화이트 스니커즈", hex: "#f1f5f9", tip: "클래식 일상화" },
+              { name: "블랙 슬립온/캔버스", hex: "#0f172a", tip: "간편한 외출" }
+            ],
+            tip: "외출 시 그레이 후드에 중청 데님을 입고 흰색 티셔츠 밑단을 살짝 빼서 레이어드해보세요!"
+          },
+          date: {
+            tshirt: [
+              { name: "솔리드 블랙 티", hex: "#000000", chip: "bg-black text-white", tip: "후드집업을 세련되게 변신" },
+              { name: "크림 베이지", hex: "#fef3c7", chip: "bg-amber-100 text-amber-900", tip: "포근하고 다정한 무드" },
+              { name: "클린 화이트", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "순수한 느낌" }
+            ],
+            pants: [
+              { name: "흑청 데님", hex: "#1e293b", type: "black_denim", tip: "소장 흑청으로 단정한 실루엣" },
+              { name: "중청 테이퍼드 데님", hex: "#1d4ed8", type: "mid_denim", tip: "꾸안꾸 남친룩의 정석" },
+              { name: "아이보리 코튼 팬츠", hex: "#fafaf9", type: "chino", tip: "밝고 센스 있는 하의" }
+            ],
+            shoes: [
+              { name: "독일군 스니커즈", hex: "#e2e8f0", tip: "꾸안꾸 데이트 1등 신발" },
+              { name: "올 화이트 레더 스니커즈", hex: "#ffffff", tip: "깨끗한 마무리" },
+              { name: "블랙 캔버스 하이", hex: "#111827", tip: "위트 있는 포인트" }
+            ],
+            tip: "후드집업으로 꾸안꾸 무드를 낼 때는 흑청 팬츠에 독일군 스니커즈를 신어주면 센스 있어 보입니다."
+          }
+        }
+      },
+      {
+        id: 6,
+        name: "유니클로 네이비 V넥 니트 가디건",
+        tag: "모던 / 댄디",
+        baseColor: "#0f233a",
+        hexColor: "#0f233a",
+        desc: "깔끔한 게이지의 딥 네이비 V넥 가디건. 단정함과 지적인 분위기의 정석.",
+        denimRec: "중청 / 연청 / 흑청 모두 호환",
+        page: "PDF 6p",
+        outfits: {
+          office: {
+            tshirt: [
+              { name: "화이트 라운드 티", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "가장 또렷하고 지적인 V존" },
+              { name: "라이트 그레이", hex: "#cbd5e1", chip: "bg-slate-300 text-slate-900", tip: "부드럽고 젠틀함" },
+              { name: "스카이 블루", hex: "#e0f2fe", chip: "bg-sky-100 text-sky-900", tip: "상쾌한 오피스 톤" }
+            ],
+            pants: [
+              { name: "차콜 그레이 슬랙스", hex: "#334155", type: "slacks", tip: "비즈니스 댄디룩 최고 조합" },
+              { name: "베이지/크림 슬랙스", hex: "#e2d9cc", type: "slacks", tip: "네이비와 환상적인 대비" },
+              { name: "흑청 데님", hex: "#1e293b", type: "black_denim", tip: "소장 흑청으로 단정한 마무리" }
+            ],
+            shoes: [
+              { name: "블랙 더비 슈즈", hex: "#000000", tip: "포멀함과 신뢰감" },
+              { name: "다크브라운 페니 로퍼", hex: "#3e2723", tip: "가디건과 찰떡궁합" },
+              { name: "올 화이트 스니커즈", hex: "#ffffff", tip: "깔끔하고 세련됨" }
+            ],
+            tip: "V넥 가디건 안에 목둘레가 짱짱한 흰 티를 받쳐 입고 슬랙스나 흑청을 입으면 완벽한 출근복입니다."
+          },
+          daily: {
+            tshirt: [
+              { name: "블랙 티셔츠", hex: "#000000", chip: "bg-black text-white", tip: "차분하고 모던함" },
+              { name: "화이트 티셔츠", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "단정하고 깨끗함" },
+              { name: "오트밀 베이지", hex: "#e7e5e4", chip: "bg-stone-200 text-stone-900", tip: "자연스러움" }
+            ],
+            pants: [
+              { name: "연청 데님 (강력 추천)", hex: "#60a5fa", type: "light_denim", tip: "★소장 연청으로 네이비와 가장 예쁜 청량감 연출" },
+              { name: "중청 와이드 데님", hex: "#2563eb", type: "mid_denim", tip: "안정적이고 캐주얼한 핏" },
+              { name: "카키 치노팬츠", hex: "#3f4c38", type: "chino", tip: "편안한 아메카지 감성" }
+            ],
+            shoes: [
+              { name: "화이트 캔버스 스니커즈", hex: "#f8fafc", tip: "발랄하고 가벼운 발걸음" },
+              { name: "그레이 스니커즈", hex: "#94a3b8", tip: "편안한 일상 외출" },
+              { name: "네이비 슬립온", hex: "#1e293b", tip: "톤을 맞춘 정돈감" }
+            ],
+            tip: "소장 중이신 '연청' 바지를 네이비 가디건과 매치하면 시원하고 젊은 감각이 살아납니다!"
+          },
+          date: {
+            tshirt: [
+              { name: "크림 화이트 티", hex: "#fafaf9", chip: "bg-stone-100 text-stone-900", tip: "다정하고 부드러운 이미지" },
+              { name: "솔리드 블랙 티", hex: "#000000", chip: "bg-black text-white", tip: "시크하고 차분함" },
+              { name: "라이트 핑크/베이지", hex: "#fce7f3", chip: "bg-pink-100 text-pink-900", tip: "데이트용 포인트" }
+            ],
+            pants: [
+              { name: "흑청 데님", hex: "#1e293b", type: "black_denim", tip: "소장 흑청의 댄디한 활용" },
+              { name: "중청 테이퍼드 데님", hex: "#1d4ed8", type: "mid_denim", tip: "단정함 속 캐주얼함" },
+              { name: "크림/아이보리 슬랙스", hex: "#f1f5f9", type: "slacks", tip: "데이트 호감도 1위 배색" }
+            ],
+            shoes: [
+              { name: "블랙 더비 슈즈", hex: "#000000", tip: "깔끔하고 세련된 남친룩" },
+              { name: "올 화이트 레더 스니커즈", hex: "#ffffff", tip: "호불호 제로" },
+              { name: "다크브라운 로퍼", hex: "#451a03", tip: "클래식하고 다정한 무드" }
+            ],
+            tip: "단추는 가운데 1~2개만 잠그거나 다 풀어서 자연스러운 V라인을 형성해 주세요."
+          }
+        }
+      },
+      {
+        id: 7,
+        name: "그레이 & 옐로우 체크 오버핏 가디건",
+        tag: "포인트 / 트렌디",
+        baseColor: "#57534e",
+        hexColor: "#57534e",
+        desc: "그레이 바탕에 옐로우 윈도우 페인 체크가 들어간 유니크한 포인트 가디건.",
+        denimRec: "흑청(최적) / 중청",
+        page: "PDF 7p",
+        outfits: {
+          office: {
+            tshirt: [
+              { name: "솔리드 블랙 티", hex: "#000000", chip: "bg-black text-white", tip: "화려한 체크 패턴을 단정하게 정돈" },
+              { name: "클린 화이트", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "화사하고 선명한 라인" },
+              { name: "차콜 그레이", hex: "#334155", chip: "bg-slate-700 text-white", tip: "체크의 바탕색과 통일" }
+            ],
+            pants: [
+              { name: "블랙 와이드 슬랙스", hex: "#0f172a", type: "slacks", tip: "패턴을 돋보이게 하는 하의" },
+              { name: "흑청 데님", hex: "#1e293b", type: "black_denim", tip: "소장 흑청으로 단정한 캐주얼" },
+              { name: "다크 차콜 슬랙스", hex: "#334155", type: "slacks", tip: "패턴 속 옐로우 라인만 강조" }
+            ],
+            shoes: [
+              { name: "블랙 더비 슈즈", hex: "#000000", tip: "정갈하고 깔끔한 마무리" },
+              { name: "올 화이트 레더 스니커즈", hex: "#ffffff", tip: "체크 속 흰 라인과 매칭" },
+              { name: "블랙 로퍼", hex: "#18181b", tip: "세련된 무드" }
+            ],
+            tip: "가디건 자체에 옐로우 체크 포인트가 있으므로, 이너와 바지는 무조건 무채색(블랙/차콜)으로 눌러주어야 과하지 않습니다."
+          },
+          daily: {
+            tshirt: [
+              { name: "블랙 무지 티", hex: "#000000", chip: "bg-black text-white", tip: "가장 추천하는 이너" },
+              { name: "화이트 티셔츠", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "밝고 캐주얼한 일상" },
+              { name: "라이트 그레이", hex: "#cbd5e1", chip: "bg-slate-300 text-slate-900", tip: "자연스러움" }
+            ],
+            pants: [
+              { name: "중청 와이드 데님 (추천)", hex: "#2563eb", type: "mid_denim", tip: "★옐로우 체크 라인과 중청의 색감이 산뜻하게 어우러짐" },
+              { name: "흑청 데님", hex: "#1e293b", type: "black_denim", tip: "소장 흑청으로 모던하게 정돈" },
+              { name: "연청 데님", hex: "#60a5fa", type: "light_denim", tip: "밝고 개성 있는 스트릿" }
+            ],
+            shoes: [
+              { name: "올 화이트 스니커즈", hex: "#ffffff", tip: "시선을 가디건으로 집중" },
+              { name: "그레이 런닝화", hex: "#94a3b8", tip: "편안한 무드" },
+              { name: "블랙 캔버스화", hex: "#0f172a", tip: "기본 충실" }
+            ],
+            tip: "소장 흑청을 입으면 시크하고, 중청을 입으면 옐로우 체크 포인트가 살아나서 아주 예쁩니다."
+          },
+          date: {
+            tshirt: [
+              { name: "슬림 블랙 티", hex: "#000000", chip: "bg-black text-white", tip: "스타일리시한 데이트룩" },
+              { name: "아이보리 티", hex: "#fafaf9", chip: "bg-stone-100 text-stone-900", tip: "부드럽고 화사함" },
+              { name: "소프트 머스타드/크림", hex: "#fef08a", chip: "bg-yellow-100 text-yellow-900", tip: "체크 색과 통일감" }
+            ],
+            pants: [
+              { name: "흑청 와이드 데님", hex: "#1e293b", type: "black_denim", tip: "소장 흑청으로 감각적인 핏" },
+              { name: "중청 테이퍼드 데님", hex: "#1d4ed8", type: "mid_denim", tip: "젊고 트렌디한 인상" },
+              { name: "블랙 세미와이드 슬랙스", hex: "#000000", type: "slacks", tip: "비율이 길어 보임" }
+            ],
+            shoes: [
+              { name: "블랙 더비 슈즈", hex: "#000000", tip: "체크 가디건을 고급스럽게 격상" },
+              { name: "독일군 스니커즈", hex: "#e2e8f0", tip: "센스 있는 패션 센스" },
+              { name: "블랙 첼시 부츠", hex: "#111827", tip: "도시적인 세련됨" }
+            ],
+            tip: "소장 흑청 바지에 블랙 티를 이너로 넣고 이 체크 가디건을 걸치면 흔하지 않은 트렌디한 데이트 룩이 됩니다."
+          }
+        }
+      },
+      {
+        id: 8,
+        name: "노스페이스 라이트 그레이 루즈핏 후드집업",
+        tag: "스포티 / 스트릿",
+        baseColor: "#cbd5e1",
+        hexColor: "#cbd5e1",
+        desc: "노스페이스 화이트 로고 포인트가 있는 라이트 그레이 오버핏 후드집업.",
+        denimRec: "중청 / 흑청",
+        page: "PDF 8p",
+        outfits: {
+          office: {
+            tshirt: [
+              { name: "퓨어 화이트 티", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "로고와 일치하는 깨끗함" },
+              { name: "솔리드 블랙 티", hex: "#000000", chip: "bg-black text-white", tip: "명확한 톤 다운" },
+              { name: "차콜 티셔츠", hex: "#334155", chip: "bg-slate-700 text-white", tip: "차분한 중간톤" }
+            ],
+            pants: [
+              { name: "다크 차콜 슬랙스", hex: "#1e293b", type: "slacks", tip: "스포티함을 오피스룩으로 정돈" },
+              { name: "흑청 데님", hex: "#0f172a", type: "black_denim", tip: "소장 흑청으로 차분하게" },
+              { name: "블랙 테이퍼드 치노", hex: "#18181b", type: "chino", tip: "단정하고 활동적인 핏" }
+            ],
+            shoes: [
+              { name: "올 화이트 레더 스니커즈", hex: "#ffffff", tip: "가장 단정한 스니커즈" },
+              { name: "블랙 더비 슈즈", hex: "#000000", tip: "믹스매치 댄디 오피스" },
+              { name: "클린 그레이 스니커즈", hex: "#94a3b8", tip: "톤온톤 깔끔함" }
+            ],
+            tip: "자유로운 분위기의 직장이라면 흑청 데님과 화이트 스니커즈를 신어 깔끔한 스트릿 오피스룩을 만드세요."
+          },
+          daily: {
+            tshirt: [
+              { name: "블랙 티셔츠", hex: "#000000", chip: "bg-black text-white", tip: "밝은 그레이 후드 안쪽을 눌러줌" },
+              { name: "화이트 티셔츠", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "경쾌한 기본" },
+              { name: "네이비 티셔츠", hex: "#1e3a8a", chip: "bg-blue-950 text-blue-100", tip: "스포티한 색감" }
+            ],
+            pants: [
+              { name: "중청 와이드 데님 (최고 조합)", hex: "#2563eb", type: "mid_denim", tip: "★밝은 회색 후드+중청 데님은 최고의 캐주얼 공식" },
+              { name: "연청 와이드 데님", hex: "#60a5fa", type: "light_denim", tip: "소장 연청으로 밝고 힙하게" },
+              { name: "블랙/차콜 스웨트 조거", hex: "#1e293b", type: "jogger", tip: "편안한 마실룩" }
+            ],
+            shoes: [
+              { name: "그레이 런닝화", hex: "#94a3b8", tip: "노스페이스 감성과 찰떡" },
+              { name: "화이트 스니커즈", hex: "#f8fafc", tip: "기본 정석" },
+              { name: "블랙/화이트 볼드 스니커즈", hex: "#0f172a", tip: "트렌디한 무드" }
+            ],
+            tip: "소장 중이신 검은색 티셔츠를 이너로 입고, 중청 데님을 입으면 산뜻하고 활기찬 느낌을 줍니다."
+          },
+          date: {
+            tshirt: [
+              { name: "솔리드 블랙 티", hex: "#000000", chip: "bg-black text-white", tip: "세련된 무채색 대비" },
+              { name: "클린 화이트", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "얼굴이 화사해 보임" },
+              { name: "크림 베이지", hex: "#fafaf9", chip: "bg-stone-100 text-stone-900", tip: "부드러운 캐주얼" }
+            ],
+            pants: [
+              { name: "흑청 데님", hex: "#1e293b", type: "black_denim", tip: "소장 흑청으로 군살 없이 깔끔하게" },
+              { name: "중청 테이퍼드 데님", hex: "#1d4ed8", type: "mid_denim", tip: "자연스러운 꾸안꾸 룩" },
+              { name: "다크 차콜 와이드 슬랙스", hex: "#334155", type: "slacks", tip: "믹스매치 남친룩" }
+            ],
+            shoes: [
+              { name: "독일군 스니커즈", hex: "#e2e8f0", tip: "데이트용 단정한 스니커즈" },
+              { name: "올 화이트 레더 스니커즈", hex: "#ffffff", tip: "깔끔하고 세련된 마무리" },
+              { name: "블랙 더비 슈즈", hex: "#000000", tip: "슬랙스와 함께 믹스매치" }
+            ],
+            tip: "후드집업 지퍼를 30%만 올리고 검은색 티셔츠가 보이게 연출한 뒤 흑청 바지를 매치하세요."
+          }
+        }
+      },
+      {
+        id: 9,
+        name: "밀리터리 올리브 카키 후드 파카",
+        tag: "고프코어 / 아웃도어",
+        baseColor: "#3a4d39",
+        hexColor: "#3a4d39",
+        desc: "방풍/방수 재질의 올리브 카키 후드 윈드브레이커 파카. 묵직하고 남성적인 컬러감.",
+        denimRec: "중청(최적) / 흑청",
+        page: "PDF 9p",
+        outfits: {
+          office: {
+            tshirt: [
+              { name: "솔리드 블랙 티", hex: "#000000", chip: "bg-black text-white", tip: "카키의 야전 느낌을 도시적으로 절제" },
+              { name: "클린 화이트", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "선명한 명도 대비" },
+              { name: "차콜 그레이", hex: "#334155", chip: "bg-slate-700 text-white", tip: "차분하고 정돈된 톤" }
+            ],
+            pants: [
+              { name: "차콜 슬랙스", hex: "#1e293b", type: "slacks", tip: "단정한 비즈니스 고프코어" },
+              { name: "흑청 데님", hex: "#0f172a", type: "black_denim", tip: "소장 흑청으로 어둡고 깔끔한 하체" },
+              { name: "다크 그레이 치노", hex: "#334155", type: "chino", tip: "기본 출근룩" }
+            ],
+            shoes: [
+              { name: "블랙 더비 슈즈", hex: "#000000", tip: "어반 아웃도어 믹스매치" },
+              { name: "올 화이트 레더 스니커즈", hex: "#ffffff", tip: "도시적인 산뜻함" },
+              { name: "블랙 레더 스니커즈", hex: "#18181b", tip: "비 오는 날에도 단정" }
+            ],
+            tip: "카키 아우터를 입고 출근할 때는 이너를 블랙 티셔츠로 고정하고 하의를 어두운 슬랙스나 흑청으로 눌러주세요."
+          },
+          daily: {
+            tshirt: [
+              { name: "화이트 티셔츠", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "카키와 대비되는 밝은 이너" },
+              { name: "오트밀/그레이 티", hex: "#cbd5e1", chip: "bg-slate-300 text-slate-900", tip: "자연스러운 아웃도어" },
+              { name: "블랙 티셔츠", hex: "#000000", chip: "bg-black text-white", tip: "기본 불패 조합" }
+            ],
+            pants: [
+              { name: "중청 와이드 데님 (압도적 추천)", hex: "#2563eb", type: "mid_denim", tip: "★카키 야상/파카와 중청 데님은 최고의 밀리터리 캐주얼!" },
+              { name: "흑청 데님", hex: "#1e293b", type: "black_denim", tip: "소장 흑청으로 묵직하고 시크하게" },
+              { name: "베이지/탄 치노팬츠", hex: "#d7ccc8", type: "chino", tip: "클래식 워크웨어 배색" }
+            ],
+            shoes: [
+              { name: "그레이 런닝화 (뉴발란스류)", hex: "#94a3b8", tip: "카키 아우터와 찰떡 밸런스" },
+              { name: "블랙 트레킹화/스니커즈", hex: "#111827", tip: "고프코어 감성" },
+              { name: "브라운 왈라비/부츠", hex: "#78350f", tip: "계절감 있는 마무리" }
+            ],
+            tip: "카키 파카를 사실 때 고민하셨던 '중청 데님'을 입으면 야상 특유의 칙칙함이 사라지고 세련된 스트릿 캐주얼이 됩니다."
+          },
+          date: {
+            tshirt: [
+              { name: "피마코튼 블랙 티", hex: "#000000", chip: "bg-black text-white", tip: "남성미와 모던함 강조" },
+              { name: "크림 베이지", hex: "#fef3c7", chip: "bg-amber-100 text-amber-900", tip: "카키를 부드럽게 완화" },
+              { name: "화이트 기본 티", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "단정하고 깨끗함" }
+            ],
+            pants: [
+              { name: "흑청 테이퍼드 데님", hex: "#1e293b", type: "black_denim", tip: "소장 흑청으로 군더더기 없는 라인" },
+              { name: "중청 데님", hex: "#1d4ed8", type: "mid_denim", tip: "생동감 있는 캐주얼 댄디" },
+              { name: "크림 와이드 팬츠", hex: "#fafaf9", type: "chino", tip: "세련된 컬러 블로킹" }
+            ],
+            shoes: [
+              { name: "블랙 더비 슈즈", hex: "#000000", tip: "날렵한 턱선과 어울리는 구두" },
+              { name: "독일군 스니커즈", hex: "#e2e8f0", tip: "센스 있는 데이트 스니커즈" },
+              { name: "블랙 첼시 부츠", hex: "#111827", tip: "키가 커 보이는 실루엣" }
+            ],
+            tip: "안에 검은색 티셔츠를 입고 지퍼를 살짝 열어둔 채 흑청 바지와 블랙 더비를 신으면 가장 멋집니다."
+          }
+        }
+      },
+      {
+        id: 10,
+        name: "탑텐 블랙와치 체크 셔파 웜 셔켓",
+        tag: "클래식 / 아메카지",
+        baseColor: "#172554",
+        hexColor: "#172554",
+        desc: "딥 네이비와 딥 그린이 교차하는 전통 블랙와치 타탄체크에 포근한 양털(셔파) 안감.",
+        denimRec: "중청 / 흑청",
+        page: "PDF 10p",
+        outfits: {
+          office: {
+            tshirt: [
+              { name: "솔리드 블랙 티", hex: "#000000", chip: "bg-black text-white", tip: "체크 속 블랙 라인과 일체감" },
+              { name: "클린 화이트", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "양털 카라와 매치되는 밝음" },
+              { name: "다크 그레이", hex: "#334155", chip: "bg-slate-700 text-white", tip: "차분한 톤" }
+            ],
+            pants: [
+              { name: "차콜 슬랙스", hex: "#1e293b", type: "slacks", tip: "체크 셔츠를 단정한 출근복으로" },
+              { name: "흑청 데님", hex: "#0f172a", type: "black_denim", tip: "소장 흑청으로 깔끔한 조합" },
+              { name: "베이지 울 슬랙스", hex: "#d7ccc8", type: "slacks", tip: "따뜻한 겨울 출근룩" }
+            ],
+            shoes: [
+              { name: "블랙 더비 슈즈", hex: "#000000", tip: "정갈한 출근화" },
+              { name: "다크 브라운 로퍼", hex: "#3e2723", tip: "블랙와치 체크와 찰떡" },
+              { name: "올 화이트 스니커즈", hex: "#ffffff", tip: "깔끔한 마무리" }
+            ],
+            tip: "안감의 아이보리 양털이 살짝 보이기 때문에 이너로 검은 티나 흰 티를 받치면 자연스럽습니다."
+          },
+          daily: {
+            tshirt: [
+              { name: "아이보리/오트밀 티", hex: "#fef3c7", chip: "bg-amber-100 text-amber-900", tip: "양털과 어울리는 포근함" },
+              { name: "블랙 티셔츠", hex: "#000000", chip: "bg-black text-white", tip: "가장 안정적인 이너" },
+              { name: "그레이 티셔츠", hex: "#94a3b8", chip: "bg-slate-300 text-slate-900", tip: "편안한 데일리" }
+            ],
+            pants: [
+              { name: "중청 와이드 데님 (최고 추천)", hex: "#2563eb", type: "mid_denim", tip: "★블랙와치 타탄체크는 중청과 입을 때 클래식 무드 폭발" },
+              { name: "흑청 데님", hex: "#1e293b", type: "black_denim", tip: "소장 흑청으로 딥하고 시크하게" },
+              { name: "브라운/카키 코듀로이 팬츠", hex: "#451a03", type: "corduroy", tip: "빈티지 겨울 감성" }
+            ],
+            shoes: [
+              { name: "브라운 왈라비/워커", hex: "#78350f", tip: "아메카지 따뜻한 신발" },
+              { name: "그레이 런닝화", hex: "#94a3b8", tip: "편안한 캐주얼" },
+              { name: "화이트 스니커즈", hex: "#ffffff", tip: "클래식 기본" }
+            ],
+            tip: "타탄체크 아우터에는 중청 바지가 정말 잘 어울립니다. 검은 티에 중청 데님만 입어도 완성도 높습니다."
+          },
+          date: {
+            tshirt: [
+              { name: "블랙 모크넥/티", hex: "#000000", chip: "bg-black text-white", tip: "깔끔하고 세련된 인상" },
+              { name: "크림 베이지 니트티", hex: "#fafaf9", chip: "bg-stone-100 text-stone-900", tip: "다정하고 따뜻한 남친룩" },
+              { name: "차콜 슬림 티", hex: "#334155", chip: "bg-slate-800 text-white", tip: "날렵한 실루엣" }
+            ],
+            pants: [
+              { name: "흑청 데님", hex: "#1e293b", type: "black_denim", tip: "소장 흑청으로 단정한 하의" },
+              { name: "중청 테이퍼드 데님", hex: "#1d4ed8", type: "mid_denim", tip: "젊고 센스 있는 컬러" },
+              { name: "크림 화이트 팬츠", hex: "#f1f5f9", type: "chino", tip: "로맨틱한 겨울 데이트룩" }
+            ],
+            shoes: [
+              { name: "블랙 더비 슈즈", hex: "#000000", tip: "체크 셔츠를 단번에 고급스럽게" },
+              { name: "독일군 스니커즈", hex: "#e2e8f0", tip: "센스 있는 선택" },
+              { name: "다크브라운 첼시 부츠", hex: "#3e2723", tip: "성숙하고 매력적인 무드" }
+            ],
+            tip: "이너로 검은색 티셔츠를 입고 소장 흑청 바지에 블랙 더비를 신으면 단정하면서도 따뜻한 느낌을 줍니다."
+          }
+        }
+      },
+      {
+        id: 11,
+        name: "노스페이스 블랙 숏 패딩 (눕시 스타일)",
+        tag: "겨울 / 볼드",
+        baseColor: "#171717",
+        hexColor: "#171717",
+        desc: "노스페이스 화이트 자수 로고가 돋보이는 볼륨감 넘치는 블랙 숏 다운 패딩.",
+        denimRec: "중청(최적) / 연청 / 흑청 모두 가능",
+        page: "PDF 11p",
+        outfits: {
+          office: {
+            tshirt: [
+              { name: "클린 화이트 티", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "패딩 로고와 매치되는 깔끔함" },
+              { name: "멜란지 그레이", hex: "#94a3b8", chip: "bg-slate-300 text-slate-900", tip: "차분하고 정돈된 출근 이너" },
+              { name: "블랙 티셔츠", hex: "#000000", chip: "bg-black text-white", tip: "올블랙 시크 오피스룩" }
+            ],
+            pants: [
+              { name: "차콜 와이드 슬랙스", hex: "#334155", type: "slacks", tip: "숏패딩과 트렌디한 조화" },
+              { name: "흑청 데님", hex: "#1e293b", type: "black_denim", tip: "소장 흑청으로 단정한 비즈니스룩" },
+              { name: "베이지 치노 슬랙스", hex: "#d7ccc8", type: "slacks", tip: "겨울철 따뜻한 대비감" }
+            ],
+            shoes: [
+              { name: "블랙 더비 슈즈", hex: "#000000", tip: "패딩에 더비 슈즈는 트렌디한 출근룩 공식" },
+              { name: "올 화이트 레더 스니커즈", hex: "#ffffff", tip: "깨끗한 포인트" },
+              { name: "블랙 레더 첼시 부츠", hex: "#111827", tip: "바람 안 드는 따뜻한 신발" }
+            ],
+            tip: "숏패딩에 차콜 슬랙스와 블랙 더비를 신으면 패딩 특유의 캐주얼함을 출근용으로 멋지게 소화할 수 있습니다."
+          },
+          daily: {
+            tshirt: [
+              { name: "검은색 티셔츠 (질문템)", hex: "#000000", chip: "bg-black text-white", tip: "블랙 패딩과 일체감" },
+              { name: "화이트 티셔츠", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "패딩 지퍼 열었을 때 산뜻함" },
+              { name: "헤더 그레이 티", hex: "#cbd5e1", chip: "bg-slate-300 text-slate-900", tip: "기본 충실 데일리" }
+            ],
+            pants: [
+              { name: "중청 와이드 데님 (구매 1순위 이유!)", hex: "#2563eb", type: "mid_denim", tip: "★블랙 숏패딩 + 중청 데님은 대한민국 남성 1위 국민 코디" },
+              { name: "연청 데님", hex: "#60a5fa", type: "light_denim", tip: "소장 연청으로 경쾌한 대비감" },
+              { name: "흑청 데님", hex: "#1e293b", type: "black_denim", tip: "소장 흑청으로 올블랙 시크룩" }
+            ],
+            shoes: [
+              { name: "그레이 런닝화 (뉴발란스 990/993류)", hex: "#94a3b8", tip: "패딩에 가장 잘 어울리는 볼드함" },
+              { name: "올 화이트 스니커즈", hex: "#ffffff", tip: "시원한 발끝" },
+              { name: "블랙/화이트 반스", hex: "#0f172a", tip: "편안한 데일리" }
+            ],
+            tip: "검은색 티셔츠에 블랙 패딩을 입으실 경우, 바지는 무조건 '중청 데님'이나 '연청 데님'으로 색을 밝혀주어야 칙칙해 보이지 않습니다!"
+          },
+          date: {
+            tshirt: [
+              { name: "화이트 실켓 티", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "얼굴이 밝아 보이는 효과" },
+              { name: "소프트 크림 니트티", hex: "#fafaf9", chip: "bg-stone-100 text-stone-900", tip: "포근하고 다정한 첫인상" },
+              { name: "블랙 티셔츠", hex: "#000000", chip: "bg-black text-white", tip: "시크하고 날씬해 보임" }
+            ],
+            pants: [
+              { name: "중청 스트레이트 데님", hex: "#1d4ed8", type: "mid_denim", tip: "가장 단정하고 비율 좋아 보임" },
+              { name: "흑청 테이퍼드 데님", hex: "#1e293b", type: "black_denim", tip: "소장 흑청으로 시크함 완성" },
+              { name: "크림 와이드 슬랙스", hex: "#f1f5f9", type: "slacks", tip: "세련된 겨울 감성" }
+            ],
+            shoes: [
+              { name: "올 화이트 레더 스니커즈", hex: "#ffffff", tip: "첫 질문에서 보신 미니멀 스니커즈 강추" },
+              { name: "블랙 더비 슈즈", hex: "#000000", tip: "정갈하고 준비된 느낌" },
+              { name: "독일군 스니커즈", hex: "#e2e8f0", tip: "무난하면서도 센스 있는 신발" }
+            ],
+            tip: "질문하셨던 '올 화이트 스니커즈'에 중청 데님, 이너로 흰 티나 검정 티를 입고 블랙 패딩을 걸치면 완벽한 데이트 룩입니다."
+          }
+        }
+      },
+      {
+        id: 12,
+        name: "빈티지 연중청 데님 트러커 재킷",
+        tag: "청재킷 / 레트로",
+        baseColor: "#527b9c",
+        hexColor: "#527b9c",
+        desc: "적당한 페이딩 워싱이 들어간 클래식 데님 트러커 재킷. 봄/가을 최고의 아우터.",
+        denimRec: "흑청(최적) / 크림팬츠",
+        page: "PDF 11-12p",
+        outfits: {
+          office: {
+            tshirt: [
+              { name: "솔리드 블랙 티", hex: "#000000", chip: "bg-black text-white", tip: "청재킷을 묵직하고 단정하게 정돈" },
+              { name: "클린 화이트 티", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "선명한 대비감" },
+              { name: "다크 네이비", hex: "#1e3a8a", chip: "bg-blue-950 text-blue-100", tip: "깔끔한 톤온톤" }
+            ],
+            pants: [
+              { name: "차콜 슬랙스", hex: "#1e293b", type: "slacks", tip: "데님 재킷을 비즈니스 캐주얼로 승화" },
+              { name: "흑청 데님", hex: "#0f172a", type: "black_denim", tip: "소장 흑청으로 톤 분리된 청청 패션" },
+              { name: "베이지 치노팬츠", hex: "#d7ccc8", type: "chino", tip: "아이비리그 정석 스타일" }
+            ],
+            shoes: [
+              { name: "블랙 더비 슈즈", hex: "#000000", tip: "청재킷에 더비는 최고의 드레스업 조합" },
+              { name: "올 화이트 레더 스니커즈", hex: "#ffffff", tip: "실패 없는 청량함" },
+              { name: "다크브라운 로퍼", hex: "#3e2723", tip: "클래식 캐주얼" }
+            ],
+            tip: "청재킷에 바지까지 비슷한 파란색을 입으면 촌스러워질 수 있으니, 소장 중이신 '흑청' 바지나 슬랙스를 매치하세요."
+          },
+          daily: {
+            tshirt: [
+              { name: "화이트 티셔츠", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "청재킷의 영원한 단짝" },
+              { name: "그레이 티셔츠", hex: "#94a3b8", chip: "bg-slate-300 text-slate-900", tip: "부드러운 데일리" },
+              { name: "블랙 티셔츠", hex: "#000000", chip: "bg-black text-white", tip: "시크한 캐주얼" }
+            ],
+            pants: [
+              { name: "흑청 와이드 데님 (최고 추천)", hex: "#1e293b", type: "black_denim", tip: "★소장 흑청으로 위아래 톤이 다른 세련된 데님 매칭" },
+              { name: "카키/올리브 카고팬츠", hex: "#3a4d39", type: "cargo", tip: "워크웨어 스트릿 감성" },
+              { name: "그레이 스웨트 팬츠", hex: "#64748b", type: "jogger", tip: "트렌디한 믹스매치" }
+            ],
+            shoes: [
+              { name: "올 화이트 스니커즈", hex: "#ffffff", tip: "산뜻함의 극치" },
+              { name: "그레이 런닝화", hex: "#94a3b8", tip: "편안한 무드" },
+              { name: "블랙 캔버스화", hex: "#0f172a", tip: "젊은 캠퍼스룩" }
+            ],
+            tip: "청재킷을 입으실 때는 소장 중인 흑청 바지를 입으시는 것이 색상 대비가 확실하여 가장 예쁩니다!"
+          },
+          date: {
+            tshirt: [
+              { name: "블랙 티셔츠", hex: "#000000", chip: "bg-black text-white", tip: "청재킷을 날렵하고 힙하게" },
+              { name: "크림 베이지 티", hex: "#fafaf9", chip: "bg-stone-100 text-stone-900", tip: "부드럽고 훈훈한 인상" },
+              { name: "화이트 기본 티", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "청순한 남친룩" }
+            ],
+            pants: [
+              { name: "흑청 데님", hex: "#1e293b", type: "black_denim", tip: "소장 흑청으로 실패 없는 데이트 룩" },
+              { name: "크림/아이보리 와이드 팬츠", hex: "#f1f5f9", type: "slacks", tip: "여성들이 가장 좋아하는 청재킷 코디 1위" },
+              { name: "다크 차콜 와이드 슬랙스", hex: "#334155", type: "slacks", tip: "다리가 길어 보이는 조합" }
+            ],
+            shoes: [
+              { name: "올 화이트 레더 스니커즈", hex: "#ffffff", tip: "청재킷과 환상 호흡" },
+              { name: "블랙 더비 슈즈", hex: "#000000", tip: "단정하고 센스 있는 마무리" },
+              { name: "독일군 스니커즈", hex: "#e2e8f0", tip: "감성적인 데이트 신발" }
+            ],
+            tip: "크림색 팬츠나 소장 흑청 바지에 올 화이트 스니커즈를 신으면 어디서나 칭찬받는 룩이 됩니다."
+          }
+        }
+      },
+      {
+        id: 13,
+        name: "지오지아 딥 인디고 반팔 데님 셔켓",
+        tag: "서머/간절기 / 생지",
+        baseColor: "#1d2b45",
+        hexColor: "#1d2b45",
+        desc: "단정한 스티치가 들어간 딥 인디고 컬러의 반팔 데님 셔츠. 여름 아우터 및 간절기 레이어드용.",
+        denimRec: "연청(톤 대비) / 흑청 / 화이트",
+        page: "PDF 12-13p",
+        outfits: {
+          office: {
+            tshirt: [
+              { name: "화이트 라운드 티", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "짙은 네이비 데님과 대비" },
+              { name: "라이트 그레이 티", hex: "#cbd5e1", chip: "bg-slate-300 text-slate-900", tip: "부드러운 중간톤" },
+              { name: "블랙 티셔츠", hex: "#000000", chip: "bg-black text-white", tip: "차분하고 프로페셔널" }
+            ],
+            pants: [
+              { name: "라이트 그레이 슬랙스", hex: "#64748b", type: "slacks", tip: "상체 인디고와 시원한 조화" },
+              { name: "흑청 데님", hex: "#1e293b", type: "black_denim", tip: "소장 흑청으로 단정한 캐주얼" },
+              { name: "베이지 치노 슬랙스", hex: "#d7ccc8", type: "slacks", tip: "깔끔한 썸머 오피스" }
+            ],
+            shoes: [
+              { name: "올 화이트 레더 스니커즈", hex: "#ffffff", tip: "시원하고 단정함" },
+              { name: "블랙 더비 슈즈", hex: "#000000", tip: "출근 격식 차리기" },
+              { name: "다크 네이비 로퍼", hex: "#0f172a", tip: "통일감 있는 마무리" }
+            ],
+            tip: "반팔 데님 셔츠를 단추 다 채우거나, 흰 티 위에 가볍게 단추 2개만 풀고 슬랙스를 매치하세요."
+          },
+          daily: {
+            tshirt: [
+              { name: "화이트 무지 티", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "반팔 셔츠 이너의 정석" },
+              { name: "블랙 티셔츠", hex: "#000000", chip: "bg-black text-white", tip: "남성다운 톤" },
+              { name: "헤더 그레이 티", hex: "#94a3b8", chip: "bg-slate-300 text-slate-900", tip: "자연스러운 무드" }
+            ],
+            pants: [
+              { name: "연청 데님 (최고 추천)", hex: "#60a5fa", type: "light_denim", tip: "★상의가 딥 인디고이므로 소장 연청과 명도 대비가 환상적!" },
+              { name: "중청 데님", hex: "#2563eb", type: "mid_denim", tip: "자연스러운 데님 그라데이션" },
+              { name: "카키 반바지/치노", hex: "#3a4d39", type: "chino", tip: "시원한 여름 일상룩" }
+            ],
+            shoes: [
+              { name: "화이트 캔버스 스니커즈", hex: "#ffffff", tip: "청량감 극대화" },
+              { name: "그레이 스니커즈", hex: "#94a3b8", tip: "편안한 일상" },
+              { name: "블랙 슬라이드/뮬", hex: "#000000", tip: "여름 쿨한 무드" }
+            ],
+            tip: "소장 중이신 '연청' 바지를 입기에 가장 완벽한 아우터입니다. 상의는 어둡고 하의는 밝아 다리가 길어 보입니다."
+          },
+          date: {
+            tshirt: [
+              { name: "클린 화이트 티", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "청량하고 깨끗한 인상" },
+              { name: "블랙 티셔츠", hex: "#000000", chip: "bg-black text-white", tip: "시크하고 탄탄한 핏" },
+              { name: "크림 베이지 티", hex: "#fafaf9", chip: "bg-stone-100 text-stone-900", tip: "부드럽고 훈훈함" }
+            ],
+            pants: [
+              { name: "크림 와이드 코튼 팬츠", hex: "#f1f5f9", type: "chino", tip: "딥 인디고와 가장 세련된 배색" },
+              { name: "흑청 데님", hex: "#1e293b", type: "black_denim", tip: "소장 흑청으로 군더더기 없는 슬림함" },
+              { name: "연청 데님", hex: "#60a5fa", type: "light_denim", tip: "경쾌하고 활발한 데이트" }
+            ],
+            shoes: [
+              { name: "올 화이트 레더 스니커즈", hex: "#ffffff", tip: "발끝까지 시원한 완성도" },
+              { name: "블랙 더비 슈즈", hex: "#000000", tip: "단정하고 센스 있는 선택" },
+              { name: "독일군 스니커즈", hex: "#e2e8f0", tip: "호감도 높은 기본" }
+            ],
+            tip: "안에 흰 티를 입고 반팔 셔츠 단추를 모두 오픈한 뒤, 크림 팬츠나 소장 흑청을 입고 흰색 스니커즈를 신으세요."
+          }
+        }
+      },
+      {
+        id: 14,
+        name: "슬레이트 차콜 미니멀 데일리 셔켓",
+        tag: "미니멀 / 차콜",
+        baseColor: "#475569",
+        hexColor: "#475569",
+        desc: "푸른빛이 살짝 감도는 차콜 슬레이트 톤의 단정한 셔츠형 아우터. 무난함의 끝판왕.",
+        denimRec: "중청 / 연청 / 흑청 모두 가능",
+        page: "PDF 13-14p",
+        outfits: {
+          office: {
+            tshirt: [
+              { name: "화이트 티셔츠", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "차콜 셔츠를 가장 돋보이게 함" },
+              { name: "솔리드 블랙 티", hex: "#000000", chip: "bg-black text-white", tip: "시크하고 정돈된 비즈니스" },
+              { name: "라이트 그레이", hex: "#cbd5e1", chip: "bg-slate-300 text-slate-900", tip: "자연스러운 음영" }
+            ],
+            pants: [
+              { name: "블랙 슬림 슬랙스", hex: "#0f172a", type: "slacks", tip: "단정함의 정석" },
+              { name: "흑청 데님", hex: "#1e293b", type: "black_denim", tip: "소장 흑청으로 모던한 통일감" },
+              { name: "베이지/크림 슬랙스", hex: "#e2d9cc", type: "slacks", tip: "화사한 오피스 톤" }
+            ],
+            shoes: [
+              { name: "블랙 더비 슈즈", hex: "#000000", tip: "출근용 정석 슈즈" },
+              { name: "올 화이트 레더 스니커즈", hex: "#ffffff", tip: "단정하고 세련됨" },
+              { name: "다크브라운 로퍼", hex: "#3e2723", tip: "차분한 포인트" }
+            ],
+            tip: "소장하고 계신 검은색 티셔츠를 이너로 입고 흑청 바지에 블랙 더비를 신으면 완벽한 톤온톤 출근룩입니다."
+          },
+          daily: {
+            tshirt: [
+              { name: "검은색 티셔츠 (질문템)", hex: "#000000", chip: "bg-black text-white", tip: "실패 없는 기본 조합" },
+              { name: "화이트 무지 티", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "가장 깔끔함" },
+              { name: "멜란지 그레이", hex: "#94a3b8", chip: "bg-slate-300 text-slate-900", tip: "편안한 데일리" }
+            ],
+            pants: [
+              { name: "중청 와이드 데님 (강력 추천)", hex: "#2563eb", type: "mid_denim", tip: "★차콜 셔츠와 중청 데님은 감도 높은 배색 조합" },
+              { name: "연청 데님", hex: "#60a5fa", type: "light_denim", tip: "소장 연청으로 하체를 밝게" },
+              { name: "올리브 카고팬츠", hex: "#3f4c38", type: "cargo", tip: "트렌디한 캐주얼" }
+            ],
+            shoes: [
+              { name: "그레이 스니커즈 (뉴발란스류)", hex: "#94a3b8", tip: "차콜 셔츠와 환상의 궁합" },
+              { name: "올 화이트 스니커즈", hex: "#ffffff", tip: "산뜻한 발끝" },
+              { name: "블랙 캔버스화", hex: "#0f172a", tip: "심플 데일리" }
+            ],
+            tip: "차콜 셔츠는 중청 바지와 입었을 때 가장 색감이 예쁘게 살아납니다. 그레이 스니커즈로 마무리하세요!"
+          },
+          date: {
+            tshirt: [
+              { name: "블랙 티셔츠", hex: "#000000", chip: "bg-black text-white", tip: "어른스럽고 세련된 분위기" },
+              { name: "크림 베이지 티", hex: "#fafaf9", chip: "bg-stone-100 text-stone-900", tip: "부드럽고 훈훈함" },
+              { name: "클린 화이트", hex: "#ffffff", chip: "bg-white text-slate-900", tip: "단정하고 깨끗한 인상" }
+            ],
+            pants: [
+              { name: "중청 테이퍼드 데님", hex: "#1d4ed8", type: "mid_denim", tip: "가장 호감도 높은 핏" },
+              { name: "흑청 데님", hex: "#1e293b", type: "black_denim", tip: "소장 흑청으로 시크함 강조" },
+              { name: "아이보리 와이드 슬랙스", hex: "#f1f5f9", type: "slacks", tip: "센스 넘치는 데이트 룩" }
+            ],
+            shoes: [
+              { name: "블랙 더비 슈즈", hex: "#000000", tip: "단정하고 준비된 인상" },
+              { name: "올 화이트 레더 스니커즈", hex: "#ffffff", tip: "호불호 없는 완벽함" },
+              { name: "독일군 스니커즈", hex: "#e2e8f0", tip: "스타일리시한 포인트" }
+            ],
+            tip: "질문하셨던 '블랙 더비 슈즈'에 흑청이나 중청 바지, 검은 티를 매치하면 도시적인 세련미가 돋보입니다."
+          }
+        }
+      }
+    ];
+
+    // State management
+    let currentOuterId = 1;
+    let currentConcept = 'office'; // office | daily | date
+    let selectedTshirtIdx = 0;
+    let selectedPantsIdx = 0;
+    let selectedShoesIdx = 0;
+  </script>
+
+  <script>
+    let scene, camera, renderer;
+    let mannequinGroup, outerMesh, tshirtMesh, pantsMesh, shoesLeftMesh, shoesRightMesh;
+    let isDragging = false;
+    let previousMousePosition = { x: 0, y: 0 };
+    let targetRotationY = 0;
+    let targetRotationX = 0;
+
+    function initThreeJS() {
+      const container = document.getElementById('canvas-container');
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+
+      // 1. Scene
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x0a0f1d);
+
+      // Add subtle fog
+      scene.fog = new THREE.FogExp2(0x0a0f1d, 0.04);
+
+      // 2. Camera
+      camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+      camera.position.set(0, 0, 7.5);
+
+      // 3. Renderer
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      container.appendChild(renderer.domElement);
+
+      // 4. Lights
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
+      scene.add(ambientLight);
+
+      const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
+      dirLight.position.set(5, 10, 7);
+      dirLight.castShadow = true;
+      scene.add(dirLight);
+
+      const rimLight = new THREE.DirectionalLight(0x38bdf8, 0.6);
+      rimLight.position.set(-5, -2, -5);
+      scene.add(rimLight);
+
+      // 5. Floor Grid
+      const gridHelper = new THREE.GridHelper(10, 20, 0x38bdf8, 0x1e293b);
+      gridHelper.position.y = -3.2;
+      scene.add(gridHelper);
+
+      // 6. Build 3D Stylized Mannequin & Outfit layers
+      mannequinGroup = new THREE.Group();
+      scene.add(mannequinGroup);
+
+      // Head / Neck (Stylized minimalist)
+      const headGeo = new THREE.SphereGeometry(0.38, 32, 32);
+      const skinMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, roughness: 0.5 });
+      const head = new THREE.Mesh(headGeo, skinMat);
+      head.position.y = 2.1;
+      mannequinGroup.add(head);
+
+      const neckGeo = new THREE.CylinderGeometry(0.14, 0.16, 0.4, 16);
+      const neck = new THREE.Mesh(neckGeo, skinMat);
+      neck.position.y = 1.7;
+      mannequinGroup.add(neck);
+
+      // T-Shirt Mesh (Inner)
+      const tshirtGeo = new THREE.CylinderGeometry(0.55, 0.52, 1.3, 32);
+      const tshirtMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.8 });
+      tshirtMesh = new THREE.Mesh(tshirtGeo, tshirtMat);
+      tshirtMesh.position.y = 0.95;
+      mannequinGroup.add(tshirtMesh);
+
+      // Outer Layer Mesh (Jacket / Cardigan draped around chest)
+      const outerGeo = new THREE.CylinderGeometry(0.68, 0.64, 1.45, 32, 1, true, -Math.PI * 0.75, Math.PI * 1.5);
+      const outerMat = new THREE.MeshStandardMaterial({ color: 0x3e4235, roughness: 0.6, side: THREE.DoubleSide });
+      outerMesh = new THREE.Mesh(outerGeo, outerMat);
+      outerMesh.position.y = 0.92;
+      mannequinGroup.add(outerMesh);
+
+      // Outer Sleeves
+      const sleeveLGeo = new THREE.CylinderGeometry(0.18, 0.15, 1.3, 16);
+      const sleeveRGeo = new THREE.CylinderGeometry(0.18, 0.15, 1.3, 16);
+      const sleeveL = new THREE.Mesh(sleeveLGeo, outerMat);
+      const sleeveR = new THREE.Mesh(sleeveRGeo, outerMat);
+      sleeveL.position.set(-0.85, 0.85, 0);
+      sleeveL.rotation.z = 0.25;
+      sleeveR.position.set(0.85, 0.85, 0);
+      sleeveR.rotation.z = -0.25;
+      mannequinGroup.add(sleeveL);
+      mannequinGroup.add(sleeveR);
+
+      // Pants (Left & Right Leg + Pelvis)
+      const pelvisGeo = new THREE.CylinderGeometry(0.52, 0.48, 0.4, 32);
+      const pantsMat = new THREE.MeshStandardMaterial({ color: 0x2563eb, roughness: 0.7 });
+      const pelvis = new THREE.Mesh(pelvisGeo, pantsMat);
+      pelvis.position.y = 0.15;
+      mannequinGroup.add(pelvis);
+
+      const legGeo = new THREE.CylinderGeometry(0.22, 0.19, 1.9, 24);
+      const legL = new THREE.Mesh(legGeo, pantsMat);
+      legL.position.set(-0.28, -0.95, 0);
+      const legR = new THREE.Mesh(legGeo, pantsMat);
+      legR.position.set(0.28, -0.95, 0);
+      mannequinGroup.add(legL);
+      mannequinGroup.add(legR);
+      pantsMesh = [pelvis, legL, legR]; // Array reference to update color
+
+      // Shoes (Left & Right)
+      const shoeGeo = new THREE.BoxGeometry(0.32, 0.26, 0.65);
+      const shoeMat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.4 });
+      shoesLeftMesh = new THREE.Mesh(shoeGeo, shoeMat);
+      shoesLeftMesh.position.set(-0.28, -2.0, 0.1);
+      shoesRightMesh = new THREE.Mesh(shoeGeo, shoeMat);
+      shoesRightMesh.position.set(0.28, -2.0, 0.1);
+      mannequinGroup.add(shoesLeftMesh);
+      mannequinGroup.add(shoesRightMesh);
+
+      // Position group slightly down
+      mannequinGroup.position.y = 0.2;
+
+      // Event listeners for dragging / rotating
+      container.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        previousMousePosition = { x: e.clientX, y: e.clientY };
+      });
+      window.addEventListener('mouseup', () => isDragging = false);
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const deltaX = e.clientX - previousMousePosition.x;
+        const deltaY = e.clientY - previousMousePosition.y;
+        targetRotationY += deltaX * 0.008;
+        targetRotationX += deltaY * 0.004;
+        // Limit X pitch
+        targetRotationX = Math.max(-0.4, Math.min(0.4, targetRotationX));
+        previousMousePosition = { x: e.clientX, y: e.clientY };
+      });
+
+      // Touch events for mobile
+      container.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          isDragging = true;
+          previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        }
+      }, { passive: true });
+      window.addEventListener('touchend', () => isDragging = false);
+      window.addEventListener('touchmove', (e) => {
+        if (!isDragging || e.touches.length !== 1) return;
+        const deltaX = e.touches[0].clientX - previousMousePosition.x;
+        const deltaY = e.touches[0].clientY - previousMousePosition.y;
+        targetRotationY += deltaX * 0.008;
+        targetRotationX += deltaY * 0.004;
+        targetRotationX = Math.max(-0.4, Math.min(0.4, targetRotationX));
+        previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      }, { passive: true });
+
+      // Reset camera
+      document.getElementById('btn-reset-cam').addEventListener('click', () => {
+        targetRotationY = 0;
+        targetRotationX = 0;
+      });
+
+      // Window resize
+      window.addEventListener('resize', onWindowResize);
+
+      // Start loop
+      animate();
+    }
+
+    function onWindowResize() {
+      const container = document.getElementById('canvas-container');
+      if (!container || !renderer || !camera) return;
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      if (mannequinGroup) {
+        // Smooth rotation damping
+        mannequinGroup.rotation.y += (targetRotationY - mannequinGroup.rotation.y) * 0.1;
+        mannequinGroup.rotation.x += (targetRotationX - mannequinGroup.rotation.x) * 0.1;
+      }
+      renderer.render(scene, camera);
+    }
+
+    // Function to update colors on the 3D model
+    function update3DModelColors(outerHex, tshirtHex, pantsHex, shoeHex) {
+      if (outerMesh) {
+        outerMesh.material.color.set(outerHex);
+      }
+      if (tshirtMesh) {
+        tshirtMesh.material.color.set(tshirtHex);
+      }
+      if (pantsMesh && Array.isArray(pantsMesh)) {
+        pantsMesh.forEach(m => m.material.color.set(pantsHex));
+      }
+      if (shoesLeftMesh && shoesRightMesh) {
+        shoesLeftMesh.material.color.set(shoeHex);
+        shoesRightMesh.material.color.set(shoeHex);
+      }
+    }
+  </script>
+
+  <script>
+    // Render list of 14 outers
+    function renderOuterList() {
+      const listEl = document.getElementById('outer-list');
+      listEl.innerHTML = '';
+
+      outerItems.forEach(outer => {
+        const isActive = outer.id === currentOuterId;
+        const card = document.createElement('div');
+        card.className = `p-3 rounded-xl cursor-pointer transition-all duration-200 border flex flex-col justify-between ${
+          isActive 
+            ? 'glass-card-active shadow-md' 
+            : 'glass-card hover:border-slate-600 hover:bg-slate-800/50'
+        }`;
+        card.onclick = () => selectOuter(outer.id);
+
+        card.innerHTML = `
+          <div class="flex items-start gap-2.5">
+            <div class="w-8 h-8 rounded-lg flex-shrink-0 flex items-center justify-center border border-white/10 shadow-inner" style="background-color: ${outer.hexColor}">
+              <i class="fa-solid fa-shirt text-xs text-white/90 drop-shadow"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-1">
+                <span class="text-[11px] font-bold text-sky-400">#${outer.id}</span>
+                <span class="text-[10px] text-slate-400 bg-slate-800 px-1.5 py-0.5 rounded">${outer.page}</span>
+              </div>
+              <h4 class="text-xs font-bold text-slate-100 truncate mt-0.5" title="${outer.name}">${outer.name}</h4>
+              <p class="text-[11px] text-slate-400 truncate">${outer.tag}</p>
+            </div>
+          </div>
+          <div class="mt-2 pt-2 border-t border-slate-700/50 flex items-center justify-between text-[10px]">
+            <span class="text-slate-400">추천 데님:</span>
+            <span class="font-medium text-sky-300 truncate max-w-[110px]">${outer.denimRec}</span>
+          </div>
+        `;
+        listEl.appendChild(card);
+      });
+
+      document.getElementById('outer-count-badge').textContent = `선택됨: #${currentOuterId}`;
+    }
+
+    function selectOuter(id) {
+      currentOuterId = id;
+      selectedTshirtIdx = 0;
+      selectedPantsIdx = 0;
+      selectedShoesIdx = 0;
+      renderOuterList();
+      updateRecommendations();
+    }
+
+    function setConcept(concept) {
+      currentConcept = concept;
+      selectedTshirtIdx = 0;
+      selectedPantsIdx = 0;
+      selectedShoesIdx = 0;
+
+      // Update tabs UI
+      document.querySelectorAll('.concept-tab').forEach(tab => {
+        const isCurrent = tab.dataset.concept === concept;
+        if (isCurrent) {
+          tab.className = 'concept-tab flex-1 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center justify-center gap-2 bg-sky-500 text-white shadow-lg shadow-sky-500/30';
+        } else {
+          tab.className = 'concept-tab flex-1 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition flex items-center justify-center gap-2';
+        }
+      });
+
+      updateRecommendations();
+    }
+
+    function updateRecommendations() {
+      const outer = outerItems.find(o => o.id === currentOuterId) || outerItems[0];
+      const outfit = outer.outfits[currentConcept];
+
+      // Update Header Text
+      document.getElementById('selected-outer-title').textContent = outer.name;
+      const conceptNames = { office: "출근복 (모던/단정)", daily: "일상외출복 (편안/캐주얼)", date: "꾸밈복 (데이트/모임)" };
+      document.getElementById('selected-concept-title').textContent = `• ${conceptNames[currentConcept]}`;
+      document.getElementById('outer-desc-guide').textContent = outer.desc;
+      document.getElementById('styling-tip-text').textContent = outfit.tip;
+
+      // Update 3D Canvas Tags
+      document.getElementById('canvas-outer-name').textContent = `#${outer.id} ${outer.name.split(' ')[0]}`;
+      document.getElementById('canvas-concept-tag').textContent = conceptNames[currentConcept].split(' ')[0];
+
+      // 1. T-shirt render
+      const tshirtBox = document.getElementById('tshirt-recommendations');
+      tshirtBox.innerHTML = '';
+      outfit.tshirt.forEach((item, idx) => {
+        const isSel = idx === selectedTshirtIdx;
+        const btn = document.createElement('button');
+        btn.className = `w-full p-2.5 rounded-lg text-left transition border flex items-center gap-2.5 ${
+          isSel 
+            ? 'bg-sky-500/20 border-sky-400 text-white' 
+            : 'bg-slate-800/40 hover:bg-slate-800 border-slate-700/60 text-slate-300'
+        }`;
+        btn.onclick = () => {
+          selectedTshirtIdx = idx;
+          updateRecommendations();
+        };
+        btn.innerHTML = `
+          <span class="w-5 h-5 rounded-full border border-white/20 flex-shrink-0 shadow-sm" style="background-color: ${item.hex}"></span>
+          <div class="flex-1 min-w-0">
+            <div class="text-xs font-bold leading-tight flex items-center justify-between">
+              <span>${item.name}</span>
+              ${isSel ? '<i class="fa-solid fa-check text-[10px] text-sky-400"></i>' : ''}
+            </div>
+            <div class="text-[10px] text-slate-400 truncate mt-0.5">${item.tip}</div>
+          </div>
+        `;
+        tshirtBox.appendChild(btn);
+      });
+
+      // 2. Pants render
+      const pantsBox = document.getElementById('pants-recommendations');
+      pantsBox.innerHTML = '';
+      outfit.pants.forEach((item, idx) => {
+        const isSel = idx === selectedPantsIdx;
+        const btn = document.createElement('button');
+        btn.className = `w-full p-2.5 rounded-lg text-left transition border flex items-center gap-2.5 ${
+          isSel 
+            ? 'bg-indigo-500/20 border-indigo-400 text-white' 
+            : 'bg-slate-800/40 hover:bg-slate-800 border-slate-700/60 text-slate-300'
+        }`;
+        btn.onclick = () => {
+          selectedPantsIdx = idx;
+          updateRecommendations();
+        };
+        btn.innerHTML = `
+          <span class="w-5 h-5 rounded-full border border-white/20 flex-shrink-0 shadow-sm" style="background-color: ${item.hex}"></span>
+          <div class="flex-1 min-w-0">
+            <div class="text-xs font-bold leading-tight flex items-center justify-between">
+              <span class="truncate">${item.name}</span>
+              ${isSel ? '<i class="fa-solid fa-check text-[10px] text-indigo-400"></i>' : ''}
+            </div>
+            <div class="text-[10px] text-slate-400 truncate mt-0.5">${item.tip}</div>
+          </div>
+        `;
+        pantsBox.appendChild(btn);
+      });
+
+      // 3. Shoes render
+      const shoesBox = document.getElementById('shoes-recommendations');
+      shoesBox.innerHTML = '';
+      outfit.shoes.forEach((item, idx) => {
+        const isSel = idx === selectedShoesIdx;
+        const btn = document.createElement('button');
+        btn.className = `w-full p-2.5 rounded-lg text-left transition border flex items-center gap-2.5 ${
+          isSel 
+            ? 'bg-emerald-500/20 border-emerald-400 text-white' 
+            : 'bg-slate-800/40 hover:bg-slate-800 border-slate-700/60 text-slate-300'
+        }`;
+        btn.onclick = () => {
+          selectedShoesIdx = idx;
+          updateRecommendations();
+        };
+        btn.innerHTML = `
+          <span class="w-5 h-5 rounded-full border border-white/20 flex-shrink-0 shadow-sm" style="background-color: ${item.hex}"></span>
+          <div class="flex-1 min-w-0">
+            <div class="text-xs font-bold leading-tight flex items-center justify-between">
+              <span>${item.name}</span>
+              ${isSel ? '<i class="fa-solid fa-check text-[10px] text-emerald-400"></i>' : ''}
+            </div>
+            <div class="text-[10px] text-slate-400 truncate mt-0.5">${item.tip}</div>
+          </div>
+        `;
+        shoesBox.appendChild(btn);
+      });
+
+      // 4. Push active colors to 3D Three.js Model
+      const activeOuterColor = outer.hexColor;
+      const activeTshirtColor = outfit.tshirt[selectedTshirtIdx].hex;
+      const activePantsColor = outfit.pants[selectedPantsIdx].hex;
+      const activeShoeColor = outfit.shoes[selectedShoesIdx].hex;
+      update3DModelColors(activeOuterColor, activeTshirtColor, activePantsColor, activeShoeColor);
+    }
+
+    // Modal listeners
+    document.addEventListener('DOMContentLoaded', () => {
+      // Init Three.js
+      initThreeJS();
+
+      // Render 14 Outers list
+      renderOuterList();
+
+      // Concept Tab triggers
+      document.querySelectorAll('.concept-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          setConcept(tab.dataset.concept);
+        });
+      });
+
+      // Initial Update
+      updateRecommendations();
+
+      // Denim Modal events
+      const modal = document.getElementById('denim-modal');
+      const openBtn = document.getElementById('btn-denim-guide');
+      const closeBtn = document.getElementById('btn-close-denim-modal');
+      const okBtn = document.getElementById('btn-modal-ok');
+
+      openBtn.addEventListener('click', () => modal.classList.remove('hidden'));
+      closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
+      okBtn.addEventListener('click', () => modal.classList.add('hidden'));
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.classList.add('hidden');
+      });
+    });
+  </script>
+</body>
+</html>
+```
