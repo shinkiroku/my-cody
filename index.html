@@ -1342,10 +1342,26 @@
         const isCurrent = outer.id === currentOuterId;
         const outfit = outer.outfits[currentConcept];
         
-        // Immediate Color chips preview
-        const tColor = outfit.tshirt[0];
-        const pColor = outfit.pants[0];
-        const sColor = outfit.shoes[0];
+        const officeOutfit = outer.outfits.office;
+        const dailyOutfit = outer.outfits.daily;
+
+        // Current concept 1st & 2nd choices
+        const t1 = outfit.tshirt[0]?.name || '';
+        const t2 = outfit.tshirt[1]?.name || '';
+        const p1 = outfit.pants[0]?.name || '';
+        const p2 = outfit.pants[1]?.name || '';
+        const s1 = outfit.shoes[0]?.name || '';
+        const s2 = outfit.shoes[1]?.name || '';
+
+        // 1-line Office 1st rank
+        const offT = officeOutfit.tshirt[0]?.name || '';
+        const offP = officeOutfit.pants[0]?.name || '';
+        const offS = officeOutfit.shoes[0]?.name || '';
+
+        // 1-line Daily 1st rank
+        const daiT = dailyOutfit.tshirt[0]?.name || '';
+        const daiP = dailyOutfit.pants[0]?.name || '';
+        const daiS = dailyOutfit.shoes[0]?.name || '';
 
         const card = document.createElement('div');
         card.className = `p-2 sm:p-2.5 rounded-xl cursor-pointer transition-all duration-200 border flex flex-col justify-between ${
@@ -1377,18 +1393,46 @@
             </div>
           </div>
 
-          <!-- Color Chips Immediate Preview -->
-          <div class="mt-2 pt-1.5 border-t border-slate-800/80 flex items-center justify-between text-[10px]">
-            <div class="flex items-center gap-1.5">
-              <span class="text-slate-400 text-[9px]">추천색:</span>
-              <div class="flex items-center gap-1">
-                <span class="w-3.5 h-3.5 rounded-full border border-white/20 shadow" title="이너: ${tColor.name}" style="background-color: ${tColor.hex}"></span>
-                <span class="w-3.5 h-3.5 rounded-full border border-white/20 shadow" title="바지: ${pColor.name}" style="background-color: ${pColor.hex}"></span>
-                <span class="w-3.5 h-3.5 rounded-full border border-white/20 shadow" title="신발: ${sColor.name}" style="background-color: ${sColor.hex}"></span>
-              </div>
+          <!-- At-a-glance 1-Line Summaries (Office 1st & Daily 1st) -->
+          <div class="mt-2 pt-1.5 border-t border-slate-800/80 flex flex-col gap-1 text-[10px]">
+            <!-- 1. 출근복 1순위 한줄 요약 -->
+            <div class="flex items-center justify-between bg-slate-900/80 px-2 py-1 rounded-md border border-slate-800">
+              <span class="font-bold text-sky-400 flex items-center gap-1 flex-shrink-0 text-[10px]">
+                <i class="fa-solid fa-briefcase text-[9px]"></i> 출근 1순위
+              </span>
+              <span class="text-slate-300 truncate text-[10px] ml-1.5 text-right">
+                <span class="text-slate-400">이너</span> <strong class="text-slate-100">${offT}</strong> · 
+                <span class="text-slate-400">바지</span> <strong class="text-sky-300">${offP}</strong> · 
+                <span class="text-slate-400">신발</span> <strong class="text-slate-200">${offS}</strong>
+              </span>
             </div>
-            <div class="text-[10px] text-sky-300 font-semibold truncate max-w-[130px]">
-              ${pColor.name}
+
+            <!-- 2. 일상외출 1순위 한줄 요약 -->
+            <div class="flex items-center justify-between bg-slate-900/80 px-2 py-1 rounded-md border border-slate-800">
+              <span class="font-bold text-emerald-400 flex items-center gap-1 flex-shrink-0 text-[10px]">
+                <i class="fa-solid fa-mug-hot text-[9px]"></i> 일상 1순위
+              </span>
+              <span class="text-slate-300 truncate text-[10px] ml-1.5 text-right">
+                <span class="text-slate-400">이너</span> <strong class="text-slate-100">${daiT}</strong> · 
+                <span class="text-slate-400">바지</span> <strong class="text-emerald-300">${daiP}</strong> · 
+                <span class="text-slate-400">신발</span> <strong class="text-slate-200">${daiS}</strong>
+              </span>
+            </div>
+
+            <!-- 3. 현재 룩 1순위 & 2순위 색상 동시 표기 -->
+            <div class="bg-slate-950/70 p-1.5 rounded-md border border-slate-800/90 flex flex-col gap-0.5 text-[9.5px]">
+              <div class="flex items-center justify-between text-slate-300 truncate">
+                <span class="text-slate-400 flex-shrink-0 font-medium">👕 이너:</span>
+                <span class="truncate ml-1"><b class="text-sky-300">1위</b> ${t1} <span class="text-slate-500">|</span> <b class="text-slate-400">2위</b> ${t2}</span>
+              </div>
+              <div class="flex items-center justify-between text-slate-300 truncate">
+                <span class="text-indigo-400 flex-shrink-0 font-medium">👖 바지:</span>
+                <span class="truncate ml-1"><b class="text-indigo-300">1위</b> ${p1} <span class="text-slate-500">|</span> <b class="text-slate-400">2위</b> ${p2}</span>
+              </div>
+              <div class="flex items-center justify-between text-slate-300 truncate">
+                <span class="text-emerald-400 flex-shrink-0 font-medium">👟 신발:</span>
+                <span class="truncate ml-1"><b class="text-emerald-300">1위</b> ${s1} <span class="text-slate-500">|</span> <b class="text-slate-400">2위</b> ${s2}</span>
+              </div>
             </div>
           </div>
         `;
@@ -1827,4 +1871,4 @@
     });
   </script>
 </body>
-</html>  
+</html>
