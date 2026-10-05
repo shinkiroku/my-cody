@@ -124,7 +124,7 @@
             <i class="fa-solid fa-sliders text-sky-400 text-xs"></i>
             <span class="text-xs font-bold text-white">내 신체 사이즈 입력 (체형 실시간 동기화)</span>
           </div>
-          <span id="body-bmi-badge" class="text-[10px] bg-slate-800 text-sky-300 px-2 py-0.5 rounded-full font-bold">174cm / 70kg (표준 핏)</span>
+          <span id="body-bmi-badge" class="text-[10px] bg-slate-800 text-sky-300 px-2 py-0.5 rounded-full font-bold">168cm / 75kg (단단한 체형)</span>
         </div>
 
         <div class="grid grid-cols-2 gap-3 pt-1">
@@ -132,24 +132,24 @@
           <div class="flex flex-col gap-1">
             <div class="flex justify-between text-[11px]">
               <span class="text-slate-400 font-medium">키 (신장)</span>
-              <span id="label-height" class="font-bold text-sky-400">174 cm</span>
+              <span id="label-height" class="font-bold text-sky-400">168 cm</span>
             </div>
-            <input type="range" id="input-height" min="158" max="192" value="174" class="w-full accent-sky-500 cursor-pointer h-1.5 bg-slate-800 rounded-lg">
+            <input type="range" id="input-height" min="158" max="192" value="168" class="w-full accent-sky-500 cursor-pointer h-1.5 bg-slate-800 rounded-lg">
           </div>
 
           <!-- Weight Slider -->
           <div class="flex flex-col gap-1">
             <div class="flex justify-between text-[11px]">
               <span class="text-slate-400 font-medium">몸무게 (체격)</span>
-              <span id="label-weight" class="font-bold text-sky-400">70 kg</span>
+              <span id="label-weight" class="font-bold text-sky-400">75 kg</span>
             </div>
-            <input type="range" id="input-weight" min="50" max="105" value="70" class="w-full accent-sky-500 cursor-pointer h-1.5 bg-slate-800 rounded-lg">
+            <input type="range" id="input-weight" min="50" max="105" value="75" class="w-full accent-sky-500 cursor-pointer h-1.5 bg-slate-800 rounded-lg">
           </div>
         </div>
       </div>
 
       <!-- Fitting Mirror Screen Stage -->
-      <div class="glass-card rounded-2xl p-2 sm:p-3 flex flex-col relative overflow-hidden shadow-2xl border border-slate-800 h-[460px] sm:h-[540px] lg:h-[620px]">
+      <div class="glass-card rounded-2xl p-2 sm:p-3 flex flex-col relative overflow-hidden shadow-2xl border border-slate-800 h-[520px] sm:h-[580px] lg:h-[640px]">
         
         <!-- Fitting Room Top Status Overlay -->
         <div class="absolute top-3 left-3 right-3 flex items-center justify-between z-20 pointer-events-none">
@@ -168,10 +168,180 @@
           </div>
         </div>
 
-        <!-- STAGE: SVG Silhouette Mannequin + Precision Overlay Layers -->
+        <!-- STAGE: SVG Silhouette Mannequin + Precision Overlay Layers + Flanking Presets -->
         <div id="fitting-stage" class="rounded-xl relative">
           <!-- Measurement Grid Guides -->
           <div class="absolute inset-0 pointer-events-none opacity-20 bg-[linear-gradient(to_right,#38bdf812_1px,transparent_1px),linear-gradient(to_bottom,#38bdf812_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+
+          <!-- LEFT FLANK PRESETS: All 1st Ranks (Office 1st, Daily 1st, Date 1st) -->
+          <div class="absolute top-12 left-1.5 sm:left-2.5 z-20 flex flex-col gap-1.5 w-[110px] sm:w-[136px] max-w-[34%] pointer-events-auto">
+            <div class="text-[9px] font-extrabold text-sky-300 flex items-center gap-1 px-0.5 drop-shadow">
+              <i class="fa-solid fa-star text-[9px] text-amber-400"></i> <span>1순위 베스트 (3종)</span>
+            </div>
+
+            <!-- 1. Office 1st -->
+            <button id="preset-card-office-0" onclick="applyDirectPreset('office', 0)" class="quick-preset-card text-left p-1.5 rounded-lg bg-slate-950/90 hover:bg-slate-900 border border-slate-700/80 backdrop-blur-md transition-all active:scale-95 shadow-lg group">
+              <div class="flex items-center justify-between mb-0.5">
+                <span class="text-[9px] font-bold text-sky-400 flex items-center gap-0.5">
+                  <i class="fa-solid fa-briefcase text-[8px]"></i> 출근 1위
+                </span>
+                <span class="text-[7.5px] text-slate-500 group-hover:text-sky-300">피팅</span>
+              </div>
+              <div class="space-y-0.5 text-[8.5px] leading-tight">
+                <div class="flex items-center gap-1 truncate text-slate-300">
+                  <span id="p-off0-t-dot" class="w-1.5 h-1.5 rounded-full border border-white/30 flex-shrink-0"></span>
+                  <span class="text-slate-400 text-[8px]">티</span>
+                  <span id="p-off0-t-name" class="font-medium truncate">-</span>
+                </div>
+                <div class="flex items-center gap-1 truncate text-slate-200">
+                  <span id="p-off0-p-dot" class="w-1.5 h-1.5 rounded-full border border-white/30 flex-shrink-0"></span>
+                  <span class="text-indigo-400 text-[8px]">바지</span>
+                  <span id="p-off0-p-name" class="font-bold text-sky-200 truncate">-</span>
+                </div>
+                <div class="flex items-center gap-1 truncate text-slate-300">
+                  <span id="p-off0-s-dot" class="w-1.5 h-1.5 rounded-full border border-white/30 flex-shrink-0"></span>
+                  <span class="text-emerald-400 text-[8px]">신발</span>
+                  <span id="p-off0-s-name" class="font-medium truncate">-</span>
+                </div>
+              </div>
+            </button>
+
+            <!-- 2. Daily 1st -->
+            <button id="preset-card-daily-0" onclick="applyDirectPreset('daily', 0)" class="quick-preset-card text-left p-1.5 rounded-lg bg-slate-950/90 hover:bg-slate-900 border border-slate-700/80 backdrop-blur-md transition-all active:scale-95 shadow-lg group">
+              <div class="flex items-center justify-between mb-0.5">
+                <span class="text-[9px] font-bold text-emerald-400 flex items-center gap-0.5">
+                  <i class="fa-solid fa-mug-hot text-[8px]"></i> 일상 1위
+                </span>
+                <span class="text-[7.5px] text-slate-500 group-hover:text-emerald-300">피팅</span>
+              </div>
+              <div class="space-y-0.5 text-[8.5px] leading-tight">
+                <div class="flex items-center gap-1 truncate text-slate-300">
+                  <span id="p-dai0-t-dot" class="w-1.5 h-1.5 rounded-full border border-white/30 flex-shrink-0"></span>
+                  <span class="text-slate-400 text-[8px]">티</span>
+                  <span id="p-dai0-t-name" class="font-medium truncate">-</span>
+                </div>
+                <div class="flex items-center gap-1 truncate text-slate-200">
+                  <span id="p-dai0-p-dot" class="w-1.5 h-1.5 rounded-full border border-white/30 flex-shrink-0"></span>
+                  <span class="text-indigo-400 text-[8px]">바지</span>
+                  <span id="p-dai0-p-name" class="font-bold text-emerald-200 truncate">-</span>
+                </div>
+                <div class="flex items-center gap-1 truncate text-slate-300">
+                  <span id="p-dai0-s-dot" class="w-1.5 h-1.5 rounded-full border border-white/30 flex-shrink-0"></span>
+                  <span class="text-emerald-400 text-[8px]">신발</span>
+                  <span id="p-dai0-s-name" class="font-medium truncate">-</span>
+                </div>
+              </div>
+            </button>
+
+            <!-- 3. Date 1st -->
+            <button id="preset-card-date-0" onclick="applyDirectPreset('date', 0)" class="quick-preset-card text-left p-1.5 rounded-lg bg-slate-950/90 hover:bg-slate-900 border border-slate-700/80 backdrop-blur-md transition-all active:scale-95 shadow-lg group">
+              <div class="flex items-center justify-between mb-0.5">
+                <span class="text-[9px] font-bold text-fuchsia-400 flex items-center gap-0.5">
+                  <i class="fa-solid fa-wand-magic-sparkles text-[8px]"></i> 꾸밈 1위
+                </span>
+                <span class="text-[7.5px] text-slate-500 group-hover:text-fuchsia-300">피팅</span>
+              </div>
+              <div class="space-y-0.5 text-[8.5px] leading-tight">
+                <div class="flex items-center gap-1 truncate text-slate-300">
+                  <span id="p-dat0-t-dot" class="w-1.5 h-1.5 rounded-full border border-white/30 flex-shrink-0"></span>
+                  <span class="text-slate-400 text-[8px]">티</span>
+                  <span id="p-dat0-t-name" class="font-medium truncate">-</span>
+                </div>
+                <div class="flex items-center gap-1 truncate text-slate-200">
+                  <span id="p-dat0-p-dot" class="w-1.5 h-1.5 rounded-full border border-white/30 flex-shrink-0"></span>
+                  <span class="text-indigo-400 text-[8px]">바지</span>
+                  <span id="p-dat0-p-name" class="font-bold text-fuchsia-200 truncate">-</span>
+                </div>
+                <div class="flex items-center gap-1 truncate text-slate-300">
+                  <span id="p-dat0-s-dot" class="w-1.5 h-1.5 rounded-full border border-white/30 flex-shrink-0"></span>
+                  <span class="text-emerald-400 text-[8px]">신발</span>
+                  <span id="p-dat0-s-name" class="font-medium truncate">-</span>
+                </div>
+              </div>
+            </button>
+          </div>
+
+          <!-- RIGHT FLANK PRESETS: All 2nd Ranks (Office 2nd, Daily 2nd, Date 2nd) -->
+          <div class="absolute top-12 right-1.5 sm:right-2.5 z-20 flex flex-col gap-1.5 w-[110px] sm:w-[136px] max-w-[34%] pointer-events-auto">
+            <div class="text-[9px] font-extrabold text-slate-300 flex items-center justify-end gap-1 px-0.5 drop-shadow">
+              <span>2순위 안정 (3종)</span> <i class="fa-solid fa-award text-[9px] text-sky-400"></i>
+            </div>
+
+            <!-- 1. Office 2nd -->
+            <button id="preset-card-office-1" onclick="applyDirectPreset('office', 1)" class="quick-preset-card text-left p-1.5 rounded-lg bg-slate-950/90 hover:bg-slate-900 border border-slate-700/80 backdrop-blur-md transition-all active:scale-95 shadow-md group">
+              <div class="flex items-center justify-between mb-0.5">
+                <span class="text-[9px] font-bold text-sky-300">출근 2위</span>
+                <span class="text-[7.5px] text-slate-500 group-hover:text-slate-300">피팅</span>
+              </div>
+              <div class="space-y-0.5 text-[8.5px] leading-tight">
+                <div class="flex items-center gap-1 truncate text-slate-300">
+                  <span id="p-off1-t-dot" class="w-1.5 h-1.5 rounded-full border border-white/30 flex-shrink-0"></span>
+                  <span class="text-slate-400 text-[8px]">티</span>
+                  <span id="p-off1-t-name" class="font-medium truncate">-</span>
+                </div>
+                <div class="flex items-center gap-1 truncate text-slate-200">
+                  <span id="p-off1-p-dot" class="w-1.5 h-1.5 rounded-full border border-white/30 flex-shrink-0"></span>
+                  <span class="text-indigo-400 text-[8px]">바지</span>
+                  <span id="p-off1-p-name" class="font-semibold text-slate-200 truncate">-</span>
+                </div>
+                <div class="flex items-center gap-1 truncate text-slate-300">
+                  <span id="p-off1-s-dot" class="w-1.5 h-1.5 rounded-full border border-white/30 flex-shrink-0"></span>
+                  <span class="text-emerald-400 text-[8px]">신발</span>
+                  <span id="p-off1-s-name" class="font-medium truncate">-</span>
+                </div>
+              </div>
+            </button>
+
+            <!-- 2. Daily 2nd -->
+            <button id="preset-card-daily-1" onclick="applyDirectPreset('daily', 1)" class="quick-preset-card text-left p-1.5 rounded-lg bg-slate-950/90 hover:bg-slate-900 border border-slate-700/80 backdrop-blur-md transition-all active:scale-95 shadow-md group">
+              <div class="flex items-center justify-between mb-0.5">
+                <span class="text-[9px] font-bold text-emerald-300">일상 2위</span>
+                <span class="text-[7.5px] text-slate-500 group-hover:text-slate-300">피팅</span>
+              </div>
+              <div class="space-y-0.5 text-[8.5px] leading-tight">
+                <div class="flex items-center gap-1 truncate text-slate-300">
+                  <span id="p-dai1-t-dot" class="w-1.5 h-1.5 rounded-full border border-white/30 flex-shrink-0"></span>
+                  <span class="text-slate-400 text-[8px]">티</span>
+                  <span id="p-dai1-t-name" class="font-medium truncate">-</span>
+                </div>
+                <div class="flex items-center gap-1 truncate text-slate-200">
+                  <span id="p-dai1-p-dot" class="w-1.5 h-1.5 rounded-full border border-white/30 flex-shrink-0"></span>
+                  <span class="text-indigo-400 text-[8px]">바지</span>
+                  <span id="p-dai1-p-name" class="font-semibold text-slate-200 truncate">-</span>
+                </div>
+                <div class="flex items-center gap-1 truncate text-slate-300">
+                  <span id="p-dai1-s-dot" class="w-1.5 h-1.5 rounded-full border border-white/30 flex-shrink-0"></span>
+                  <span class="text-emerald-400 text-[8px]">신발</span>
+                  <span id="p-dai1-s-name" class="font-medium truncate">-</span>
+                </div>
+              </div>
+            </button>
+
+            <!-- 3. Date 2nd -->
+            <button id="preset-card-date-1" onclick="applyDirectPreset('date', 1)" class="quick-preset-card text-left p-1.5 rounded-lg bg-slate-950/90 hover:bg-slate-900 border border-slate-700/80 backdrop-blur-md transition-all active:scale-95 shadow-md group">
+              <div class="flex items-center justify-between mb-0.5">
+                <span class="text-[9px] font-bold text-fuchsia-300">꾸밈 2위</span>
+                <span class="text-[7.5px] text-slate-500 group-hover:text-slate-300">피팅</span>
+              </div>
+              <div class="space-y-0.5 text-[8.5px] leading-tight">
+                <div class="flex items-center gap-1 truncate text-slate-300">
+                  <span id="p-dat1-t-dot" class="w-1.5 h-1.5 rounded-full border border-white/30 flex-shrink-0"></span>
+                  <span class="text-slate-400 text-[8px]">티</span>
+                  <span id="p-dat1-t-name" class="font-medium truncate">-</span>
+                </div>
+                <div class="flex items-center gap-1 truncate text-slate-200">
+                  <span id="p-dat1-p-dot" class="w-1.5 h-1.5 rounded-full border border-white/30 flex-shrink-0"></span>
+                  <span class="text-indigo-400 text-[8px]">바지</span>
+                  <span id="p-dat1-p-name" class="font-semibold text-slate-200 truncate">-</span>
+                </div>
+                <div class="flex items-center gap-1 truncate text-slate-300">
+                  <span id="p-dat1-s-dot" class="w-1.5 h-1.5 rounded-full border border-white/30 flex-shrink-0"></span>
+                  <span class="text-emerald-400 text-[8px]">신발</span>
+                  <span id="p-dat1-s-name" class="font-medium truncate">-</span>
+                </div>
+              </div>
+            </button>
+          </div>
 
           <!-- Dynamic Scalable Body Silhouette Container -->
           <div id="body-container" class="relative flex items-center justify-center h-full w-full layer-transition" style="transform: scale(1.0);">
@@ -1042,8 +1212,8 @@
     ];
 
     // State Variables
-    let userHeight = 174;
-    let userWeight = 70;
+    let userHeight = 168;
+    let userWeight = 75;
     let isOuterOpen = true; // button open vs buttoned
     let currentOuterId = 1;
     let currentConcept = 'office';
@@ -1056,18 +1226,18 @@
   <script>
     // Body Morphing Engine: Updates SVG Body Paths based on Height & Weight
     function updateBodyMorphing() {
-      const hScale = userHeight / 174; // reference 174cm
+      const hScale = userHeight / 168; // reference 168cm
       const bmi = userWeight / ((userHeight / 100) * (userHeight / 100));
       
-      // Width expansion factor based on BMI (reference ~23)
-      const wFactor = Math.max(0.85, Math.min(1.35, 1 + (bmi - 23) * 0.035));
+      // Width expansion factor based on BMI (reference ~26.5)
+      const wFactor = Math.max(0.85, Math.min(1.35, 1 + (bmi - 26) * 0.035));
       const legLengthFactor = Math.max(0.88, Math.min(1.15, hScale));
 
       // Calculate key body coordinates
-      const shoulderHalfWidth = 45 * wFactor;
-      const waistHalfWidth = 34 * wFactor;
-      const hipHalfWidth = 38 * wFactor;
-      const legThickness = 14 * wFactor;
+      const shoulderHalfWidth = 46 * wFactor;
+      const waistHalfWidth = 36 * wFactor;
+      const hipHalfWidth = 40 * wFactor;
+      const legThickness = 15 * wFactor;
 
       const leftShoulder = 150 - shoulderHalfWidth;
       const rightShoulder = 150 + shoulderHalfWidth;
@@ -1077,7 +1247,7 @@
       const rightHip = 150 + hipHalfWidth;
 
       const hipY = 285;
-      const ankleY = hipY + (275 * legLengthFactor);
+      const ankleY = hipY + (270 * legLengthFactor);
 
       // 1. Update Torso
       const torsoPath = `M${leftShoulder},128 L${rightShoulder},128 L${rightWaist},210 L${rightHip},${hipY} L${leftHip},${hipY} L${leftWaist},210 Z`;
@@ -1098,8 +1268,8 @@
       // Update BMI badge text
       let bmiCategory = "표준 체형";
       if (bmi < 18.5) bmiCategory = "슬림 체형";
-      else if (bmi >= 25 && bmi < 28) bmiCategory = "건장한 체형";
-      else if (bmi >= 28) bmiCategory = "체격 있는 체형";
+      else if (bmi >= 23 && bmi < 27) bmiCategory = "단단하고 건장한 핏";
+      else if (bmi >= 27) bmiCategory = "체격 있는 듬직한 핏";
 
       document.getElementById('body-bmi-badge').textContent = `${userHeight}cm / ${userWeight}kg (${bmiCategory})`;
       document.getElementById('label-height').textContent = `${userHeight} cm`;
@@ -1390,6 +1560,81 @@
       updateRecommendations();
     }
 
+    // Direct one-touch fitting from any of the 6 all-in-one flank preset cards
+    function applyDirectPreset(concept, rankIdx) {
+      currentConcept = concept;
+      selectedTshirtIdx = rankIdx;
+      selectedPantsIdx = rankIdx;
+      selectedShoesIdx = rankIdx;
+
+      // Sync concept tabs in wardrobe section
+      document.querySelectorAll('.concept-tab').forEach(tab => {
+        const isCurrent = tab.dataset.concept === concept;
+        if (isCurrent) {
+          tab.className = 'concept-tab flex-1 py-1.5 px-1 rounded-lg text-xs font-semibold transition flex items-center justify-center gap-1.5 bg-sky-500 text-white shadow-md shadow-sky-500/20';
+        } else {
+          tab.className = 'concept-tab flex-1 py-1.5 px-1 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition flex items-center justify-center gap-1.5';
+        }
+      });
+
+      renderVisualOuterCards();
+      updateRecommendations();
+    }
+
+    // Update all 6 flank preset cards (Office 1/2, Daily 1/2, Date 1/2) simultaneously
+    function updateMirrorFlankPresets() {
+      const outer = outerItems.find(o => o.id === currentOuterId) || outerItems[0];
+      const outfits = outer.outfits;
+
+      const concepts = ['office', 'daily', 'date'];
+      const prefixMap = { office: 'off', daily: 'dai', date: 'dat' };
+
+      concepts.forEach(concept => {
+        const prefix = prefixMap[concept];
+        const cOutfit = outfits[concept];
+
+        [0, 1].forEach(rank => {
+          const t = cOutfit.tshirt[rank] || cOutfit.tshirt[0];
+          const p = cOutfit.pants[rank] || cOutfit.pants[0];
+          const s = cOutfit.shoes[rank] || cOutfit.shoes[0];
+
+          const tDot = document.getElementById(`p-${prefix}${rank}-t-dot`);
+          const tName = document.getElementById(`p-${prefix}${rank}-t-name`);
+          const pDot = document.getElementById(`p-${prefix}${rank}-p-dot`);
+          const pName = document.getElementById(`p-${prefix}${rank}-p-name`);
+          const sDot = document.getElementById(`p-${prefix}${rank}-s-dot`);
+          const sName = document.getElementById(`p-${prefix}${rank}-s-name`);
+
+          if (tDot && tName) {
+            tDot.style.backgroundColor = t.hex;
+            tName.textContent = t.name;
+          }
+          if (pDot && pName) {
+            pDot.style.backgroundColor = p.hex;
+            pName.textContent = p.name;
+          }
+          if (sDot && sName) {
+            sDot.style.backgroundColor = s.hex;
+            sName.textContent = s.name;
+          }
+
+          // Highlight the currently active card among the 6 cards
+          const card = document.getElementById(`preset-card-${concept}-${rank}`);
+          if (card) {
+            const isActive = (currentConcept === concept && selectedTshirtIdx === rank && selectedPantsIdx === rank && selectedShoesIdx === rank);
+            if (isActive) {
+              const ringColor = concept === 'office' ? 'ring-sky-400 bg-sky-950/80 border-sky-400' 
+                : concept === 'daily' ? 'ring-emerald-400 bg-emerald-950/80 border-emerald-400' 
+                : 'ring-fuchsia-400 bg-fuchsia-950/80 border-fuchsia-400';
+              card.className = `quick-preset-card text-left p-1.5 rounded-lg ring-2 ${ringColor} backdrop-blur-md transition-all active:scale-95 shadow-lg group`;
+            } else {
+              card.className = 'quick-preset-card text-left p-1.5 rounded-lg bg-slate-950/90 hover:bg-slate-900 border border-slate-700/80 backdrop-blur-md transition-all active:scale-95 shadow-md group';
+            }
+          }
+        });
+      });
+    }
+
     function updateRecommendations() {
       const outer = outerItems.find(o => o.id === currentOuterId) || outerItems[0];
       const outfit = outer.outfits[currentConcept];
@@ -1505,6 +1750,9 @@
         statusPill.className = "text-[10px] bg-amber-950 text-amber-300 border border-amber-600 px-2 py-0.5 rounded-full font-bold";
       }
 
+      // Update mirror quick preset cards
+      updateMirrorFlankPresets();
+
       // Redraw clothing on mannequin
       updateClothingLayers();
     }
@@ -1567,10 +1815,10 @@
 
       // Reset Fit
       document.getElementById('btn-fit-reset').addEventListener('click', () => {
-        userHeight = 174;
-        userWeight = 70;
-        inputH.value = 174;
-        inputW.value = 70;
+        userHeight = 168;
+        userWeight = 75;
+        inputH.value = 168;
+        inputW.value = 75;
         isOuterOpen = true;
         document.getElementById('outer-open-label').textContent = '단추 풀기';
         updateBodyMorphing();
