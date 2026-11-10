@@ -718,7 +718,7 @@
       maxTemp: 17,
       mood: 'mixed',
       activeCategoryTab: 'all',
-      anchorItems: [ WARDROBE.pants[3] ], // Default: 4. 진청 기모청바지 (Array: 1 or 2 items)
+      anchorItems: [], // Default: empty (0 items selected, freely selectable 1 or 2)
       variationOffset: 0,
       activeRankIdx: 0,
       currentRecommendations: [],
@@ -1329,9 +1329,28 @@
       const anchors = state.anchorItems.filter(Boolean);
       const catKor = { pants: '바지', inner: '이너', shirt: '남방', outer: '아우터', shoes: '신발' };
 
-      document.getElementById('anchor-count-badge').textContent = `${anchors.length}개 선택됨 (최대 2개)`;
-
-      if (anchors.length === 1) {
+      if (anchors.length === 0) {
+        document.getElementById('anchor-count-badge').textContent = '0개 선택 (자유 모드)';
+        document.getElementById('anchor-count-badge').className = 'text-[10px] bg-slate-800 text-slate-300 border border-slate-700 px-1.5 py-0.2 rounded-full font-bold';
+        box.innerHTML = `
+          <div class="flex items-center justify-between gap-2 bg-slate-950/80 border border-slate-700/80 p-2.5 rounded-lg">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="w-6 h-6 rounded-full bg-slate-800 border border-slate-600 flex items-center justify-center text-sky-400 text-xs flex-shrink-0">
+                <i class="fa-solid fa-shirt"></i>
+              </span>
+              <div class="min-w-0">
+                <span class="text-xs font-bold text-slate-200 block truncate">선택된 고정 옷 없음 (날씨 기반 자유 코디 추천)</span>
+                <span class="text-[10px] text-slate-400 block truncate">아래 옷장에서 원하는 옷을 클릭해 1개 조합을 하거나, 추가로 1개 더 선택해 2개를 고정할 수 있습니다.</span>
+              </div>
+            </div>
+            <span class="text-[9.5px] text-emerald-300 bg-emerald-950/60 px-2 py-1 rounded border border-emerald-600/40 font-bold flex-shrink-0">
+              자유 추천 모드
+            </span>
+          </div>
+        `;
+      } else if (anchors.length === 1) {
+        document.getElementById('anchor-count-badge').textContent = '1개 선택됨 (최대 2개)';
+        document.getElementById('anchor-count-badge').className = 'text-[10px] bg-sky-500/20 text-sky-300 border border-sky-500/30 px-1.5 py-0.2 rounded-full font-bold';
         const a1 = anchors[0];
         box.innerHTML = `
           <div class="flex items-center justify-between gap-2 bg-sky-950/60 border border-sky-500/50 p-2 rounded-lg">
@@ -1390,7 +1409,6 @@
     }
 
     function removeAnchorItem(id) {
-      if (state.anchorItems.length <= 1) return; // Keep at least 1
       state.anchorItems = state.anchorItems.filter(it => it.id !== id);
       state.variationOffset = 0;
       generateRecommendations();
@@ -1402,9 +1420,14 @@
       const anchors = state.anchorItems.filter(Boolean);
       const catKor = { pants: '바지', inner: '이너', shirt: '남방', outer: '아우터', shoes: '신발' };
 
-      const namesSummary = anchors.map(a => `'${a.name}'`).join(' + ');
-      document.getElementById('mirror-anchor-badge').textContent = `고정: ${anchors.map(a => `[${catKor[a.category]}] ${a.name}`).join(' + ')}`;
-      document.getElementById('recommendation-section-title').textContent = `${namesSummary} 기준 맞춤 코디 4가지`;
+      if (anchors.length === 0) {
+        document.getElementById('mirror-anchor-badge').textContent = `기온 맞춤 자유 추천 (원하는 옷을 골라 고정해보세요)`;
+        document.getElementById('recommendation-section-title').textContent = `오늘 기온(${state.minTemp}°C~${state.maxTemp}°C) 맞춤 베스트 코디 1·2·3위`;
+      } else {
+        const namesSummary = anchors.map(a => `'${a.name}'`).join(' + ');
+        document.getElementById('mirror-anchor-badge').textContent = `고정: ${anchors.map(a => `[${catKor[a.category]}] ${a.name}`).join(' + ')}`;
+        document.getElementById('recommendation-section-title').textContent = `${namesSummary} 기준 맞춤 코디 4가지`;
+      }
       document.getElementById('variation-counter-badge').textContent = `조합 패턴 #${state.variationOffset + 1}`;
 
       renderAnchorStatusBanner();
@@ -1720,36 +1743,31 @@
           const existingIdx = state.anchorItems.findIndex(a => a.id === clickedItem.id);
 
           if (existingIdx !== -1) {
-            // Already selected item clicked!
-            if (state.anchorItems.length === 1) {
-              // Only 1 item selected: cycle variation
-              state.variationOffset += 1;
-            } else {
-              // 2 items selected: unselect this item (returns to 1 item)
-              state.anchorItems.splice(existingIdx, 1);
-              state.variationOffset = 0;
-            }
+            // Already selected item clicked: UNSELECT it cleanly!
+            state.anchorItems.splice(existingIdx, 1);
+            state.variationOffset = 0;
           } else {
             // New item clicked
-            if (state.anchorItems.length === 1) {
+            if (state.anchorItems.length === 0) {
+              // First item selected
+              state.anchorItems = [ clickedItem ];
+              state.variationOffset = 0;
+            } else if (state.anchorItems.length === 1) {
               const currentItem = state.anchorItems[0];
               if (currentItem.category === clickedItem.category) {
-                // Same category: replace the single item
+                // Same category: replace the item
                 state.anchorItems = [ clickedItem ];
-                state.variationOffset = 0;
               } else {
-                // Different category: ADD as 2nd anchor! (2 items fixed)
+                // Different category: add as 2nd anchor (now 2 items fixed!)
                 state.anchorItems.push(clickedItem);
-                state.variationOffset = 0;
               }
+              state.variationOffset = 0;
             } else if (state.anchorItems.length >= 2) {
-              // 2 items already selected: check if clicked item matches the category of one of them
+              // 2 items already selected: replace matching category or oldest item
               const matchCatIdx = state.anchorItems.findIndex(a => a.category === clickedItem.category);
               if (matchCatIdx !== -1) {
-                // Replace the one with the same category
                 state.anchorItems[matchCatIdx] = clickedItem;
               } else {
-                // Replace the oldest item (index 0)
                 state.anchorItems.shift();
                 state.anchorItems.push(clickedItem);
               }
@@ -1892,9 +1910,9 @@
       renderWardrobeList();
       renderAllRecommendationsUI();
 
-      // Clear Anchors Button
+      // Clear Anchors Button (전부 체크해제)
       document.getElementById('btn-clear-anchors').addEventListener('click', () => {
-        state.anchorItems = [ WARDROBE.pants[3] ]; // Reset to 진청 기모청바지
+        state.anchorItems = []; // Completely uncheck all items
         state.variationOffset = 0;
         state.activeRankIdx = 0;
         generateRecommendations();
