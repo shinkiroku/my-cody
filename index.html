@@ -51,6 +51,11 @@
       box-shadow: 0 0 0 2px #38bdf8, 0 6px 20px rgba(56, 189, 248, 0.35);
       background: rgba(20, 38, 70, 0.95) !important;
     }
+    .anchor-active-ring-2 {
+      border-color: #a855f7 !important;
+      box-shadow: 0 0 0 2px #a855f7, 0 6px 20px rgba(168, 85, 247, 0.35);
+      background: rgba(38, 20, 70, 0.95) !important;
+    }
     .rank-active-ring {
       border-color: #38bdf8 !important;
       box-shadow: 0 0 0 1.5px #38bdf8, 0 4px 14px rgba(56, 189, 248, 0.28);
@@ -84,14 +89,14 @@
     <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
       <div class="flex items-center gap-2 min-w-0">
         <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center shadow flex-shrink-0">
-          <i class="fa-solid fa-Palette text-sm text-white"></i>
+          <i class="fa-solid fa-palette text-sm text-white"></i>
         </div>
         <div class="min-w-0">
           <div class="flex items-center gap-1.5">
             <h1 class="text-xs sm:text-base font-extrabold text-white tracking-tight truncate">HEX 컬러 배합 실물 피팅 룸</h1>
             <span class="text-[10px] font-bold bg-sky-500/20 text-sky-300 border border-sky-500/30 px-1.5 py-0.5 rounded-full flex-shrink-0">168cm·74kg</span>
           </div>
-          <p class="text-[10px] text-slate-400 truncate">내 옷장 49종 전용 · 기온(최저 우선) 맞춤 · 댄디&캐주얼 다양한 컬러 매칭</p>
+          <p class="text-[10px] text-slate-400 truncate">내 옷장 53종 · 최대 2개 동시 선택 고정 · 신발 동적 교체 · 기온 최저 우선 댄디 코디</p>
         </div>
       </div>
 
@@ -102,7 +107,7 @@
         </button>
         <button id="btn-reroll-top" class="text-[11px] bg-indigo-600/80 hover:bg-indigo-500 text-white font-bold px-2.5 py-1.5 rounded-lg flex items-center gap-1 border border-indigo-400/40 transition active:scale-95">
           <i class="fa-solid fa-dice"></i>
-          <span>다시 추천</span>
+          <span>다시 추천 (신발교체)</span>
         </button>
         <button id="btn-upload-toggle" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-2 py-1.5 rounded-lg flex items-center gap-1 transition active:scale-95" title="내 사진 입히기">
           <i class="fa-solid fa-camera text-sky-400"></i>
@@ -116,7 +121,7 @@
   <div class="block lg:hidden px-3 pt-2 pb-1 max-w-xl mx-auto w-full sticky top-[52px] z-30">
     <div class="glass-card p-1 rounded-xl flex items-center justify-between text-xs font-bold shadow-lg border border-slate-700/80">
       <button id="cover-tab-wardrobe" class="flex-1 py-2 rounded-lg transition text-white bg-sky-600 shadow flex items-center justify-center gap-1.5">
-        <i class="fa-solid fa-sliders"></i> 1. 기온 & 내 옷 고르기
+        <i class="fa-solid fa-sliders"></i> 1. 기온 & 내 옷 고르기 (최대 2개)
       </button>
       <button id="cover-tab-fitting" class="flex-1 py-2 rounded-lg transition text-slate-400 hover:text-white flex items-center justify-center gap-1.5">
         <i class="fa-solid fa-person-rays"></i> 2. 실물 피팅 & 1·2·3순위
@@ -243,7 +248,7 @@
                 <filter id="shadowFilter" x="-15%" y="-15%" width="130%" height="130%">
                   <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#000" flood-opacity="0.45"/>
                 </filter>
-                <!-- Tartan Check Pattern for Outer #9 (Lotus Green #004225, Black #111111, Midnight Navy #003366) -->
+                <!-- Tartan Check Pattern for Outer #9 -->
                 <pattern id="tartanCheckPattern" width="24" height="24" patternUnits="userSpaceOnUse">
                   <rect width="24" height="24" fill="#003366"/>
                   <rect x="0" y="0" width="12" height="24" fill="#004225" opacity="0.85"/>
@@ -253,18 +258,28 @@
                   <line x1="0" y1="6" x2="24" y2="6" stroke="#111111" stroke-width="3"/>
                   <line x1="0" y1="18" x2="24" y2="18" stroke="#111111" stroke-width="2"/>
                 </pattern>
-                <!-- Grey & Yellow Stripe Cardigan Pattern for Outer #11 (#808080 + #F0E68C) -->
+                <!-- Grey & Yellow Stripe Pattern for Outer #11 -->
                 <pattern id="yellowStripePattern" width="20" height="20" patternUnits="userSpaceOnUse">
                   <rect width="20" height="20" fill="#808080"/>
                   <line x1="0" y1="6" x2="20" y2="6" stroke="#F0E68C" stroke-width="2.2" opacity="0.9"/>
                   <line x1="0" y1="15" x2="20" y2="15" stroke="#F0E68C" stroke-width="1.5" opacity="0.75"/>
                   <line x1="10" y1="0" x2="10" y2="20" stroke="#F0E68C" stroke-width="1.2" opacity="0.5"/>
                 </pattern>
-                <!-- Large Square Check Pattern for Inner #16 (#808080 and #212529) -->
+                <!-- Large Square Check Pattern for Inner #16 -->
                 <pattern id="greyBlackCheckPattern" width="28" height="28" patternUnits="userSpaceOnUse">
                   <rect width="28" height="28" fill="#808080"/>
                   <rect x="0" y="0" width="14" height="14" fill="#212529"/>
                   <rect x="14" y="14" width="14" height="14" fill="#212529"/>
+                </pattern>
+                <!-- Corduroy Rib Texture Pattern for Corduroy Outer / Shirts (#4A412A) -->
+                <pattern id="corduroyPattern" width="6" height="12" patternUnits="userSpaceOnUse">
+                  <rect width="6" height="12" fill="#4A412A"/>
+                  <line x1="3" y1="0" x2="3" y2="12" stroke="#2B2416" stroke-width="1.5" opacity="0.7"/>
+                </pattern>
+                <!-- Knit Rib Texture Pattern for Burgundy Cardigan (#560319) -->
+                <pattern id="burgundyKnitPattern" width="8" height="8" patternUnits="userSpaceOnUse">
+                  <rect width="8" height="8" fill="#560319"/>
+                  <line x1="4" y1="0" x2="4" y2="8" stroke="#3D0111" stroke-width="1.4" opacity="0.8"/>
                 </pattern>
               </defs>
 
@@ -283,19 +298,19 @@
               <path id="body-arm-left" d="M101,128 L80,250 L93,252 L110,135 Z" fill="url(#skinGrad)"/>
               <path id="body-arm-right" d="M199,128 L220,250 L207,252 L190,135 Z" fill="url(#skinGrad)"/>
 
-              <!-- LAYER 1: Inner (T-Shirt / Knit / Sweatshirt / Inner Vest) -->
+              <!-- LAYER 1: Inner -->
               <g id="layer-inner" class="layer-transition"></g>
 
               <!-- LAYER 2: Pants -->
               <g id="layer-pants" class="layer-transition"></g>
 
-              <!-- LAYER 3: Shirt (남방 레이어드 겸용) -->
+              <!-- LAYER 3: Shirt / Layer -->
               <g id="layer-shirt" class="layer-transition"></g>
 
-              <!-- LAYER 4: Outer (아우터) -->
+              <!-- LAYER 4: Outer -->
               <g id="layer-outer" class="layer-transition"></g>
 
-              <!-- LAYER 5: Shoes (신발) -->
+              <!-- LAYER 5: Shoes -->
               <g id="layer-shoes" class="layer-transition"></g>
 
               <!-- Custom User Photo Overlay -->
@@ -313,7 +328,7 @@
               </div>
               <div class="flex items-center gap-1.5 flex-shrink-0">
                 <button id="btn-reroll-mirror" class="bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 shadow transition active:scale-95">
-                  <i class="fa-solid fa-rotate"></i> 다른 조합 (다시 추천)
+                  <i class="fa-solid fa-rotate"></i> 다른 조합 (신발교체)
                 </button>
                 <button id="btn-back-to-wardrobe-mirror" class="bg-slate-800 hover:bg-slate-700 text-sky-300 text-[10px] font-bold px-2.5 py-1 rounded-lg border border-slate-600 transition active:scale-95">
                   <i class="fa-solid fa-hand-pointer"></i> 옷 다시 선택
@@ -333,7 +348,7 @@
               <i class="fa-solid fa-wand-magic-sparkles text-sky-400"></i>
               <span id="recommendation-section-title">선택한 옷 기준 맞춤 코디 4가지</span>
             </h2>
-            <p id="recommendation-temp-summary" class="text-[10px] text-slate-400 mt-0.5">기온 조건과 색채 조화(명도·채도·온도감)를 분석한 추천 결과입니다.</p>
+            <p id="recommendation-temp-summary" class="text-[10px] text-slate-400 mt-0.5">색채 조화와 168cm/74kg 체형 보정, 그리고 기온을 고려해 신발까지 다채롭게 추천합니다.</p>
           </div>
           <span id="variation-counter-badge" class="text-[10px] font-bold bg-indigo-950 text-indigo-300 border border-indigo-500/40 px-2 py-0.5 rounded-full">
             조합 패턴 #1
@@ -346,20 +361,21 @@
         </div>
 
         <!-- Detailed Color Harmony & Temperature Advice Box -->
-        <div class="p-2.5 rounded-xl bg-slate-900/95 border border-slate-800 text-[11px] text-slate-200 flex flex-col gap-1">
+        <div class="p-2.5 rounded-xl bg-slate-900/95 border border-slate-800 text-[11px] text-slate-200 flex flex-col gap-1.5">
           <div class="flex items-center justify-between">
             <span class="font-bold text-sky-400 flex items-center gap-1">
-              <i class="fa-solid fa-palette"></i> <span id="active-combo-title">베스트 1위 컬러 배합 & 기온 해설</span>
+              <i class="fa-solid fa-palette"></i> <span id="active-combo-title">베스트 1위 컬러 배합 & 체형 보정 해설</span>
             </span>
             <span id="active-temp-badge" class="text-[10px] bg-slate-800 text-emerald-300 px-2 py-0.5 rounded border border-slate-700">최저기온 우선 맞춤</span>
           </div>
+          <div id="active-combo-harmony-pill" class="text-[10px] text-sky-300 font-bold bg-sky-950/80 px-2.5 py-1 rounded-lg border border-sky-500/30 flex items-center gap-1.5"></div>
           <p id="active-combo-reason" class="text-slate-300 leading-relaxed text-[11px]"></p>
         </div>
       </div>
 
     </section>
 
-    <!-- RIGHT COLUMN: Temperature Input + 5-Part Wardrobe Selector (Anchor Item Picker) -->
+    <!-- RIGHT COLUMN: Temperature Input + 5-Part Wardrobe Selector (Dual Anchor Item Picker) -->
     <section id="section-wardrobe" class="flex lg:col-span-6 flex-col gap-3">
 
       <!-- STEP 1: Temperature Setting (Min Temp Priority & Max Temp Adaptability) -->
@@ -425,70 +441,71 @@
         </div>
       </div>
 
-      <!-- STEP 2: Color Style Mode & Anchor Item Selection -->
+      <!-- STEP 2: Color Style Mode & Dual Anchor Item Selection -->
       <div class="glass-card rounded-2xl p-3 sm:p-3.5 border border-slate-800 flex flex-col gap-3">
         <div class="flex items-center justify-between flex-wrap gap-2">
           <div class="flex items-center gap-1.5">
             <span class="w-5 h-5 rounded-full bg-sky-500 text-slate-950 font-extrabold text-[11px] flex items-center justify-center">2</span>
             <div>
-              <h2 class="text-xs sm:text-sm font-extrabold text-white">내 옷장에서 기준 옷 1개 고르기 (총 49종 · 대표색 표시)</h2>
-              <p class="text-[10px] text-slate-400">어느 파트든 하나를 고르면 그 옷의 HEX 색감과 기온에 맞춰 나머지 파트를 자동 조합합니다.</p>
+              <h2 class="text-xs sm:text-sm font-extrabold text-white flex items-center gap-1.5">
+                <span>내 옷장에서 기준 옷 선택 (최대 2개까지 고정 가능)</span>
+                <span id="anchor-count-badge" class="text-[10px] bg-sky-500/20 text-sky-300 border border-sky-500/30 px-1.5 py-0.2 rounded-full font-bold">1개 선택됨</span>
+              </h2>
+              <p class="text-[10px] text-slate-400">1개만 골라도 바로 추천되며, 다른 파트에서 1개 더 고르면 2개를 고정한 상태로 최적 코디를 추천합니다.</p>
             </div>
           </div>
 
-          <button id="btn-reroll-wardrobe" class="text-[11px] bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-3 py-1.5 rounded-xl flex items-center gap-1.5 shadow-md transition active:scale-95">
-            <i class="fa-solid fa-shuffle"></i>
-            <span>같은 옷으로 다른 조합 뽑기</span>
-          </button>
+          <div class="flex items-center gap-1.5">
+            <button id="btn-clear-anchors" class="text-[10.5px] bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1.5 rounded-xl border border-slate-700 transition active:scale-95">
+              선택 초기화
+            </button>
+            <button id="btn-reroll-wardrobe" class="text-[11px] bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-2.5 py-1.5 rounded-xl flex items-center gap-1.5 shadow-md transition active:scale-95">
+              <i class="fa-solid fa-shuffle"></i>
+              <span>다른 조합 뽑기 (신발변경)</span>
+            </button>
+          </div>
         </div>
 
-        <!-- Color Mood Preference Filter (Clean Dandy Default + Diverse Color Challenge) -->
+        <!-- Color Mood Preference Filter -->
         <div class="flex items-center gap-1.5 bg-slate-900/90 p-1.5 rounded-xl border border-slate-800">
           <span class="text-[10px] font-bold text-slate-400 px-1.5 flex-shrink-0">배색 무드:</span>
           <button data-mood="mixed" class="mood-btn flex-1 py-1.5 px-2 rounded-lg text-[11px] font-bold bg-sky-600 text-white shadow transition">
-            밸런스 (댄디+다양한 색감)
+            밸런스 (댄디 + 감각적 색감)
           </button>
           <button data-mood="dandy" class="mood-btn flex-1 py-1.5 px-2 rounded-lg text-[11px] font-medium text-slate-400 hover:text-white transition">
-            깔끔·미니멀 댄디
+            깔끔·모던 미니멀 댄디
           </button>
           <button data-mood="colorful" class="mood-btn flex-1 py-1.5 px-2 rounded-lg text-[11px] font-medium text-slate-400 hover:text-white transition">
-            감각적 컬러 포인트 도전
+            원포인트 컬러 도전
           </button>
         </div>
 
-        <!-- 5 Category Tabs (All / Pants / Inner / Shirt / Outer / Shoes) -->
+        <!-- 5 Category Tabs -->
         <div class="grid grid-cols-6 gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-[11px] font-bold">
-          <button data-cat="all" class="cat-tab py-1.5 rounded-lg bg-slate-800 text-sky-400 transition">전체(49)</button>
+          <button data-cat="all" class="cat-tab py-1.5 rounded-lg bg-slate-800 text-sky-400 transition">전체(53)</button>
           <button data-cat="pants" class="cat-tab py-1.5 rounded-lg text-slate-400 hover:text-white transition">바지(10)</button>
-          <button data-cat="inner" class="cat-tab py-1.5 rounded-lg text-slate-400 hover:text-white transition">이너(17)</button>
-          <button data-cat="shirt" class="cat-tab py-1.5 rounded-lg text-slate-400 hover:text-white transition">남방(4)</button>
-          <button data-cat="outer" class="cat-tab py-1.5 rounded-lg text-slate-400 hover:text-white transition">아우터(13)</button>
+          <button data-cat="inner" class="cat-tab py-1.5 rounded-lg text-slate-400 hover:text-white transition">이너(19)</button>
+          <button data-cat="shirt" class="cat-tab py-1.5 rounded-lg text-slate-400 hover:text-white transition">남방(5)</button>
+          <button data-cat="outer" class="cat-tab py-1.5 rounded-lg text-slate-400 hover:text-white transition">아우터(14)</button>
           <button data-cat="shoes" class="cat-tab py-1.5 rounded-lg text-slate-400 hover:text-white transition">신발(5)</button>
         </div>
 
-        <!-- Currently Selected Anchor Item Banner -->
-        <div class="flex items-center justify-between bg-sky-950/40 border border-sky-500/40 px-3 py-2 rounded-xl">
-          <div class="flex items-center gap-2 min-w-0">
-            <span id="anchor-banner-swatch" class="w-5 h-5 rounded-full border border-white/30 shadow flex-shrink-0" style="background-color: #1D314A;"></span>
-            <div class="min-w-0">
-              <div class="text-[10px] text-sky-300 font-bold">현재 선택한 기준 아이템 (클릭 시 다른 조합 즉시 생성)</div>
-              <div id="anchor-banner-name" class="text-xs font-extrabold text-white truncate">[바지 4] 진청 기모청바지 (#1D314A)</div>
-            </div>
-          </div>
-          <span class="text-[10px] text-sky-300 font-semibold flex-shrink-0 ml-2">다른 옷 터치 시 변경</span>
+        <!-- Currently Selected Anchors Display Banner (Dual Items) -->
+        <div id="anchor-status-box" class="flex flex-col gap-1.5 bg-slate-900/95 border border-sky-500/40 p-2.5 rounded-xl shadow-inner">
+          <!-- Injected via renderAnchorStatusBanner() -->
         </div>
 
         <!-- Wardrobe Items List Container -->
         <div id="wardrobe-items-container" class="flex flex-col gap-3 max-h-[540px] overflow-y-auto pr-1">
-          <!-- Populated dynamically with all 5 categories & representative HEX swatches -->
+          <!-- Populated dynamically with all categories -->
         </div>
       </div>
 
-      <!-- STEP 3: Manual Fine-Tuning (내가 직접 1개 파트만 바꿔보기) -->
+      <!-- STEP 3: Manual Fine-Tuning -->
       <div class="glass-card rounded-2xl p-3 sm:p-3.5 border border-slate-800 flex flex-col gap-2.5">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-1.5">
-            <i class="fa-solid fa-Sliders text-indigo-400 text-xs"></i>
+            <i class="fa-solid fa-sliders text-indigo-400 text-xs"></i>
             <h3 class="text-xs font-bold text-white">현재 피팅된 코디에서 개별 파트 직접 바꿔보기</h3>
           </div>
           <span class="text-[10px] text-slate-400">추천 조합에서 내가 원하는 옷으로 미세 조절</span>
@@ -504,7 +521,7 @@
             <select id="manual-select-inner" class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-slate-100 text-[11px] focus:border-sky-400 outline-none"></select>
           </div>
           <div class="flex flex-col gap-1">
-            <label class="text-[10px] text-slate-400 font-bold">👔 남방(레이어드)</label>
+            <label class="text-[10px] text-slate-400 font-bold">👔 남방/레이어드</label>
             <select id="manual-select-shirt" class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-slate-100 text-[11px] focus:border-sky-400 outline-none"></select>
           </div>
           <div class="flex flex-col gap-1">
@@ -522,7 +539,7 @@
 
   </main>
 
-  <!-- Floating Quick Navigation Bar (Always accessible to jump to Wardrobe or Reroll) -->
+  <!-- Floating Quick Navigation Bar -->
   <div class="fixed bottom-3 left-1/2 -translate-x-1/2 z-40 glass-card px-3 py-2 rounded-2xl border border-slate-700/90 shadow-2xl flex items-center gap-2 max-w-[95vw]">
     <button id="float-btn-wardrobe" class="px-3 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-extrabold flex items-center gap-1.5 shadow transition active:scale-95">
       <i class="fa-solid fa-shirt"></i>
@@ -535,7 +552,7 @@
     <div class="h-4 w-[1px] bg-slate-700"></div>
     <button id="float-btn-reroll" class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-extrabold flex items-center gap-1.5 shadow transition active:scale-95">
       <i class="fa-solid fa-dice"></i>
-      <span>다음 1·2·3순위 (다시 추천)</span>
+      <span>다음 1·2·3순위 (신발교체)</span>
     </button>
   </div>
 
@@ -584,7 +601,7 @@
 
   <script>
     // =========================================================================
-    // 1. EXACT USER WARDROBE DATABASE (44 Items across 5 Categories + HEX Codes)
+    // 1. EXACT USER WARDROBE DATABASE (53 Items across 5 Categories + HEX Codes)
     // =========================================================================
     const WARDROBE = {
       pants: [
@@ -616,13 +633,16 @@
         { id: 'i14', category: 'inner', num: 14, name: '진회색 올리브 기모 맨투맨 티셔츠', hex: '#4A412A', subType: 'sweat_lined', lined: true, warmth: 4, tempMin: -12, tempMax: 13, tone: 'earth_olive_dark', desc: 'HEX #4A412A · 기모안감 · 분위기 있는 다크 올리브 브라운' },
         { id: 'i15', category: 'inner', num: 15, name: '파랑 기모 맨투맨 티셔츠', hex: '#2B547E', subType: 'sweat_lined', lined: true, warmth: 4, tempMin: -12, tempMax: 13, tone: 'cool_blue', desc: 'HEX #2B547E · 기모안감 · 산뜻하고 지적인 스틸 제이 블루' },
         { id: 'i16', category: 'inner', num: 16, name: '검정회색 체크무늬 니트', hex: '#808080', hexSub1: '#212529', pattern: 'check_grey_black', subType: 'knit', warmth: 4, tempMin: -10, tempMax: 15, tone: 'check_mono', desc: '회색(#808080)+검정(#212529) 큰 정사각 체크 포인트 니트' },
-        { id: 'i17', category: 'inner', num: 17, name: '흰색 기모 맨투맨 티셔츠', hex: '#F5F7FA', subType: 'sweat_lined', lined: true, warmth: 4, tempMin: -12, tempMax: 13, tone: 'neutral_light', desc: '기모안감 · 겨울에도 화사하고 포근한 화이트 기모 맨투맨' }
+        { id: 'i17', category: 'inner', num: 17, name: '흰색 기모 맨투맨 티셔츠', hex: '#F5F7FA', subType: 'sweat_lined', lined: true, warmth: 4, tempMin: -12, tempMax: 13, tone: 'neutral_light', desc: '기모안감 · 겨울에도 화사하고 포근한 화이트 기모 맨투맨' },
+        { id: 'i18', category: 'inner', num: 18, name: '올리브 그린 니트', hex: '#728C00', subType: 'knit', warmth: 4, tempMin: -10, tempMax: 16, tone: 'accent_green', desc: 'HEX #728C00 (베놈 그린) · 감각적이고 생동감 넘치는 올리브 니트' },
+        { id: 'i19', category: 'inner', num: 19, name: '버건디 두툼 가디건 (이너용)', hex: '#560319', pattern: 'burgundy_knit', subType: 'cardigan', warmth: 3.5, tempMin: 1, tempMax: 18, tone: 'burgundy_deep', desc: 'HEX #560319 (진스칼렛) · 패딩/코트 속 포근하게 받쳐 입는 버건디 가디건' }
       ],
       shirt: [
         { id: 'sh1', category: 'shirt', num: 1, name: '흑청 박시 남방', hex: '#292929', subType: 'boxy_shirt', warmth: 2.5, tempMin: -8, tempMax: 22, tone: 'neutral_dark', desc: 'HEX #292929 · 아우터 겸용 모던 흑청 박시 셔츠' },
         { id: 'sh2', category: 'shirt', num: 2, name: '자주 냅툰블루 남방', hex: '#405465', subType: 'shirt', warmth: 2, tempMin: -8, tempMax: 23, tone: 'cool_mid', desc: 'HEX #405465 · 세련된 뮤트 스틸블루 남방' },
         { id: 'sh3', category: 'shirt', num: 3, name: '유니클로 회색 남방', hex: '#808080', subType: 'shirt', warmth: 2, tempMin: -8, tempMax: 23, tone: 'neutral_mid', desc: 'HEX #808080 · 단정한 정석 미드그레이 남방' },
-        { id: 'sh4', category: 'shirt', num: 4, name: '스파오 청남방', hex: '#79BAEC', subType: 'denim_shirt', warmth: 2, tempMin: -8, tempMax: 23, tone: 'cool_light', desc: 'HEX #79BAEC · 산뜻한 스카이블루 데님 남방' }
+        { id: 'sh4', category: 'shirt', num: 4, name: '스파오 청남방', hex: '#79BAEC', subType: 'denim_shirt', warmth: 2, tempMin: -8, tempMax: 23, tone: 'cool_light', desc: 'HEX #79BAEC · 산뜻한 스카이블루 데님 남방' },
+        { id: 'sh5', category: 'shirt', num: 5, name: '진회색올리브 골덴박시남방', hex: '#4A412A', subType: 'corduroy_shirt', texture: 'corduroy', warmth: 3, tempMin: 0, tempMax: 22, tone: 'earth_olive_dark', desc: 'HEX #4A412A · 코듀로이 질감의 댄디 웜톤 박시 남방 (단독/레이어드)' }
       ],
       outer: [
         { id: 'o1', category: 'outer', num: 1, name: '유니클로 회색 후드 집업(조금 얇음)', hex: '#C0C0C0', subType: 'hoodie', warmth: 2, tempMin: 9, tempMax: 21, tone: 'neutral_light', desc: 'HEX #C0C0C0 · 초가을·간절기용 가벼운 실버그레이 후드' },
@@ -637,7 +657,8 @@
         { id: 'o10', category: 'outer', num: 10, name: '지오다노 클래식 블랙 가디건', hex: '#16171A', subType: 'cardigan', warmth: 2.5, tempMin: 6, tempMax: 20, tone: 'neutral_dark', desc: '깔끔하고 댄디한 스타일의 정석 블랙 가디건' },
         { id: 'o11', category: 'outer', num: 11, name: '에잇세컨즈 회색·노란줄 가디건', hex: '#808080', hexSub1: '#F0E68C', pattern: 'stripe_yellow', subType: 'cardigan', warmth: 2.5, tempMin: 6, tempMax: 19, tone: 'accent_cardigan', desc: '회색(#808080) 바탕 + 카키옐로우(#F0E68C) 스트라이프' },
         { id: 'o12', category: 'outer', num: 12, name: '유니클로 흰색 패딩(겨울용)', hex: '#F3F5F8', subType: 'heavy_puffer', isWinter: true, warmth: 5, tempMin: -15, tempMax: 5, tone: 'neutral_light', desc: '한겨울용 헤비다운 · 화사하고 깨끗한 스노우 화이트' },
-        { id: 'o13', category: 'outer', num: 13, name: '아디다스 하늘색 패딩(겨울용)', hex: '#368BC1', subType: 'heavy_puffer', isWinter: true, warmth: 5, tempMin: -15, tempMax: 5, tone: 'cool_bright', desc: 'HEX #368BC1 · 겨울용 빙하 블루 아이스 컬러 포인트 패딩' }
+        { id: 'o13', category: 'outer', num: 13, name: '아디다스 하늘색 패딩(겨울용)', hex: '#368BC1', subType: 'heavy_puffer', isWinter: true, warmth: 5, tempMin: -15, tempMax: 5, tone: 'cool_bright', desc: 'HEX #368BC1 · 겨울용 빙하 블루 아이스 컬러 포인트 패딩' },
+        { id: 'o14', category: 'outer', num: 14, name: '버건디 두툼 가디건', hex: '#560319', pattern: 'burgundy_knit', subType: 'cardigan', warmth: 3.5, tempMin: 1, tempMax: 18, tone: 'burgundy_deep', desc: 'HEX #560319 (진스칼렛) · 아우터/이너 겸용 두툼하고 포근한 버건디 댄디 가디건' }
       ],
       shoes: [
         { id: 's1', category: 'shoes', num: 1, name: '르무통 검은색 단화', hex: '#18181B', subType: 'derby_flat', tone: 'neutral_dark', dandyScore: 10, desc: '깔끔하고 단정한 댄디 블랙 단화' },
@@ -648,72 +669,64 @@
       ]
     };
 
-    // Unowned Recommendations Pool (4번째 카드: 내가 가지고 있지 않지만 추천하는 색/옷)
+    // Unowned Recommendations Pool
     const UNOWNED_SUGGESTIONS = [
       {
         id: 'u1',
         targetPart: 'pants',
         name: '크림 아이보리 세미와이드 치노/슬랙스',
         hex: '#F5F2EB',
-        reason: '가지고 계신 옥스포드 블루 니트(#002147), 녹색 니트(#345342), 냅툰블루 남방(#405465) 등 짙은 상의들과 매치했을 때 가장 화사하고 고급스러운 댄디룩을 완성해 줍니다.'
+        reason: '소장 중인 버건디 가디건(#560319), 옥스포드 블루 니트(#002147), 올리브 그린 니트(#728C00)와 매치 시 최상급 유럽형 프레피 댄디룩을 완성합니다.'
       },
       {
         id: 'u2',
         targetPart: 'outer',
         name: '카멜 브라운 / 웜토프 싱글 코트 또는 자켓',
         hex: '#9E7B56',
-        reason: '진고동색 면바지, 갈색 맨투맨, 검정/회색 니트 위에 걸치면 168cm 체형을 길어 보이게 하면서 깔끔·댄디한 인상을 극대화하는 웜톤 아우터입니다.'
+        reason: '진고동색 면바지, 갈색 맨투맨, 검정/회색/올리브 니트 위에 걸치면 168cm 체형을 길어 보이게 하면서 따뜻한 댄디 인상을 극대화합니다.'
       },
       {
         id: 'u3',
         targetPart: 'inner',
-        name: '버건디 / 와인 라운드 하찌 니트',
-        hex: '#5E1924',
-        reason: '소장 중인 회색/검정/진청/흑청 바지 및 흑청·회색 남방과 레이어드할 때 세련된 성숙미를 더해주는 가을·겨울 포인트 컬러입니다.'
+        name: '오트밀 크림 모크넥 니트',
+        hex: '#E3DAC9',
+        reason: '버건디 가디건이나 탑텐 체크 자켓, 아미그린 윈드브레이커 속을 포근하고 부드럽게 밝혀주는 필수적인 클래식 베이스 이너입니다.'
       },
       {
         id: 'u4',
-        targetPart: 'inner',
-        name: '웜 오트밀 / 샌드 베이지 크루넥 니트',
-        hex: '#DDD3C2',
-        reason: '흰색 티셔츠보다 따뜻해 보이면서 아미그린 바람막이(#4B5320), 탑텐 체크 자켓(#004225), 검정 아우터 안을 부드럽게 밝혀주는 필수 중간톤 이너입니다.'
-      },
-      {
-        id: 'u5',
         targetPart: 'shoes',
         name: '다크 브라운 스웨이드 로퍼 / 더비슈즈',
         hex: '#3E2723',
-        reason: '베이지 면바지, 진청 기모청바지, 진고동 면바지에 매치하면 검은색 단화보다 한층 부드럽고 클래식한 댄디 무드를 연출할 수 있습니다.'
+        reason: '베이지 면바지, 진청 기모청바지, 버건디 가디건에 매치하면 검은색 단화보다 한층 부드럽고 클래식한 댄디 무드를 연출할 수 있습니다.'
       },
       {
-        id: 'u6',
+        id: 'u5',
         targetPart: 'pants',
-        name: '올리브 카키 테이퍼드 치노 팬츠',
-        hex: '#4A553B',
-        reason: '흰색/회색/남색 이너 및 스파오 청남방(#79BAEC), 회색 후드집업과 매치할 때 면바지·청바지와는 또 다른 감각적인 캐주얼 배색을 만들어 줍니다.'
+        name: '미드 그레이 턴업 테이퍼드 슬랙스',
+        hex: '#6B7280',
+        reason: '올리브 그린 니트(#728C00)나 파랑 기모 맨투맨(#2B547E)의 원색 포인트를 차분하고 스마트하게 잡아주는 오피스 댄디 바지입니다.'
       }
     ];
 
     // =========================================================================
-    // 2. APPLICATION STATE
+    // 2. APPLICATION STATE (Supports up to 2 simultaneous anchor items)
     // =========================================================================
     let state = {
       height: 168,
       weight: 74,
       minTemp: 8,
       maxTemp: 17,
-      mood: 'mixed', // 'mixed' | 'dandy' | 'colorful'
+      mood: 'mixed',
       activeCategoryTab: 'all',
-      anchorItem: WARDROBE.pants[3], // Default: 4. 진청 기모청바지
-      variationOffset: 0,            // Increments on "다시 추천" or re-clicking same item
-      activeRankIdx: 0,              // 0 (1st), 1 (2nd), 2 (3rd), 3 (4th Unowned)
-      currentRecommendations: [],    // Array of 4 outfit objects
+      anchorItems: [ WARDROBE.pants[3] ], // Default: 4. 진청 기모청바지 (Array: 1 or 2 items)
+      variationOffset: 0,
+      activeRankIdx: 0,
+      currentRecommendations: [],
       isShirtOpen: true,
       isOuterOpen: true,
       customPhotoUrl: null
     };
 
-    // Helper: Find item by ID across all categories
     function getItemById(id) {
       for (const cat of Object.keys(WARDROBE)) {
         const found = WARDROBE[cat].find(it => it.id === id);
@@ -722,7 +735,6 @@
       return null;
     }
 
-    // Helper: Convert HEX to RGB & Luminance/HSL for Color Harmony Scoring
     function hexToRgb(hex) {
       const clean = hex.replace('#', '');
       const num = parseInt(clean, 16);
@@ -731,7 +743,7 @@
 
     function getLuminance(hex) {
       const { r, g, b } = hexToRgb(hex);
-      return (0.299 * r + 0.587 * g + 0.114 * b) / 255; // 0.0 (black) to 1.0 (white)
+      return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
     }
 
     function getColorDistance(hex1, hex2) {
@@ -745,7 +757,7 @@
     }
 
     // =========================================================================
-    // 3. TEMPERATURE & COLOR HARMONY ENGINE (Diverse Multi-Combo Generator)
+    // 3. COLOR HARMONY & TEMPERATURE SCORING ENGINE
     // =========================================================================
     function scoreTemperatureFit(pants, inner, shirt, outer) {
       let score = 0;
@@ -753,55 +765,46 @@
       const maxT = state.maxTemp;
       const tempDiff = Math.max(0, maxT - minT);
 
-      // 1) Priority: Min Temperature Suitability
-      // Winter paddings (o12, o13) only when minTemp <= 4°C
       if (outer) {
         if (outer.isWinter) {
-          if (minT <= 3) score += 45;
-          else if (minT <= 6) score += 10;
-          else score -= 80; // Too hot for heavy winter padding
+          if (minT <= 3) score += 50;
+          else if (minT <= 6) score += 15;
+          else score -= 90;
         } else {
-          // Autumn / Early Winter outers
           if (minT >= 4 && minT <= 17) score += 35;
           else if (minT < 4) {
-            // Cold morning: prefer fleece(o4), light puffer(o5), or jacket(o9) + inner vest/knit
-            if (outer.warmth >= 3.5) score += 30;
-            else score -= 10;
+            if (outer.warmth >= 3.5) score += 32;
+            else score -= 12;
           } else if (minT > 18) {
-            score -= 35; // Too warm for outer
+            score -= 35;
           }
         }
       } else {
-        // No outer: good when minTemp >= 16°C
         if (minT >= 16) score += 40;
-        else score -= 45;
+        else score -= 50;
       }
 
-      // 2) Lined Pants (기모 바지: p1, p2, p3, p4) check
       if (pants.lined) {
-        if (minT <= 9) score += 28;
+        if (minT <= 9) score += 30;
         else if (minT <= 13) score += 12;
-        else score -= 25; // Too warm for lined pants
+        else score -= 25;
       } else {
         if (minT > 9) score += 20;
         else if (minT >= 3) score += 8;
-        else score -= 12;
+        else score -= 10;
       }
 
-      // 3) Inner Warmth & Layering for Min/Max Temp Bridge
       if (minT <= 6) {
-        if (inner.warmth >= 3.5) score += 25; // Knit, half-zip, or inner vest
+        if (inner.warmth >= 3.5) score += 28;
       } else if (minT >= 15) {
-        if (inner.warmth <= 2.5) score += 22; // Long tee
+        if (inner.warmth <= 2.5) score += 24;
         else score -= 15;
       } else {
         score += 18;
       }
 
-      // High daily temperature range (일교차 >= 8°C): Shirt layering or zip-up/cardigan bonus
-      if (tempDiff >= 8) {
-        if (shirt) score += 15;
-        if (outer && ['cardigan', 'hoodie', 'windbreaker'].includes(outer.subType)) score += 12;
+      if (tempDiff >= 8 && outer && ['cardigan', 'hoodie', 'windbreaker'].includes(outer.subType)) {
+        score += 15;
       }
 
       return score;
@@ -811,94 +814,103 @@
       let score = 0;
       const lumP = getLuminance(pants.hex);
       const lumI = getLuminance(inner.hex);
-      const lumO = outer ? getLuminance(outer.hex) : (shirt ? getLuminance(shirt.hex) : lumI);
+      const lumO = outer ? getLuminance(outer.hex) : lumI;
 
-      // 1) Avoid muddy identical non-black colors between top & bottom
       const distPI = getColorDistance(pants.hex, inner.hex);
-      if (distPI < 28 && lumP > 0.15) {
-        score -= 35; // Too similar gray-on-gray or blue-on-blue without contrast
+      if (distPI < 30 && lumP > 0.15) {
+        score -= 40;
       }
 
-      if (outer) {
-        const distPO = getColorDistance(pants.hex, outer.hex);
-        // Avoid blue denim jacket (o8) + mid-blue jeans (p7) clashing unless broken up
-        if (outer.id === 'o8' && pants.id === 'p7') score -= 40;
-        if (outer.id === 'o8' && ['p1', 'p3', 'p5', 'p8', 'p9'].includes(pants.id)) score += 26;
-        if (distPO > 50) score += 15;
+      if (outer && outer.id === 'o8' && pants.id === 'p7') score -= 50;
+      if (shirt && shirt.id === 'sh4' && ['p6', 'p7'].includes(pants.id)) score -= 30;
+
+      // 1) Burgundy Thick Cardigan (#560319) in outer OR inner
+      const hasBurgundy = (outer && outer.hex === '#560319') || (inner && inner.hex === '#560319') || (shirt && shirt.hex === '#560319');
+      if (hasBurgundy) {
+        if (pants.id === 'p3') score += 45; // Beige + Burgundy = #1 Dandy Preppy
+        else if (['p4', 'p7'].includes(pants.id)) score += 38; // Denim + Burgundy
+        else if (['p2', 'p10'].includes(pants.id)) score += 35; // Grey + Burgundy
+        else if (['p5', 'p8', 'p9'].includes(pants.id)) score += 32;
+
+        if (['i6', 'i17'].includes(inner.id)) score += 38; // Clean White with Burgundy
+        else if (['i10', 'i5', 'i1'].includes(inner.id)) score += 28;
+        else if (inner.id === 'i2') score += 26;
+        else if (inner.id === 'i18' || inner.id === 'i3') score -= 45; // Avoid Red+Green clash!
+
+        // Cortez reddish-brown logo echoes Burgundy (#7C2D12 + #560319)
+        if (shoes.id === 's2') score += 35;
+        else if (shoes.id === 's1') score += 30;
       }
 
-      if (shirt) {
-        // Denim shirt (sh4) with mid/light blue jeans penalty, great with black/beige/brown/dark indigo
-        if (shirt.id === 'sh4' && ['p6', 'p7'].includes(pants.id)) score -= 25;
-        if (shirt.id === 'sh4' && ['p1', 'p3', 'p4', 'p5', 'p8'].includes(pants.id)) score += 22;
-        // Shirt + Inner contrast
-        const distSI = getColorDistance(shirt.hex, inner.hex);
-        if (distSI > 60) score += 16;
+      // 2) Olive Green Knit (#728C00 베놈 그린)
+      if (inner.id === 'i18') {
+        if (['p5', 'p8', 'p9'].includes(pants.id)) score += 42; // Black / Charcoal grounds the venom green
+        else if (pants.id === 'p3') score += 38; // Beige chino + Olive green
+        else if (pants.id === 'p4') score += 34; // Dark Indigo denim
+        else if (pants.id === 'p1') score += 28;
+
+        if (outer) {
+          if (['o2', 'o4', 'o5', 'o10'].includes(outer.id)) score += 36;
+          else if (['o1', 'o7'].includes(outer.id)) score += 30;
+          else if (outer.id === 'o8') score += 28;
+          else if (['o6', 'o9', 'o14'].includes(outer.id)) score -= 45;
+        }
       }
 
-      // 2) Specific Dandy & Color-Challenge Pairings from User's Exact HEX Palette
-      // Dark Brown Pants (p1 #3B2314) pairings
+      // 3) Dark Olive Corduroy Boxy Shirt (#4A412A) in shirt OR inner
+      const hasOliveCorduroy = (shirt && shirt.hex === '#4A412A') || (inner && inner.hex === '#4A412A');
+      if (hasOliveCorduroy) {
+        if (pants.id === 'p3') score += 42;
+        else if (['p6', 'p7', 'p4'].includes(pants.id)) score += 38;
+        else if (['p5', 'p8'].includes(pants.id)) score += 32;
+
+        if (outer) {
+          if (['o5', 'o2', 'o10', 'o12'].includes(outer.id)) score += 28;
+          else if (outer.id === 'o6') score -= 25;
+        }
+      }
+
+      // 4) Other Classic Pairings
       if (pants.id === 'p1') {
-        if (['i2', 'i3', 'i6', 'i9', 'i10'].includes(inner.id)) score += 24; // Oxford Blue, Forest Green, White, Mint, Silver Grey
-        if (outer && ['o6', 'o9', 'o10', 'o5', 'o7'].includes(outer.id)) score += 20;
+        if (['i2', 'i3', 'i6', 'i17', 'i10'].includes(inner.id)) score += 26;
+        if (outer && ['o5', 'o7', 'o10', 'o14'].includes(outer.id)) score += 22;
       }
-      // Beige Pants (p3 #D4C2A5) pairings
       if (pants.id === 'p3') {
-        if (['i2', 'i3', 'i4', 'i7', 'i8', 'i11'].includes(inner.id)) score += 26; // Crisp contrast with dark/rich tops
-        if (outer && ['o3', 'o6', 'o8', 'o9', 'o10', 'o11'].includes(outer.id)) score += 22;
+        if (['i2', 'i3', 'i4', 'i7', 'i8', 'i11', 'i13', 'i15', 'i18'].includes(inner.id)) score += 30;
+        if (outer && ['o8', 'o9', 'o10', 'o14'].includes(outer.id)) score += 26;
       }
-      // Dark Indigo Lined Jeans (p4 #1D314A) pairings
       if (pants.id === 'p4') {
-        if (['i1', 'i3', 'i4', 'i6', 'i9', 'i10', 'i11'].includes(inner.id)) score += 25;
-        if (outer && ['o1', 'o3', 'o6', 'o7', 'o9', 'o11', 'o12', 'o13'].includes(outer.id)) score += 24;
+        if (['i1', 'i3', 'i4', 'i6', 'i9', 'i10', 'i14', 'i16', 'i17'].includes(inner.id)) score += 26;
+        if (outer && ['o1', 'o3', 'o7', 'o11', 'o12', 'o13', 'o14'].includes(outer.id)) score += 24;
       }
-      // Lined Sweatshirts & Check Knit specific color harmonies
-      if (inner.id === 'i14') { // #4A412A Dark Olive Grey Sweatshirt
-        if (['p3', 'p4', 'p5', 'p6', 'p7', 'p8'].includes(pants.id)) score += 24;
-      }
-      if (inner.id === 'i15') { // #2B547E Blue Lined Sweatshirt
-        if (['p1', 'p2', 'p3', 'p5', 'p8', 'p9', 'p10'].includes(pants.id)) score += 25;
-      }
-      if (inner.id === 'i16') { // #808080 + #212529 Big Check Knit
-        if (['p1', 'p3', 'p4', 'p5', 'p7', 'p8'].includes(pants.id)) score += 26;
-        // Avoid pattern clash with tartan check outer (o9) or striped cardigan (o11)
-        if (outer && ['o9', 'o11'].includes(outer.id)) score -= 45;
-      }
-      if (inner.id === 'i17' || inner.id === 'i13') { // White / Black Lined Sweatshirt
-        score += 18;
+      if (inner.id === 'i16') {
+        if (['p3', 'p4', 'p7'].includes(pants.id)) score += 28;
+        if (outer && ['o9', 'o11'].includes(outer.id)) score -= 50;
       }
 
-      // Mint Tee (i9 #99C6B4) & Teal Half-Zip (i11 #005666) & Green Knit (i3 #345342) & Olive/Blue/Check
-      const isColorAccentInner = ['i2', 'i3', 'i4', 'i8', 'i9', 'i11', 'i14', 'i15', 'i16'].includes(inner.id);
-      const isColorAccentOuter = outer && ['o3', 'o6', 'o8', 'o9', 'o11', 'o13'].includes(outer.id);
+      // 168cm Height Proportion Rule
+      if (lumP < 0.25 && lumI > 0.45) score += 25;
+      if (outer && Math.abs(lumI - lumO) > 0.3) score += 18;
 
-      // Don't overload 3 strong accent colors at once (keep it Dandy!)
-      if (isColorAccentInner && isColorAccentOuter && ['i9', 'i11', 'i15', 'i16'].includes(inner.id) && ['o9', 'o11', 'o13'].includes(outer.id)) {
-        score -= 30;
+      // Shoes Matching Logic
+      if (shoes.id === 's1' && ['p4', 'p5', 'p8', 'p9', 'p10'].includes(pants.id)) score += 20;
+      if (shoes.id === 's2' && (hasBurgundy || pants.id === 'p3' || pants.id === 'p1')) score += 26;
+      if (shoes.id === 's4' || shoes.id === 's5') {
+        if (lumP < 0.3) score += 18; // White shoes pop against dark pants
       }
+      if (shoes.id === 's3' && ['p4', 'p8', 'p7'].includes(pants.id)) score += 20;
 
-      // Mood adjustments
+      // Mood Adjustments
       if (mood === 'dandy') {
-        if (['p3', 'p4', 'p5', 'p8', 'p9', 'p10'].includes(pants.id)) score += 15;
-        if (['i1', 'i2', 'i3', 'i6', 'i7'].includes(inner.id)) score += 15;
-        if (outer && ['o5', 'o9', 'o10', 'o11'].includes(outer.id)) score += 18;
-        if (['s1', 's2', 's3'].includes(shoes.id)) score += 12;
+        if (['p3', 'p4', 'p5', 'p8', 'p10'].includes(pants.id)) score += 16;
+        if (['i2', 'i6', 'i17', 'i1'].includes(inner.id) || hasBurgundy) score += 18;
       } else if (mood === 'colorful') {
-        if (isColorAccentInner) score += 28;
-        if (isColorAccentOuter) score += 25;
-        if (['p1', 'p3', 'p6', 'p7'].includes(pants.id)) score += 15;
+        if (['i18', 'i15', 'i9', 'i11'].includes(inner.id) || hasBurgundy || (outer && ['o9', 'o11', 'o13'].includes(outer.id))) {
+          score += 32;
+        }
       } else {
-        // Mixed: Balanced Clean Dandy + Fresh Color Twist
-        if (isColorAccentInner || isColorAccentOuter) score += 22;
-        if (Math.abs(lumP - lumO) > 0.25) score += 15;
-      }
-
-      // Shoes sandwich balance (match shoes with inner or pants, or clean white lift)
-      if (shoes.id === 's2' && (['p1', 'p3', 'p4', 'p7'].includes(pants.id) || inner.id === 'i4')) {
-        score += 18; // Cortez warm reddish-brown swoosh echoes warm/denim tones
-      }
-      if (shoes.id === 's1' && ['p4', 'p5', 'p8', 'p9', 'p10'].includes(pants.id)) {
-        score += 16; // Black derby/flat anchors dark/grey pants neatly
+        if (hasBurgundy || inner.id === 'i18' || inner.id === 'i15') score += 22;
+        if (Math.abs(lumP - lumO) > 0.2) score += 14;
       }
 
       return score;
@@ -906,72 +918,93 @@
 
     function buildHarmonyDescription(pants, inner, shirt, outer, shoes) {
       const parts = [];
-      parts.push(`하의 [${pants.name}]의 대표색(${pants.hex})을 중심으로`);
-      if (outer && shirt) {
-        parts.push(`상의는 [${inner.name}] 위에 [${shirt.name}]과 [${outer.name}]을 레이어드하여`);
-      } else if (outer) {
-        parts.push(`상의는 [${inner.name}(${inner.hex})]과 [${outer.name}(${outer.hex})]을 매치해`);
-      } else if (shirt) {
-        parts.push(`상의는 [${inner.name}] 위에 [${shirt.name}(${shirt.hex})]을 걸쳐`);
+      let conceptBadge = '깔끔한 댄디 밸런스';
+
+      const hasBurgundy = (outer && outer.hex === '#560319') || (inner && inner.hex === '#560319');
+      if (hasBurgundy) {
+        conceptBadge = '버건디 클래식 프레피';
+        parts.push(`진스칼렛 버건디(#560319)의 우아한 색감을 중심으로 [${pants.name}]와 매칭해 이탈리안 프레피 댄디 무드를 연출했습니다.`);
+      } else if (inner.id === 'i18') {
+        conceptBadge = '베놈그린 원포인트 댄디';
+        parts.push(`생동감 넘치는 베놈 그린 니트(#728C00)를 원포인트로 두고, [${pants.name}]와 ${outer ? `[${outer.name}]` : '단정한 하의'}로 채도를 차분하게 감싸 세련된 도시적 남친룩을 완성했습니다.`);
+      } else if (shirt && shirt.hex === '#4A412A') {
+        conceptBadge = '올리브 골덴 웜톤 댄디';
+        parts.push(`진회색올리브 골덴남방(#4A412A)의 따뜻한 코듀로이 결감과 [${pants.name}]의 조화로 편안하면서도 분위기 있는 가을·겨울 감성을 살렸습니다.`);
+      } else if (Math.abs(getLuminance(pants.hex) - getLuminance(inner.hex)) > 0.35) {
+        conceptBadge = '명도 대비 체형 보정 댄디';
+        parts.push(`[${pants.name}]와 [${inner.name}]의 선명한 상·하의 명도 대비로 V존 시선을 위로 끌어올려 168cm/74kg 체형의 비율이 한층 길고 날씬해 보입니다.`);
       } else {
-        parts.push(`상의는 [${inner.name}(${inner.hex})] 단독 포인트로`);
+        conceptBadge = '톤온톤 차분한 댄디';
+        parts.push(`[${pants.name}]의 무게감과 [${inner.name}]의 부드러운 톤이 자연스럽게 연결되어 단정하고 지적인 인상을 줍니다.`);
       }
 
-      const lumP = getLuminance(pants.hex);
-      const lumI = getLuminance(inner.hex);
-      if (Math.abs(lumP - lumI) > 0.35) {
-        parts.push(`상·하의 명도 대비가 뚜렷해 168cm/74kg 체형이 훨씬 깔끔하고 비율이 좋아 보입니다.`);
-      } else {
-        parts.push(`차분한 톤온톤·세미콘트라스트 배색으로 댄디하고 정돈된 인상을 줍니다.`);
+      if (shirt) {
+        parts.push(`안쪽에 [${shirt.name}]을 레이어드하여 보온성과 입체적인 넥라인을 한 단계 높였습니다.`);
       }
+      parts.push(`발끝은 [${shoes.name}]로 마무리하여 안정감과 색감 밸런스를 잡았습니다.`);
 
-      parts.push(`신발은 [${shoes.name}]로 마무리해 최저 ${state.minTemp}°C 보온성과 최고 ${state.maxTemp}°C 실내·낮 활동성을 모두 챙겼습니다.`);
-      return parts.join(' ');
+      return { badge: conceptBadge, text: parts.join(' ') };
     }
 
-    // Generate Diverse Top Combinations for the Anchor Item
-    function generateRecommendations() {
-      const anchor = state.anchorItem;
-      const minT = state.minTemp;
-      const maxT = state.maxTemp;
+    function pickBestOptionalLayer(p, i, o, offsetSeed) {
+      const layerOptions = [...WARDROBE.shirt];
+      const vestItem = getItemById('i12');
+      if (vestItem && i.id !== 'i12' && state.minTemp <= 13) layerOptions.push(vestItem);
+      const burgItem = getItemById('o14');
+      if (burgItem && o && o.id !== 'o14' && i.id !== 'i19') layerOptions.push(burgItem);
 
-      // Determine candidate pools (if anchor is in a category, lock that category to [anchor])
-      const pantsPool = anchor.category === 'pants' ? [anchor] : WARDROBE.pants;
-      const innerPool = anchor.category === 'inner' ? [anchor] : WARDROBE.inner;
-      const shoesPool = anchor.category === 'shoes' ? [anchor] : WARDROBE.shoes;
-
-      // Helper: Pick best optional layer (남방 4종 + 유니클로 회색 패딩조끼 i12) for a given (pants, inner, outer)
-      function pickBestOptionalLayer(p, i, o, offsetSeed) {
-        const layerOptions = [...WARDROBE.shirt];
-        const vestItem = getItemById('i12');
-        // Include Uniqlo grey inner vest as a layer option when it's chilly and inner isn't already the vest
-        if (vestItem && i.id !== 'i12' && state.minTemp <= 12) {
-          layerOptions.push(vestItem);
+      const scored = layerOptions.map(lay => {
+        let lScore = 0;
+        const distLI = getColorDistance(lay.hex, i.hex);
+        const distLP = getColorDistance(lay.hex, p.hex);
+        if (distLI > 45) lScore += 25;
+        if (distLP > 35) lScore += 18;
+        if (lay.id === 'sh4' && ['p6', 'p7'].includes(p.id)) lScore -= 30;
+        if (lay.id === 'sh4' && ['p1', 'p3', 'p4', 'p5', 'p8'].includes(p.id)) lScore += 22;
+        if (lay.id === 'sh5' && p.id === 'p3') lScore += 28; // Olive corduroy layer with beige
+        if (['sweat', 'sweat_lined', 'knit'].includes(i.subType) && ['sh1', 'i12', 'sh5'].includes(lay.id)) {
+          lScore += 14;
         }
-        const scoredLayers = layerOptions.map(lay => {
-          let lScore = 0;
-          const distLI = getColorDistance(lay.hex, i.hex);
-          const distLP = getColorDistance(lay.hex, p.hex);
-          if (distLI > 45) lScore += 22;
-          if (distLP > 40) lScore += 15;
-          if (lay.id === 'sh4' && ['p6', 'p7'].includes(p.id)) lScore -= 25;
-          if (lay.id === 'sh4' && ['p1', 'p3', 'p4', 'p5', 'p8'].includes(p.id)) lScore += 20;
-          // For thick sweatshirts/knits, boxy black-denim shirt (sh1) or grey vest (i12) or unbuttoned shirt works best
-          if (['sweat', 'sweat_lined', 'knit'].includes(i.subType) && ['sh1', 'i12', 'sh2', 'sh3'].includes(lay.id)) {
-            lScore += 12;
-          }
-          return { item: lay, score: lScore };
-        });
-        scoredLayers.sort((a, b) => b.score - a.score);
-        return scoredLayers[offsetSeed % scoredLayers.length].item;
-      }
+        return { item: lay, score: lScore };
+      });
+      scored.sort((a, b) => b.score - a.score);
+      return scored[offsetSeed % scored.length].item;
+    }
 
-      // Default: NO shirt layer unless the user explicitly selected a shirt as the anchor item!
-      const shirtPool = anchor.category === 'shirt' ? [anchor] : [null];
+    // Dynamic Shoes Selector (Answers: "다시 추천 할 때 신발도 바꿔줘")
+    function pickDynamicShoes(pants, inner, shirt, outer, offsetSeed) {
+      // Score all 5 shoes
+      const scored = WARDROBE.shoes.map(s => {
+        const score = scoreColorHarmony(pants, inner, shirt, outer, s, state.mood);
+        return { shoe: s, score };
+      });
+      // Sort shoes by compatibility
+      scored.sort((a, b) => b.score - a.score);
+      // Top 3 shoes are all good choices; rotate among them using offsetSeed!
+      const topCount = Math.min(3, scored.length);
+      const picked = scored[offsetSeed % topCount].shoe;
+      return picked;
+    }
 
-      // Outer can be null (if warm enough >= 17°C) or one of 13 outers (unless outer is anchor)
-      const outerPool = anchor.category === 'outer'
-        ? [anchor]
+    // Multi-Anchor Recommendation Generator (1 or 2 anchors)
+    function generateRecommendations() {
+      const anchors = state.anchorItems.filter(Boolean);
+      const minT = state.minTemp;
+
+      // Lock pools for categories present in anchors
+      const getAnchorForCat = (cat) => anchors.find(a => a.category === cat);
+
+      const anchorPants = getAnchorForCat('pants');
+      const anchorInner = getAnchorForCat('inner');
+      const anchorShirt = getAnchorForCat('shirt');
+      const anchorOuter = getAnchorForCat('outer');
+      const anchorShoes = getAnchorForCat('shoes');
+
+      const pantsPool = anchorPants ? [anchorPants] : WARDROBE.pants;
+      const innerPool = anchorInner ? [anchorInner] : WARDROBE.inner;
+      const shirtPool = anchorShirt ? [anchorShirt] : [null]; // Default no shirt unless anchored
+      const outerPool = anchorOuter
+        ? [anchorOuter]
         : (minT >= 18 ? [null, ...WARDROBE.outer] : [...WARDROBE.outer]);
 
       const candidates = [];
@@ -980,46 +1013,32 @@
         for (const i of innerPool) {
           for (const o of outerPool) {
             for (const sh of shirtPool) {
-              // If inner is Uniqlo padding vest (i12), require an outer unless user anchored i12
-              if (i.id === 'i12' && !o && anchor.id !== 'i12') continue;
+              if (i.id === 'i12' && !o && (!anchorInner || anchorInner.id !== 'i12')) continue;
 
-              // Pick best matching shoe for this combo
-              let bestShoe = shoesPool[0];
-              let bestScore = -9999;
+              // Pick shoe: if shoes is locked as anchor, use it; otherwise pick dynamically with offset!
+              const chosenShoe = anchorShoes
+                ? anchorShoes
+                : pickDynamicShoes(p, i, sh, o, state.variationOffset);
 
-              for (const s of shoesPool) {
-                const tScore = scoreTemperatureFit(p, i, sh, o);
-                const cScore = scoreColorHarmony(p, i, sh, o, s, state.mood);
-                const total = tScore + cScore;
-                if (total > bestScore) {
-                  bestScore = total;
-                  bestShoe = s;
-                }
-              }
+              const tScore = scoreTemperatureFit(p, i, sh, o);
+              const cScore = scoreColorHarmony(p, i, sh, o, chosenShoe, state.mood);
+              const total = tScore + cScore;
 
-              if (bestScore > -30) {
-                // Determine Harmony Tag
-                let harmonyTag = '댄디 밸런스';
-                if (['i2', 'i3', 'i9', 'i11'].includes(i.id) || (o && ['o3', 'o6', 'o9', 'o11', 'o13'].includes(o.id))) {
-                  harmonyTag = '감각 컬러배합';
-                } else if (sh) {
-                  harmonyTag = '레이어드 댄디';
-                } else if (Math.abs(getLuminance(p.hex) - getLuminance(i.hex)) > 0.45) {
-                  harmonyTag = '선명 명도대비';
-                }
+              if (total > -20) {
+                const descObj = buildHarmonyDescription(p, i, sh, o, chosenShoe);
+                const recLayer = pickBestOptionalLayer(p, i, o, candidates.length + state.variationOffset);
 
-                const recLayer = sh ? sh : pickBestOptionalLayer(p, i, o, candidates.length + state.variationOffset);
                 candidates.push({
                   pants: p,
                   inner: i,
-                  shirt: sh, // null by default (unless anchor is shirt)
+                  shirt: sh,
                   recommendedLayer: recLayer,
                   layerAdded: Boolean(sh),
                   outer: o,
-                  shoes: bestShoe,
-                  score: bestScore,
-                  harmonyTag,
-                  reason: buildHarmonyDescription(p, i, sh, o, bestShoe)
+                  shoes: chosenShoe,
+                  score: total,
+                  harmonyTag: descObj.badge,
+                  reason: descObj.text
                 });
               }
             }
@@ -1027,19 +1046,17 @@
         }
       }
 
-      // Sort by score descending
       candidates.sort((a, b) => b.score - a.score);
 
-      // Filter for distinct combinations (ensure diverse Outers, Inners, and Pants across sets)
+      // Ensure diverse combination list across 1st, 2nd, 3rd ranks
       const diverseList = [];
       const usedKeys = new Set();
 
       for (const cand of candidates) {
-        // Create signature of non-anchor key items to guarantee visual variety
         const sigParts = [];
-        if (anchor.category !== 'pants') sigParts.push(cand.pants.id);
-        if (anchor.category !== 'inner') sigParts.push(cand.inner.id);
-        if (anchor.category !== 'outer') sigParts.push(cand.outer ? cand.outer.id : 'no_outer');
+        if (!anchorPants) sigParts.push(cand.pants.id);
+        if (!anchorInner) sigParts.push(cand.inner.id);
+        if (!anchorOuter) sigParts.push(cand.outer ? cand.outer.id : 'no_outer');
         const sig = sigParts.slice(0, 2).join('_');
 
         if (!usedKeys.has(sig) || diverseList.length < 12) {
@@ -1049,20 +1066,27 @@
         if (diverseList.length >= 24) break;
       }
 
-      // Select 3 outfits based on variationOffset so clicking "다시 추천" cycles through fresh sets!
       const poolSize = Math.max(3, diverseList.length);
       const baseIdx = (state.variationOffset * 3) % poolSize;
 
       const rank1 = { ...(diverseList[baseIdx % poolSize] || candidates[0]) };
       const rank2 = { ...(diverseList[(baseIdx + 1) % poolSize] || candidates[1] || rank1) };
       const rank3 = { ...(diverseList[(baseIdx + 2) % poolSize] || candidates[2] || rank1) };
-      // Ensure distinct recommended optional layers across 1, 2, 3
+
+      // Ensure each rank also varies the shoe dynamically if not anchored!
+      if (!anchorShoes) {
+        rank1.shoes = pickDynamicShoes(rank1.pants, rank1.inner, rank1.shirt, rank1.outer, state.variationOffset);
+        rank2.shoes = pickDynamicShoes(rank2.pants, rank2.inner, rank2.shirt, rank2.outer, state.variationOffset + 1);
+        rank3.shoes = pickDynamicShoes(rank3.pants, rank3.inner, rank3.shirt, rank3.outer, state.variationOffset + 2);
+      }
+
       if (!rank1.shirt) rank1.recommendedLayer = pickBestOptionalLayer(rank1.pants, rank1.inner, rank1.outer, state.variationOffset);
       if (!rank2.shirt) rank2.recommendedLayer = pickBestOptionalLayer(rank2.pants, rank2.inner, rank2.outer, state.variationOffset + 1);
       if (!rank3.shirt) rank3.recommendedLayer = pickBestOptionalLayer(rank3.pants, rank3.inner, rank3.outer, state.variationOffset + 2);
 
-      // Build 4th card: Unowned Recommendation tailored to current anchor + variationOffset
-      const unownedSuggestion = UNOWNED_SUGGESTIONS[(state.variationOffset + anchor.num) % UNOWNED_SUGGESTIONS.length];
+      // 4th Card: Unowned Recommendation
+      const anchorNum = anchors[0] ? anchors[0].num : 1;
+      const unownedSuggestion = UNOWNED_SUGGESTIONS[(state.variationOffset + anchorNum) % UNOWNED_SUGGESTIONS.length];
       const rank4 = {
         ...rank1,
         isUnownedCard: true,
@@ -1075,12 +1099,11 @@
     }
 
     // =========================================================================
-    // 4. SVG REALISTIC MANNEQUIN & 5-LAYER CLOTHING RENDERING (168cm / 74kg)
+    // 4. SVG MANNEQUIN RENDERING
     // =========================================================================
     function updateBodyAndClothingSVG() {
       const hScale = state.height / 168;
       const bmi = state.weight / ((state.height / 100) * (state.height / 100));
-      // At 168cm 74kg, BMI is ~26.2 (solid/muscular build)
       const wFactor = Math.max(0.85, Math.min(1.32, 1 + (bmi - 25.5) * 0.035));
       const legLengthFactor = Math.max(0.88, Math.min(1.14, hScale));
 
@@ -1099,7 +1122,6 @@
       const hipY = 285;
       const ankleY = hipY + (268 * legLengthFactor);
 
-      // Update Base Body SVG Paths
       document.getElementById('body-torso').setAttribute(
         'd',
         `M${leftShoulder},126 L${rightShoulder},126 L${rightWaist},210 L${rightHip},${hipY} L${leftHip},${hipY} L${leftWaist},210 Z`
@@ -1121,7 +1143,6 @@
         `M${rightShoulder + 2},128 L${rightShoulder + 22 * wFactor},250 L${rightShoulder + 10 * wFactor},252 L${rightShoulder - 8},135 Z`
       );
 
-      // Update BMI Badge
       let bmiText = '탄탄한 표준 체형';
       if (bmi < 21) bmiText = '슬림 체형';
       else if (bmi >= 25 && bmi < 27.5) bmiText = '탄탄하고 다부진 체형';
@@ -1130,7 +1151,6 @@
       document.getElementById('label-height').textContent = `${state.height} cm`;
       document.getElementById('label-weight').textContent = `${state.weight} kg`;
 
-      // Get Active Outfit (If 4th unowned card is active, preview the unowned color on its target part!)
       const activeCombo = state.currentRecommendations[state.activeRankIdx] || state.currentRecommendations[0];
       if (!activeCombo) return;
 
@@ -1148,7 +1168,7 @@
         else if (u.targetPart === 'shoes') shoesObj = { ...shoesObj, hex: u.hex };
       }
 
-      // --- 1. RENDER SHOES ---
+      // --- 1. SHOES ---
       const shoesG = document.getElementById('layer-shoes');
       const isChunky = shoesObj.subType === 'chunky';
       const soleExtra = isChunky ? 4 : 0;
@@ -1163,7 +1183,7 @@
         ${logoAccent}
       `;
 
-      // --- 2. RENDER PANTS ---
+      // --- 2. PANTS ---
       const pantsG = document.getElementById('layer-pants');
       const isRelaxed = activeCombo.pants.id === 'p9' || activeCombo.pants.subType === 'denim';
       const legSpread = isRelaxed ? 5 * wFactor : 2 * wFactor;
@@ -1176,14 +1196,15 @@
         <line x1="150" y1="${hipY - 10}" x2="150" y2="${hipY + 32}" stroke="#ffffff" stroke-width="1" opacity="0.2"/>
       `;
 
-      // --- 3. RENDER INNER ---
+      // --- 3. INNER ---
       const innerG = document.getElementById('layer-inner');
       const isHalfZip = activeCombo.inner.subType === 'half_zip';
       const isVPrint = activeCombo.inner.id === 'i8';
       const isVest = activeCombo.inner.subType === 'inner_vest';
+      const isBurgundyInner = activeCombo.inner.hex === '#560319';
       const innerFill = (!activeCombo.isUnownedCard && activeCombo.inner.pattern === 'check_grey_black')
         ? 'url(#greyBlackCheckPattern)'
-        : innerHex;
+        : (isBurgundyInner ? 'url(#burgundyKnitPattern)' : innerHex);
 
       let innerExtra = '';
       if (isHalfZip) {
@@ -1193,15 +1214,15 @@
         innerExtra = `<path d="M134,152 L150,172 L166,152" fill="none" stroke="#e2e8f0" stroke-width="3" opacity="0.8"/>`;
       } else if (isVest) {
         innerExtra = `<line x1="150" y1="132" x2="150" y2="${hipY - 6}" stroke="#334155" stroke-width="1.5"/>`;
+      } else if (isBurgundyInner) {
+        innerExtra = `<path d="M138,126 L150,158 L162,126" fill="none" stroke="#3D0111" stroke-width="2.5"/>`;
       }
 
       innerG.innerHTML = `
-        <!-- Base Long Sleeve or Knit Body -->
         <path d="M${150 - shoulderHalfWidth + 2},126 L${150 + shoulderHalfWidth - 2},126
                  L${150 + waistHalfWidth + 2},210 L${150 + hipHalfWidth},${hipY - 5}
                  L${150 - hipHalfWidth},${hipY - 5} L${150 - waistHalfWidth - 2},210 Z"
               fill="${innerFill}" stroke="#0f172a" stroke-width="1.2"/>
-        <!-- Inner Sleeves -->
         ${!isVest ? `
           <path d="M${150 - shoulderHalfWidth + 2},126 L${150 - shoulderHalfWidth - 21 * wFactor},248 L${150 - shoulderHalfWidth - 9 * wFactor},250 L${150 - shoulderHalfWidth + 9},138 Z" fill="${innerFill}" stroke="#0f172a" stroke-width="1"/>
           <path d="M${150 + shoulderHalfWidth - 2},126 L${150 + shoulderHalfWidth + 21 * wFactor},248 L${150 + shoulderHalfWidth + 9 * wFactor},250 L${150 + shoulderHalfWidth - 9},138 Z" fill="${innerFill}" stroke="#0f172a" stroke-width="1"/>
@@ -1210,12 +1231,16 @@
         ${innerExtra}
       `;
 
-      // --- 4. RENDER SHIRT / OPTIONAL LAYER (남방 또는 패딩조끼 레이어드) ---
+      // --- 4. SHIRT / LAYER ---
       const shirtG = document.getElementById('layer-shirt');
       if (shirtObj) {
         const isLayerVest = shirtObj.subType === 'inner_vest';
         const shGap = state.isShirtOpen ? 10 : 2;
         const shLen = hipY + (isLayerVest ? -2 : 4);
+        const shFill = shirtObj.texture === 'corduroy'
+          ? 'url(#corduroyPattern)'
+          : (shirtObj.hex === '#560319' ? 'url(#burgundyKnitPattern)' : shirtObj.hex);
+
         if (isLayerVest) {
           shirtG.innerHTML = `
             <path d="M${150 - shoulderHalfWidth + 4},126 L142,126 L148,162 L${150 - shGap},${shLen} L${150 - hipHalfWidth - 1},${shLen} L${150 - waistHalfWidth - 1},210 Z"
@@ -1225,32 +1250,29 @@
           `;
         } else {
           shirtG.innerHTML = `
-            <!-- Left Shirt Panel -->
             <path d="M${150 - shoulderHalfWidth - 1},125 L145,125 L${150 - shGap},${shLen} L${150 - hipHalfWidth - 3},${shLen} L${150 - waistHalfWidth - 3},210 Z"
-                  fill="${shirtObj.hex}" stroke="#0f172a" stroke-width="1.3"/>
-            <!-- Right Shirt Panel -->
+                  fill="${shFill}" stroke="#0f172a" stroke-width="1.3"/>
             <path d="M155,125 L${150 + shoulderHalfWidth + 1},125 L${150 + waistHalfWidth + 3},210 L${150 + hipHalfWidth + 3},${shLen} L${150 + shGap},${shLen} Z"
-                  fill="${shirtObj.hex}" stroke="#0f172a" stroke-width="1.3"/>
-            <!-- Shirt Sleeves -->
+                  fill="${shFill}" stroke="#0f172a" stroke-width="1.3"/>
             <path d="M${150 - shoulderHalfWidth - 1},125 L${150 - shoulderHalfWidth - 24 * wFactor},250 L${150 - shoulderHalfWidth - 11 * wFactor},251 L${150 - shoulderHalfWidth + 9},138 Z"
-                  fill="${shirtObj.hex}" stroke="#0f172a" stroke-width="1.2"/>
+                  fill="${shFill}" stroke="#0f172a" stroke-width="1.2"/>
             <path d="M${150 + shoulderHalfWidth + 1},125 L${150 + shoulderHalfWidth + 24 * wFactor},250 L${150 + shoulderHalfWidth + 11 * wFactor},251 L${150 + shoulderHalfWidth - 9},138 Z"
-                  fill="${shirtObj.hex}" stroke="#0f172a" stroke-width="1.2"/>
-            <!-- Shirt Collar -->
-            <polygon points="136,120 146,136 132,134" fill="${shirtObj.hex}" stroke="#0f172a" stroke-width="1"/>
-            <polygon points="164,120 154,136 168,134" fill="${shirtObj.hex}" stroke="#0f172a" stroke-width="1"/>
+                  fill="${shFill}" stroke="#0f172a" stroke-width="1.2"/>
+            <polygon points="136,120 146,136 132,134" fill="${shFill}" stroke="#0f172a" stroke-width="1"/>
+            <polygon points="164,120 154,136 168,134" fill="${shFill}" stroke="#0f172a" stroke-width="1"/>
           `;
         }
       } else {
         shirtG.innerHTML = '';
       }
 
-      // --- 5. RENDER OUTER LAYER ---
+      // --- 5. OUTER ---
       const outerG = document.getElementById('layer-outer');
       if (outerObj) {
         let fillStyle = outerObj.hex;
         if (outerObj.pattern === 'tartan') fillStyle = 'url(#tartanCheckPattern)';
         else if (outerObj.pattern === 'stripe_yellow') fillStyle = 'url(#yellowStripePattern)';
+        else if (outerObj.pattern === 'burgundy_knit' || outerObj.hex === '#560319') fillStyle = 'url(#burgundyKnitPattern)';
 
         const outGap = state.isOuterOpen ? 24 : 4;
         const outLen = hipY + (outerObj.isWinter ? 18 : 10);
@@ -1267,16 +1289,12 @@
         }
 
         outerG.innerHTML = `
-          <!-- Left Outer Panel -->
           <path d="M${150 - shoulderHalfWidth - 5},124 L143,124 L${150 - outGap},${neckCutY} L${150 - hipHalfWidth - 7},${outLen} L${150 - waistHalfWidth - 7},210 Z"
                 fill="${fillStyle}" stroke="#0f172a" stroke-width="1.8" filter="drop-shadow(0 6px 8px rgba(0,0,0,0.45))"/>
-          <!-- Right Outer Panel -->
           <path d="M157,124 L${150 + shoulderHalfWidth + 5},124 L${150 + waistHalfWidth + 7},210 L${150 + hipHalfWidth + 7},${outLen} L${150 + outGap},${neckCutY} Z"
                 fill="${fillStyle}" stroke="#0f172a" stroke-width="1.8" filter="drop-shadow(0 6px 8px rgba(0,0,0,0.45))"/>
-          <!-- Outer Left Sleeve -->
           <path d="M${150 - shoulderHalfWidth - 5},124 L${150 - shoulderHalfWidth - 28 * wFactor},253 L${150 - shoulderHalfWidth - 13 * wFactor},254 L${150 - shoulderHalfWidth + 10},140 Z"
                 fill="${fillStyle}" stroke="#0f172a" stroke-width="1.8"/>
-          <!-- Outer Right Sleeve -->
           <path d="M${150 + shoulderHalfWidth + 5},124 L${150 + shoulderHalfWidth + 28 * wFactor},253 L${150 + shoulderHalfWidth + 13 * wFactor},254 L${150 + shoulderHalfWidth - 10},140 Z"
                 fill="${fillStyle}" stroke="#0f172a" stroke-width="1.8"/>
           ${outerExtra}
@@ -1285,13 +1303,13 @@
         outerG.innerHTML = '';
       }
 
-      // Update Active Color Palette Bar inside Mirror
+      // Palette Bar
       const paletteBar = document.getElementById('active-color-palette-bar');
       const swatches = [
         { label: '바지', hex: pantsHex },
         { label: '이너', hex: innerHex }
       ];
-      if (shirtObj) swatches.push({ label: '남방', hex: shirtObj.hex });
+      if (shirtObj) swatches.push({ label: '레이어드', hex: shirtObj.hex });
       if (outerObj) swatches.push({ label: '아우터', hex: outerObj.hex });
       swatches.push({ label: '신발', hex: shoesObj.hex });
 
@@ -1304,19 +1322,94 @@
     }
 
     // =========================================================================
-    // 5. UI RENDERING: FLANK CARDS, 4 RECOMMENDATION CARDS & WARDROBE PICKER
+    // 5. UI RENDERING: DUAL ANCHOR BANNER & RECOMMENDATION CARDS
     // =========================================================================
+    function renderAnchorStatusBanner() {
+      const box = document.getElementById('anchor-status-box');
+      const anchors = state.anchorItems.filter(Boolean);
+      const catKor = { pants: '바지', inner: '이너', shirt: '남방', outer: '아우터', shoes: '신발' };
+
+      document.getElementById('anchor-count-badge').textContent = `${anchors.length}개 선택됨 (최대 2개)`;
+
+      if (anchors.length === 1) {
+        const a1 = anchors[0];
+        box.innerHTML = `
+          <div class="flex items-center justify-between gap-2 bg-sky-950/60 border border-sky-500/50 p-2 rounded-lg">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="w-5 h-5 rounded-full border border-white/40 shadow flex-shrink-0" style="background-color: ${a1.hex};"></span>
+              <div class="min-w-0">
+                <span class="text-[9.5px] text-sky-400 font-extrabold block">고정 기준 1</span>
+                <span class="text-xs font-bold text-white truncate block">[${catKor[a1.category] || a1.category} ${a1.num}] ${a1.name}</span>
+              </div>
+            </div>
+            <span class="text-[9.5px] text-sky-300 bg-sky-900/60 px-2 py-0.5 rounded border border-sky-600/40 font-medium flex-shrink-0">
+              + 1개 더 선택 가능 (2개 고정)
+            </span>
+          </div>
+          <div class="text-[9.5px] text-slate-400 px-1 flex items-center justify-between">
+            <span>💡 다른 파트 옷을 1개 더 누르면 2개를 고정한 상태로 최적 코디를 추천합니다.</span>
+            <span class="text-sky-300">같은 옷 다시 누르면 조합 재순환</span>
+          </div>
+        `;
+      } else if (anchors.length >= 2) {
+        const a1 = anchors[0];
+        const a2 = anchors[1];
+        box.innerHTML = `
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+            <div class="flex items-center justify-between gap-2 bg-sky-950/70 border border-sky-400/60 p-2 rounded-lg">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="w-4 h-4 rounded-full border border-white/40 shadow flex-shrink-0" style="background-color: ${a1.hex};"></span>
+                <div class="min-w-0 text-[11px]">
+                  <span class="text-[9px] text-sky-400 font-extrabold block">고정 1: ${catKor[a1.category]}</span>
+                  <span class="font-bold text-white truncate block">${a1.name}</span>
+                </div>
+              </div>
+              <button type="button" onclick="removeAnchorItem('${a1.id}')" class="text-[10px] text-slate-400 hover:text-rose-300 p-1 rounded transition" title="고정 해제">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+
+            <div class="flex items-center justify-between gap-2 bg-purple-950/70 border border-purple-400/60 p-2 rounded-lg">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="w-4 h-4 rounded-full border border-white/40 shadow flex-shrink-0" style="background-color: ${a2.hex};"></span>
+                <div class="min-w-0 text-[11px]">
+                  <span class="text-[9px] text-purple-300 font-extrabold block">고정 2: ${catKor[a2.category]}</span>
+                  <span class="font-bold text-white truncate block">${a2.name}</span>
+                </div>
+              </div>
+              <button type="button" onclick="removeAnchorItem('${a2.id}')" class="text-[10px] text-slate-400 hover:text-rose-300 p-1 rounded transition" title="고정 해제">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          </div>
+          <div class="text-[9.5px] text-slate-300 px-1 flex items-center justify-between">
+            <span class="text-purple-300 font-medium">✨ 2가지 옷이 모두 고정되었습니다! 나머지 파트(신발·이너·아우터 등)가 이 2벌에 맞춰 추천됩니다.</span>
+          </div>
+        `;
+      }
+    }
+
+    function removeAnchorItem(id) {
+      if (state.anchorItems.length <= 1) return; // Keep at least 1
+      state.anchorItems = state.anchorItems.filter(it => it.id !== id);
+      state.variationOffset = 0;
+      generateRecommendations();
+      renderWardrobeList();
+      renderAllRecommendationsUI();
+    }
+
     function renderAllRecommendationsUI() {
-      const anchor = state.anchorItem;
-      const catKor = { pants: '바지', inner: '이너', shirt: '남방', outer: '아우터', shoes: '신발' }[anchor.category];
+      const anchors = state.anchorItems.filter(Boolean);
+      const catKor = { pants: '바지', inner: '이너', shirt: '남방', outer: '아우터', shoes: '신발' };
 
-      document.getElementById('mirror-anchor-badge').textContent = `기준 옷: [${catKor}] ${anchor.name}`;
-      document.getElementById('anchor-banner-swatch').style.backgroundColor = anchor.hex;
-      document.getElementById('anchor-banner-name').textContent = `[${catKor} ${anchor.num}] ${anchor.name} (${anchor.hex})`;
-      document.getElementById('recommendation-section-title').textContent = `'${anchor.name}' 기준 베스트 코디 1·2·3위 + 미보유 추천`;
-      document.getElementById('variation-counter-badge').textContent = `조합 배수 #${state.variationOffset + 1}`;
+      const namesSummary = anchors.map(a => `'${a.name}'`).join(' + ');
+      document.getElementById('mirror-anchor-badge').textContent = `고정: ${anchors.map(a => `[${catKor[a.category]}] ${a.name}`).join(' + ')}`;
+      document.getElementById('recommendation-section-title').textContent = `${namesSummary} 기준 맞춤 코디 4가지`;
+      document.getElementById('variation-counter-badge').textContent = `조합 패턴 #${state.variationOffset + 1}`;
 
-      // 1) Update Mirror Flank Quick Cards (0, 1, 2, 3)
+      renderAnchorStatusBanner();
+
+      // 1) Flank Quick Cards
       state.currentRecommendations.forEach((combo, idx) => {
         const flankBtn = document.getElementById(`flank-rank-${idx}`);
         const flankItems = document.getElementById(`flank-${idx}-items`);
@@ -1361,7 +1454,7 @@
               ${combo.shirt ? `
               <div class="flex items-center gap-1 truncate">
                 <span class="w-2 h-2 rounded-full border border-white/30 flex-shrink-0" style="background-color:${combo.shirt.hex}"></span>
-                <span class="text-indigo-300 text-[8px]">남방</span>
+                <span class="text-indigo-300 text-[8px]">레이어드</span>
                 <span class="truncate font-medium text-indigo-200">${combo.shirt.name}</span>
               </div>` : ''}
               <div class="flex items-center gap-1 truncate">
@@ -1369,17 +1462,17 @@
                 <span class="text-sky-300 text-[8px]">바지</span>
                 <span class="truncate font-bold text-sky-200">${combo.pants.name}</span>
               </div>
-              <div class="flex items-center gap-1 truncate">
+              <div class="flex items-center gap-1 truncate text-emerald-300">
                 <span class="w-2 h-2 rounded-full border border-white/30 flex-shrink-0" style="background-color:${combo.shoes.hex}"></span>
-                <span class="text-emerald-300 text-[8px]">신발</span>
-                <span class="truncate">${combo.shoes.name}</span>
+                <span class="text-emerald-400 text-[8px]">신발</span>
+                <span class="truncate font-bold">${combo.shoes.name}</span>
               </div>
             `;
           }
         }
       });
 
-      // 2) Render 4 Detailed Cards in Bottom Grid
+      // 2) 4 Detailed Cards in Bottom Grid
       const grid = document.getElementById('four-recommendations-grid');
       const rankTitles = [
         { badge: '베스트 1위', icon: 'fa-crown text-amber-400', border: 'border-sky-500/50' },
@@ -1429,7 +1522,7 @@
 
             <div class="space-y-1 text-[11px]">
               <div class="flex items-center justify-between bg-slate-950/70 px-2 py-1 rounded border border-slate-800/80">
-                <span class="text-slate-400 text-[10px] w-11">🧥 아우터</span>
+                <span class="text-slate-400 text-[10px] w-12">🧥 아우터</span>
                 <div class="flex items-center gap-1.5 min-w-0 flex-1 justify-end">
                   ${combo.outer ? `<span class="w-3 h-3 rounded-full border border-white/30 flex-shrink-0" style="background-color:${combo.outer.hex}"></span>` : ''}
                   <span class="font-bold text-slate-100 truncate">${combo.outer ? combo.outer.name : '단독 착용 (아우터 생략)'}</span>
@@ -1437,7 +1530,7 @@
               </div>
 
               <div class="flex items-center justify-between bg-slate-950/70 px-2 py-1 rounded border border-slate-800/80">
-                <span class="text-slate-400 text-[10px] w-11">👕 이너</span>
+                <span class="text-slate-400 text-[10px] w-12">👕 이너</span>
                 <div class="flex items-center gap-1.5 min-w-0 flex-1 justify-end">
                   <span class="w-3 h-3 rounded-full border border-white/30 flex-shrink-0" style="background-color:${combo.inner.hex}"></span>
                   <span class="font-bold text-slate-100 truncate">${combo.inner.name}</span>
@@ -1450,10 +1543,10 @@
                   ${combo.shirt ? `
                     <span class="w-3 h-3 rounded-full border border-white/30 flex-shrink-0" style="background-color:${combo.shirt.hex}"></span>
                     <span class="font-bold text-indigo-200 truncate text-[10.5px]">${combo.shirt.name}</span>
-                    <button type="button" data-cycle-layer="${idx}" class="text-[9.5px] bg-indigo-800/80 hover:bg-indigo-700 text-indigo-100 px-1.5 py-0.5 rounded border border-indigo-400/40 flex-shrink-0 transition" title="다른 남방/조끼로 변경">변경</button>
+                    <button type="button" data-cycle-layer="${idx}" class="text-[9.5px] bg-indigo-800/80 hover:bg-indigo-700 text-indigo-100 px-1.5 py-0.5 rounded border border-indigo-400/40 flex-shrink-0 transition" title="다른 레이어드로 변경">변경</button>
                     <button type="button" data-toggle-layer="${idx}" class="text-[9.5px] bg-rose-900/70 hover:bg-rose-800 text-rose-200 px-1.5 py-0.5 rounded border border-rose-500/40 flex-shrink-0 transition">해제</button>
                   ` : `
-                    <span class="text-[10px] text-slate-500 truncate">기본 (레이어드 없음)</span>
+                    <span class="text-[10px] text-slate-500 truncate">기본 (단품 배색)</span>
                     <button type="button" data-toggle-layer="${idx}" class="text-[10px] bg-indigo-600/90 hover:bg-indigo-500 text-white font-bold px-2 py-0.5 rounded-md shadow flex items-center gap-1 flex-shrink-0 transition active:scale-95">
                       <i class="fa-solid fa-plus text-[8px]"></i> 레이어드 추가
                     </button>
@@ -1462,7 +1555,7 @@
               </div>
 
               <div class="flex items-center justify-between bg-slate-950/70 px-2 py-1 rounded border border-slate-800/80">
-                <span class="text-slate-400 text-[10px] w-11">👖 바지</span>
+                <span class="text-slate-400 text-[10px] w-12">👖 바지</span>
                 <div class="flex items-center gap-1.5 min-w-0 flex-1 justify-end">
                   <span class="w-3 h-3 rounded-full border border-white/30 flex-shrink-0" style="background-color:${combo.pants.hex}"></span>
                   <span class="font-bold text-sky-200 truncate">${combo.pants.name}</span>
@@ -1470,10 +1563,10 @@
               </div>
 
               <div class="flex items-center justify-between bg-slate-950/70 px-2 py-1 rounded border border-slate-800/80">
-                <span class="text-slate-400 text-[10px] w-11">👟 신발</span>
+                <span class="text-slate-400 text-[10px] w-12">👟 신발</span>
                 <div class="flex items-center gap-1.5 min-w-0 flex-1 justify-end">
                   <span class="w-3 h-3 rounded-full border border-white/30 flex-shrink-0" style="background-color:${combo.shoes.hex}"></span>
-                  <span class="font-medium text-emerald-200 truncate">${combo.shoes.name}</span>
+                  <span class="font-bold text-emerald-300 truncate">${combo.shoes.name}</span>
                 </div>
               </div>
             </div>
@@ -1481,7 +1574,6 @@
         `;
       }).join('');
 
-      // Attach click listeners to the 4 cards
       document.querySelectorAll('[data-rank-card]').forEach(el => {
         el.addEventListener('click', () => {
           state.activeRankIdx = parseInt(el.getAttribute('data-rank-card'), 10);
@@ -1491,7 +1583,6 @@
         });
       });
 
-      // Attach Optional Layer Toggle ("+ 레이어드 추가" / "해제") per recommendation card
       document.querySelectorAll('[data-toggle-layer]').forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
@@ -1509,12 +1600,12 @@
             combo.layerAdded = true;
             combo.harmonyTag = '레이어드 댄디';
           }
-          combo.reason = buildHarmonyDescription(combo.pants, combo.inner, combo.shirt, combo.outer, combo.shoes);
+          const desc = buildHarmonyDescription(combo.pants, combo.inner, combo.shirt, combo.outer, combo.shoes);
+          combo.reason = desc.text;
           renderAllRecommendationsUI();
         });
       });
 
-      // Attach Optional Layer Cycle ("변경" button to cycle through shirts & inner vest)
       document.querySelectorAll('[data-cycle-layer]').forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
@@ -1522,21 +1613,22 @@
           const combo = state.currentRecommendations[idx];
           if (!combo) return;
           state.activeRankIdx = idx;
-          const layerPool = [...WARDROBE.shirt, getItemById('i12')].filter(Boolean);
+          const layerPool = [...WARDROBE.shirt, getItemById('i12'), getItemById('o14')].filter(Boolean);
           const curIdx = combo.shirt ? layerPool.findIndex(l => l.id === combo.shirt.id) : -1;
           const nextLayer = layerPool[(curIdx + 1) % layerPool.length];
           combo.shirt = nextLayer;
           combo.recommendedLayer = nextLayer;
           combo.layerAdded = true;
-          combo.reason = buildHarmonyDescription(combo.pants, combo.inner, combo.shirt, combo.outer, combo.shoes);
+          const desc = buildHarmonyDescription(combo.pants, combo.inner, combo.shirt, combo.outer, combo.shoes);
+          combo.reason = desc.text;
           renderAllRecommendationsUI();
         });
       });
 
-      // Update active explanation box
       const activeCombo = state.currentRecommendations[state.activeRankIdx] || state.currentRecommendations[0];
       const rankNames = ['베스트 1위', '추천 2순위', '추천 3순위', '4. 미보유 추천 코디'];
-      document.getElementById('active-combo-title').textContent = `${rankNames[state.activeRankIdx]} 컬러 배합 & 기온 해설`;
+      document.getElementById('active-combo-title').textContent = `${rankNames[state.activeRankIdx]} 컬러 배합 & 체형 보정 해설`;
+      document.getElementById('active-combo-harmony-pill').innerHTML = `<i class="fa-solid fa-sparkles text-amber-400"></i> <span>핵심 조화: ${activeCombo.harmonyTag}</span>`;
       document.getElementById('active-combo-reason').textContent = activeCombo.reason;
       document.getElementById('active-temp-badge').textContent = `최저 ${state.minTemp}°C 우선 · 최고 ${state.maxTemp}°C 대응`;
 
@@ -1544,14 +1636,14 @@
       updateBodyAndClothingSVG();
     }
 
-    // Render 5-Part Wardrobe List with Representative HEX Swatches
+    // Render Wardrobe List (Allows selecting up to 2 items)
     function renderWardrobeList() {
       const container = document.getElementById('wardrobe-items-container');
       const catMeta = [
         { key: 'pants', title: '👖 바지 (10종)', icon: 'fa-person text-sky-400' },
-        { key: 'inner', title: '👕 이너 · 니트 · 기모맨투맨 · 티셔츠 · 조끼 (17종)', icon: 'fa-shirt text-emerald-400' },
-        { key: 'shirt', title: '👔 남방 · 레이어드 겸용 (4종)', icon: 'fa-layer-group text-indigo-400' },
-        { key: 'outer', title: '🧥 아우터 · 가디건 · 바람막이 · 패딩 (13종)', icon: 'fa-vest text-amber-400' },
+        { key: 'inner', title: '👕 이너 · 니트 · 기모맨투맨 · 가디건 · 조끼 (19종)', icon: 'fa-shirt text-emerald-400' },
+        { key: 'shirt', title: '👔 남방 · 레이어드 겸용 (5종)', icon: 'fa-layer-group text-indigo-400' },
+        { key: 'outer', title: '🧥 아우터 · 가디건 · 바람막이 · 패딩 (14종)', icon: 'fa-vest text-amber-400' },
         { key: 'shoes', title: '👟 신발 (5종)', icon: 'fa-shoe-prints text-rose-400' }
       ];
 
@@ -1562,8 +1654,11 @@
       container.innerHTML = visibleCats.map(cat => {
         const items = WARDROBE[cat.key];
         const cardsHtml = items.map(item => {
-          const isAnchor = state.anchorItem.id === item.id;
-          // Multi-swatch support for check/stripe items (#9 tartan, #11 yellow stripe, #2 cortez)
+          const anchorIdx = state.anchorItems.findIndex(a => a.id === item.id);
+          const isAnchor = anchorIdx !== -1;
+          const anchorBadge = isAnchor ? (anchorIdx === 0 ? '기준 1' : '기준 2') : '';
+          const ringClass = isAnchor ? (anchorIdx === 0 ? 'anchor-active-ring' : 'anchor-active-ring-2') : 'bg-slate-900/75 hover:bg-slate-800/90 border-slate-800';
+
           let swatchHtml = `<span class="w-6 h-6 rounded-lg border border-white/30 shadow-inner flex-shrink-0" style="background-color: ${item.hex};"></span>`;
           if (item.hexSub1 && item.hexSub2) {
             swatchHtml = `
@@ -1582,9 +1677,7 @@
           }
 
           return `
-            <button data-item-id="${item.id}" class="wardrobe-item-btn text-left p-2.5 rounded-xl border transition-all flex items-center justify-between gap-2 ${
-              isAnchor ? 'anchor-active-ring' : 'bg-slate-900/75 hover:bg-slate-800/90 border-slate-800'
-            }">
+            <button data-item-id="${item.id}" class="wardrobe-item-btn text-left p-2.5 rounded-xl border transition-all flex items-center justify-between gap-2 ${ringClass}">
               <div class="flex items-center gap-2.5 min-w-0">
                 ${swatchHtml}
                 <div class="min-w-0">
@@ -1598,7 +1691,7 @@
 
               <div class="flex flex-col items-end flex-shrink-0">
                 <span class="text-[9.5px] font-mono text-slate-300 bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800">${item.hex}</span>
-                ${isAnchor ? '<span class="text-[9px] text-sky-400 font-extrabold mt-0.5">선택됨 · 터치시 재조합</span>' : '<span class="text-[9px] text-slate-500 mt-0.5">기준 선택</span>'}
+                ${isAnchor ? `<span class="text-[9px] ${anchorIdx === 0 ? 'text-sky-300' : 'text-purple-300'} font-extrabold mt-0.5"><i class="fa-solid fa-lock text-[8px]"></i> [${anchorBadge}] 고정</span>` : '<span class="text-[9px] text-slate-500 mt-0.5">+ 선택</span>'}
               </div>
             </button>
           `;
@@ -1608,7 +1701,7 @@
           <div class="flex flex-col gap-1.5">
             <div class="flex items-center justify-between px-1">
               <span class="text-xs font-extrabold text-slate-200">${cat.title}</span>
-              <span class="text-[10px] text-slate-400">터치 시 맞춤 배색 생성</span>
+              <span class="text-[10px] text-slate-400">클릭하여 최대 2벌 고정</span>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
               ${cardsHtml}
@@ -1617,27 +1710,58 @@
         `;
       }).join('');
 
-      // Attach listeners to each wardrobe item button
+      // Dual Anchor Item Selection Click Handler
       document.querySelectorAll('.wardrobe-item-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const itemId = btn.getAttribute('data-item-id');
           const clickedItem = getItemById(itemId);
           if (!clickedItem) return;
 
-          if (state.anchorItem.id === clickedItem.id) {
-            // Same item clicked again -> give a DIFFERENT combination!
-            state.variationOffset += 1;
-          } else {
-            state.anchorItem = clickedItem;
-            state.variationOffset = 0;
-          }
-          state.activeRankIdx = 0;
+          const existingIdx = state.anchorItems.findIndex(a => a.id === clickedItem.id);
 
+          if (existingIdx !== -1) {
+            // Already selected item clicked!
+            if (state.anchorItems.length === 1) {
+              // Only 1 item selected: cycle variation
+              state.variationOffset += 1;
+            } else {
+              // 2 items selected: unselect this item (returns to 1 item)
+              state.anchorItems.splice(existingIdx, 1);
+              state.variationOffset = 0;
+            }
+          } else {
+            // New item clicked
+            if (state.anchorItems.length === 1) {
+              const currentItem = state.anchorItems[0];
+              if (currentItem.category === clickedItem.category) {
+                // Same category: replace the single item
+                state.anchorItems = [ clickedItem ];
+                state.variationOffset = 0;
+              } else {
+                // Different category: ADD as 2nd anchor! (2 items fixed)
+                state.anchorItems.push(clickedItem);
+                state.variationOffset = 0;
+              }
+            } else if (state.anchorItems.length >= 2) {
+              // 2 items already selected: check if clicked item matches the category of one of them
+              const matchCatIdx = state.anchorItems.findIndex(a => a.category === clickedItem.category);
+              if (matchCatIdx !== -1) {
+                // Replace the one with the same category
+                state.anchorItems[matchCatIdx] = clickedItem;
+              } else {
+                // Replace the oldest item (index 0)
+                state.anchorItems.shift();
+                state.anchorItems.push(clickedItem);
+              }
+              state.variationOffset = 0;
+            }
+          }
+
+          state.activeRankIdx = 0;
           generateRecommendations();
           renderWardrobeList();
           renderAllRecommendationsUI();
 
-          // On Fold Cover Screen (< 1024px), automatically switch to Fitting Mirror so user sees the outfit immediately
           if (window.innerWidth < 1024) {
             switchMobileTab('fitting');
           }
@@ -1645,7 +1769,6 @@
       });
     }
 
-    // Populate and sync manual override dropdowns
     function initManualSelects() {
       const selPants = document.getElementById('manual-select-pants');
       const selInner = document.getElementById('manual-select-inner');
@@ -1655,7 +1778,10 @@
 
       selPants.innerHTML = WARDROBE.pants.map(p => `<option value="${p.id}">${p.num}. ${p.name}</option>`).join('');
       selInner.innerHTML = WARDROBE.inner.map(i => `<option value="${i.id}">${i.num}. ${i.name}</option>`).join('');
-      selShirt.innerHTML = `<option value="none">레이어드 안함 (기본)</option>` + WARDROBE.shirt.map(s => `<option value="${s.id}">[남방 ${s.num}] ${s.name}</option>`).join('') + `<option value="i12">[조끼] 유니클로 회색 패딩조끼</option>`;
+      selShirt.innerHTML = `<option value="none">레이어드 안함 (기본)</option>` +
+        WARDROBE.shirt.map(s => `<option value="${s.id}">[남방 ${s.num}] ${s.name}</option>`).join('') +
+        `<option value="i12">[조끼] 유니클로 회색 패딩조끼</option>` +
+        `<option value="o14">[가디건] 버건디 두툼 가디건</option>`;
       selOuter.innerHTML = `<option value="none">아우터 안입음</option>` + WARDROBE.outer.map(o => `<option value="${o.id}">${o.num}. ${o.name}</option>`).join('');
       selShoes.innerHTML = WARDROBE.shoes.map(s => `<option value="${s.id}">${s.num}. ${s.name}</option>`).join('');
 
@@ -1669,7 +1795,8 @@
         combo.outer = selOuter.value === 'none' ? null : getItemById(selOuter.value);
         combo.shoes = getItemById(selShoes.value) || combo.shoes;
         combo.harmonyTag = '내 수동 커스텀';
-        combo.reason = buildHarmonyDescription(combo.pants, combo.inner, combo.shirt, combo.outer, combo.shoes);
+        const desc = buildHarmonyDescription(combo.pants, combo.inner, combo.shirt, combo.outer, combo.shoes);
+        combo.reason = desc.text;
         renderAllRecommendationsUI();
       };
 
@@ -1688,7 +1815,6 @@
       document.getElementById('manual-select-shoes').value = combo.shoes.id;
     }
 
-    // Update Temperature Strategy Banner Text
     function updateTempUI() {
       const minT = state.minTemp;
       const maxT = state.maxTemp;
@@ -1701,19 +1827,18 @@
       if (minT <= 2) {
         pill.textContent = '한겨울·영하권 (겨울패딩 + 기모바지)';
         pill.className = 'text-[10px] font-bold bg-sky-950 text-sky-300 border border-sky-500/40 px-2 py-0.5 rounded-full';
-        desc.innerHTML = `<i class="fa-solid fa-snowflake text-sky-400"></i> <span>최저 ${minT}°C 추위에 맞춰 <strong>유니클로 흰색 패딩·아디다스 하늘색 패딩·경량패딩</strong> 및 <strong>기모 바지·니트·패딩조끼</strong>를 최우선 배합합니다.</span>`;
+        desc.innerHTML = `<i class="fa-solid fa-snowflake text-sky-400"></i> <span>최저 ${minT}°C 추위에 맞춰 <strong>유니클로 흰색 패딩·아디다스 하늘색 패딩·경량패딩·버건디 두툼 가디건</strong> 및 <strong>기모 바지·니트·기모맨투맨</strong>을 최우선 배합합니다.</span>`;
       } else if (minT <= 9) {
-        pill.textContent = '쌀쌀한 가을·초겨울 (기모·후리스·경량패딩)';
+        pill.textContent = '쌀쌀한 가을·초겨울 (기모·가디건·경량패딩)';
         pill.className = 'text-[10px] font-bold bg-emerald-950 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded-full';
-        desc.innerHTML = `<i class="fa-solid fa-wind text-emerald-400"></i> <span>최저 ${minT}°C에 맞춰 약한기모 바지·니트·체크자켓·바람막이를 매칭하고, 낮 ${maxT}°C에는 아우터를 열거나 벗어도 완벽한 이너 배색을 유지합니다.</span>`;
+        desc.innerHTML = `<i class="fa-solid fa-wind text-emerald-400"></i> <span>최저 ${minT}°C에 맞춰 약한기모 바지·버건디 가디건·올리브 니트·골덴남방을 매칭하고, 낮 ${maxT}°C에는 아우터를 열거나 벗어도 멋진 댄디 배색을 유지합니다.</span>`;
       } else {
         pill.textContent = '선선한 초가을·간절기 (가디건·남방·바람막이)';
         pill.className = 'text-[10px] font-bold bg-amber-950 text-amber-300 border border-amber-500/40 px-2 py-0.5 rounded-full';
-        desc.innerHTML = `<i class="fa-solid fa-sun text-amber-400"></i> <span>최저 ${minT}°C ~ 최고 ${maxT}°C 활동에 맞춰 가벼운 후드집업, 가디건, 청자켓, 남방 레이어드 중심의 산뜻한 댄디 코디를 추천합니다.</span>`;
+        desc.innerHTML = `<i class="fa-solid fa-sun text-amber-400"></i> <span>최저 ${minT}°C ~ 최고 ${maxT}°C 활동에 맞춰 가벼운 후드집업, 블랙 가디건, 청자켓, 남방 레이어드 중심의 산뜻한 댄디 코디를 추천합니다.</span>`;
       }
     }
 
-    // Fold7 Cover Display vs Main Unfolded Screen Navigation
     function switchMobileTab(target) {
       const secFitting = document.getElementById('section-fitting');
       const secWardrobe = document.getElementById('section-wardrobe');
@@ -1737,7 +1862,6 @@
           document.getElementById('section-wardrobe').scrollIntoView({ behavior: 'smooth' });
         }
       } else {
-        // On Fold7 Unfolded (lg+), both are visible side-by-side; scroll smoothly to the requested section
         if (target === 'wardrobe') {
           document.getElementById('section-wardrobe').scrollIntoView({ behavior: 'smooth' });
         } else {
@@ -1768,7 +1892,17 @@
       renderWardrobeList();
       renderAllRecommendationsUI();
 
-      // Height & Weight Sliders
+      // Clear Anchors Button
+      document.getElementById('btn-clear-anchors').addEventListener('click', () => {
+        state.anchorItems = [ WARDROBE.pants[3] ]; // Reset to 진청 기모청바지
+        state.variationOffset = 0;
+        state.activeRankIdx = 0;
+        generateRecommendations();
+        renderWardrobeList();
+        renderAllRecommendationsUI();
+      });
+
+      // Height / Weight Sliders
       document.getElementById('input-height').addEventListener('input', (e) => {
         state.height = parseInt(e.target.value, 10);
         updateBodyAndClothingSVG();
@@ -1785,7 +1919,6 @@
         updateBodyAndClothingSVG();
       });
 
-      // Temperature Sliders
       const minSlider = document.getElementById('input-min-temp');
       const maxSlider = document.getElementById('input-max-temp');
 
@@ -1811,7 +1944,6 @@
         renderAllRecommendationsUI();
       });
 
-      // Quick Weather Preset Buttons
       document.querySelectorAll('.temp-preset-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           state.minTemp = parseInt(btn.getAttribute('data-min'), 10);
@@ -1828,7 +1960,6 @@
         });
       });
 
-      // Mood Filter Buttons
       document.querySelectorAll('.mood-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           state.mood = btn.getAttribute('data-mood');
@@ -1842,7 +1973,6 @@
         });
       });
 
-      // Category Tabs
       document.querySelectorAll('.cat-tab').forEach(tab => {
         tab.addEventListener('click', () => {
           state.activeCategoryTab = tab.getAttribute('data-cat');
@@ -1854,7 +1984,6 @@
         });
       });
 
-      // Flank Quick Rank Buttons inside Mirror
       [0, 1, 2, 3].forEach(idx => {
         document.getElementById(`flank-rank-${idx}`).addEventListener('click', () => {
           state.activeRankIdx = idx;
@@ -1862,7 +1991,6 @@
         });
       });
 
-      // Shirt & Outer Open/Close Toggles
       document.getElementById('btn-toggle-shirt-layer').addEventListener('click', () => {
         state.isShirtOpen = !state.isShirtOpen;
         document.getElementById('shirt-layer-label').textContent = state.isShirtOpen ? '남방 열기' : '남방 잠금';
@@ -1875,23 +2003,19 @@
         updateBodyAndClothingSVG();
       });
 
-      // Reroll ("다시 추천") Buttons
       document.getElementById('btn-reroll-top').addEventListener('click', triggerReroll);
       document.getElementById('btn-reroll-mirror').addEventListener('click', triggerReroll);
       document.getElementById('btn-reroll-wardrobe').addEventListener('click', triggerReroll);
       document.getElementById('float-btn-reroll').addEventListener('click', triggerReroll);
 
-      // Jump Back to Wardrobe Picker Buttons ("언제든지 옷을 고르는 위치로")
       document.getElementById('btn-go-wardrobe-top').addEventListener('click', () => switchMobileTab('wardrobe'));
       document.getElementById('btn-back-to-wardrobe-mirror').addEventListener('click', () => switchMobileTab('wardrobe'));
       document.getElementById('float-btn-wardrobe').addEventListener('click', () => switchMobileTab('wardrobe'));
       document.getElementById('float-btn-fitting').addEventListener('click', () => switchMobileTab('fitting'));
 
-      // Cover Display Tabs
       document.getElementById('cover-tab-wardrobe').addEventListener('click', () => switchMobileTab('wardrobe'));
       document.getElementById('cover-tab-fitting').addEventListener('click', () => switchMobileTab('fitting'));
 
-      // Handle Fold7 Unfold / Fold Resize seamlessly
       window.addEventListener('resize', () => {
         const secFitting = document.getElementById('section-fitting');
         const secWardrobe = document.getElementById('section-wardrobe');
@@ -1903,7 +2027,6 @@
         }
       });
 
-      // Photo Upload Modal
       const uploadModal = document.getElementById('upload-modal');
       const fileInput = document.getElementById('file-upload-input');
       const uploadPreviewBox = document.getElementById('upload-preview-box');
